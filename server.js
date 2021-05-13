@@ -1,5 +1,5 @@
-const express = require("express");
-const { auth, requiresAuth } = require("express-openid-connect");
+import express from "express";
+import { auth, requiresAuth } from "express-openid-connect";
 const app = express();
 const port = process.env.PORT || 3000;
 require("dotenv").config();
