@@ -56,7 +56,7 @@ export const signin = async (req, res) => {
     const token = newToken(user);
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
-    console.log();
+    console.log(e);
     return res.status(401).send({ message: "Not Authorized" });
   }
 };

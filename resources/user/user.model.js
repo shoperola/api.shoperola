@@ -94,7 +94,7 @@ UserSchema.pre("save", function (next) {
   });
 });
 
-UserSchema.methods.checkPassword = (password) => {
+UserSchema.methods.checkPassword = function (password) {
   const passwordHash = this.password;
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {
