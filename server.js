@@ -19,7 +19,9 @@ app.use(urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.post("/signup", signup);
 app.post("/signin", signin);
-app.get("/", () => "Server is Running");
+app.get("/", (req, res) => {
+  res.json("Server is Running");
+});
 
 export const start = async () => {
   try {
