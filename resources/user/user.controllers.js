@@ -1,5 +1,5 @@
 const getUserProfile = (req, res) => {
-  if (req.user == null) {
+  if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
   }
   res.json(req.user);
