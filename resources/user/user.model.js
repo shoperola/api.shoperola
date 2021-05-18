@@ -23,18 +23,51 @@ const UserSchema = new Schema(
       required: true,
     },
     identities: {
-      google: String,
-      facebook: String,
-      linkedin: String,
-      twitter: String,
+      google: {
+        type: String,
+        default: "",
+      },
+      facebook: {
+        type: String,
+        default: "",
+      },
+      linkedin: {
+        type: String,
+        default: "",
+      },
+      twitter: {
+        type: String,
+        default: "",
+      },
     },
-    services: String,
-    profession: String,
-    location: String,
-    about: String,
-    publicUrl: String,
-    bannerImage: String,
-    picture: String,
+    services: {
+      type: String,
+      default: "",
+    },
+    profession: {
+      type: String,
+      default: "",
+    },
+    location: {
+      type: String,
+      default: "",
+    },
+    about: {
+      type: String,
+      default: "",
+    },
+    publicUrl: {
+      type: String,
+      default: "",
+    },
+    bannerImage: {
+      type: String,
+      default: "",
+    },
+    picture: {
+      type: String,
+      default: "",
+    },
     rating: {
       type: Number,
       default: 0,
