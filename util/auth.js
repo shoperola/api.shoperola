@@ -2,11 +2,7 @@ import { User } from "../resources/user/user.model.js";
 import { newToken, verifyToken } from "./jwt.js";
 
 export const signup = async (req, res) => {
-  if (
-    !req.body.email ||
-    !req.body.password ||
-    !req.body.firstName ||
-  ) {
+  if (!req.body.email || !req.body.password || !req.body.firstName) {
     return res.status(400).send({
       message: "Required fields missing",
     });
