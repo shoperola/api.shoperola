@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   res.json("Server is Running");
 });
 app.use(protect);
-app.router("/api/user", UserRouter);
+app.use("/api/user", UserRouter);
 
 export const start = async () => {
   try {
