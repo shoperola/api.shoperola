@@ -119,9 +119,12 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre("save", function (next) {
-  if (!this.isModified("password")) {
+  if (!this.isModified("password") && !this.isModified("publicUrl")) {
     return next();
   }
+  this.publicUrl = `https://konsult-member.com/${
+    this._id
+  }/${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`;
 
   bcrypt.hash(this.password, 8, (err, hash) => {
     if (err) {

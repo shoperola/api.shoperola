@@ -25,7 +25,7 @@ export const signin = async (req, res) => {
     return res.status(400).send({ message: "Email and password required" });
   const user = await User.findOne({ email: req.body.email }).exec();
   if (!user) {
-    return res.status(401).send({ message: "Invalid Credentials" });
+    return res.status(400).send({ message: "User Not found" });
   }
 
   try {
