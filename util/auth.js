@@ -1,27 +1,11 @@
 import { User } from "../resources/user/user.model.js";
-import jwt from "jsonwebtoken";
-import { JWT_config as config } from "../server.js";
-
-export const newToken = (user) => {
-  return jwt.sign({ id: user._id }, config.secrets.jwt, {
-    expiresIn: config.secrets.jwtExp,
-  });
-};
-
-export const verifyToken = (token) =>
-  new Promise((resolve, reject) => {
-    jwt.verify(token, config.secrets.jwt, (err, payload) => {
-      if (err) return reject(err);
-      resolve(payload);
-    });
-  });
+import { newToken, verifyToken } from "./jwt.js";
 
 export const signup = async (req, res) => {
   if (
     !req.body.email ||
     !req.body.password ||
     !req.body.firstName ||
-    !req.body.username
   ) {
     return res.status(400).send({
       message: "Required fields missing",

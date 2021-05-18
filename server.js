@@ -22,6 +22,8 @@ app.post("/signin", signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
+app.use(protect);
+app.router("/api/user", UserRouter);
 
 export const start = async () => {
   try {

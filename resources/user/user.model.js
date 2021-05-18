@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 
 const UserSchema = new Schema(
@@ -20,9 +20,7 @@ const UserSchema = new Schema(
     },
     lastName: {
       type: String,
-    },
-    username: {
-      type: String,
+      required: true,
     },
     identities: {
       google: String,
@@ -30,18 +28,17 @@ const UserSchema = new Schema(
       linkedin: String,
       twitter: String,
     },
-    location: {
-      type: String,
-    },
+    services: String,
+    profession: String,
+    location: String,
+    about: String,
+    publicUrl: String,
+    bannerImage: String,
+    picture: String,
     rating: {
       type: Number,
       default: 0,
     },
-    publicUrl: {
-      type: String,
-    },
-    bannerImage: String,
-    picture: String,
     featured: [{ type: String, data: String }],
     socials: {
       website: String,
@@ -75,6 +72,15 @@ const UserSchema = new Schema(
       type: Number,
       default: 0,
     },
+    reviews: [
+      {
+        writtenBy: SchemaTypes.ObjectId,
+        text: String,
+        timestamp: Date,
+        replied: Boolean,
+        reply: String,
+      },
+    ],
   },
   { timestamps: true }
 );
