@@ -4,6 +4,7 @@ import UserRouter from "./resources/user/user.router.js";
 import { connect } from "./util/db.js";
 import morgan from "morgan";
 import { config } from "dotenv";
+import cors from "cors";
 config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ export const JWT_config = {
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
+app.use(cors());
 app.use(morgan("dev"));
 app.post("/signup", signup);
 app.post("/signin", signin);

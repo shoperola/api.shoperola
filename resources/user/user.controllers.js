@@ -1,4 +1,6 @@
-const getUserProfile = (req, res) => {};
+const getUserProfile = (req, res) => {
+  res.json(req.user);
+};
 
 const updateUserProfile = (req, res) => {};
 
