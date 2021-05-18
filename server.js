@@ -1,5 +1,6 @@
 import express, { urlencoded, json } from "express";
 import { signup, signin, protect } from "./util/auth.js";
+import UserRouter from "./resources/user/user.router.js";
 import { connect } from "./util/db.js";
 import morgan from "morgan";
 import { config } from "dotenv";
