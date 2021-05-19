@@ -5,6 +5,7 @@ import { connect } from "./util/db.js";
 import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";
+
 config();
 const app = express();
 const port = process.env.PORT || 3000;
