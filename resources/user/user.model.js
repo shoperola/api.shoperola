@@ -74,10 +74,22 @@ const UserSchema = new Schema(
     },
     featured: [{ type: String, data: String }],
     socials: {
-      website: String,
-      facebook: String,
-      linkedin: String,
-      twitter: String,
+      website: {
+        type: String,
+        default: "",
+      },
+      facebook: {
+        type: String,
+        default: "",
+      },
+      linkedin: {
+        type: String,
+        default: "",
+      },
+      twitter: {
+        type: String,
+        default: "",
+      },
     },
     fees: {
       type: Number,
