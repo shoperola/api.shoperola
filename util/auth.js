@@ -1,31 +1,32 @@
-import { User } from "../resources/user/user.model.js";
 import { newToken, verifyToken } from "./jwt.js";
 
 export const signup = async (req, res) => {
+  const Model = req.model;
   if (!req.body.email || !req.body.password || !req.body.firstName) {
     return res.status(400).send({
       message: "Required fields missing",
     });
   }
   try {
-    const user = await User.create(req.body);
+    const user = await Model.create(req.body);
     const token = newToken(user);
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e);
     if (e.toString().includes("E11000 duplicate key error collection")) {
-      return res.status(400).send({ status: "User Already Exists" });
+      return res.status(400).send({ status: "Model Already Exists" });
     }
     return res.status(400).send({ status: "Error Communicating with server" });
   }
 };
 
 export const signin = async (req, res) => {
+  const Model = req.model;
   if (!req.body.email || !req.body.password)
     return res.status(400).send({ message: "Email and password required" });
-  const user = await User.findOne({ email: req.body.email }).exec();
+  const user = await Model.findOne({ email: req.body.email }).exec();
   if (!user) {
-    return res.status(400).send({ message: "User Not found" });
+    return res.status(400).send({ message: "Model Not found" });
   }
 
   try {
@@ -42,6 +43,7 @@ export const signin = async (req, res) => {
 };
 
 export const protect = async (req, res, next) => {
+  const Model = req.model;
   if (!req.headers.authorization) {
     return res.status(401).end();
   }
@@ -51,7 +53,7 @@ export const protect = async (req, res, next) => {
   }
   try {
     const payload = await verifyToken(token);
-    const user = await User.findById(payload.id)
+    const user = await Model.findById(payload.id)
       .select("-password -identities")
       .lean()
       .exec();

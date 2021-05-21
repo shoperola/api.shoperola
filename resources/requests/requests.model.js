@@ -1,4 +1,5 @@
-import { Schema, SchemaTypes, model } from "mongoose";
+import mongoose from "mongoose";
+const { Schema, SchemaTypes, model } = mongoose;
 
 const RequestSchema = Schema(
   {
@@ -11,20 +12,34 @@ const RequestSchema = Schema(
       required: true,
     },
     status: {
-      type: Boolean,
+      type: String,
       enum: ["pending", "replied"],
       default: "pending",
     },
-    attachments: [],
-    video: {
+    attachments: [
+      {
+        link: String,
+        filename: String,
+      },
+    ],
+    requestVideo: {
       type: String,
+      default: "",
     },
     requestText: {
       type: String,
+      required: true,
     },
-    answer: {
+    answerVideo: {
       type: String,
+      default: "",
+    },
+    answerText: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }
 );
+
+export const Request = model("requests", RequestSchema);
