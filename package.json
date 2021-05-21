@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "format": "prettier --write \"**/*.js\"",
+    "deploy": "npm run format && git push heroku master"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,7 @@
     "multer-s3": "^2.9.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0"
   }
 }
