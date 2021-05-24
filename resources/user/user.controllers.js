@@ -45,6 +45,7 @@ const updateProfilePicture = async (req, res) => {
         new: true,
       }
     )
+      .select("-password -identities")
       .lean()
       .exec();
     res.json({ status: "ok", data: doc });
