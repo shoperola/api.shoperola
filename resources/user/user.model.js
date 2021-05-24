@@ -121,7 +121,10 @@ const UserSchema = new Schema(
     },
     reviews: [
       {
-        writtenBy: SchemaTypes.ObjectId,
+        writtenBy: {
+          type: SchemaTypes.ObjectId,
+          ref: "clients",
+        },
         text: String,
         timestamp: Date,
         replied: Boolean,

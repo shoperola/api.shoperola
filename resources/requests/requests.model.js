@@ -6,10 +6,12 @@ const RequestSchema = Schema(
     clientID: {
       type: SchemaTypes.ObjectId,
       required: true,
+      ref: "clients",
     },
     userID: {
       type: SchemaTypes.ObjectId,
       required: true,
+      ref: "users",
     },
     status: {
       type: String,
