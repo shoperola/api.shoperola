@@ -29,6 +29,32 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+const updateProfilePicture = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User not Found" });
+  }
+  const userID = req.user._id;
+  console.log(req.file, req.body);
+  try {
+    const doc = await User.findByIdAndUpdate(
+      userID,
+      {
+        picture: req.file.location,
+      },
+      {
+        new: true,
+      }
+    )
+      .lean()
+      .exec();
+    res.json({ status: "ok", data: doc });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: "Error Updating Profile Picture" });
+  }
+  // res.json({ status: "recieved" });
+};
+
 const getRequests = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
@@ -143,4 +169,10 @@ const getRequest = async (req, res) => {
   }
 };
 
-export { getUserProfile, updateUserProfile, getRequest, getRequests };
+export {
+  getUserProfile,
+  updateUserProfile,
+  updateProfilePicture,
+  getRequest,
+  getRequests,
+};

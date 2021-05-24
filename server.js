@@ -13,11 +13,6 @@ config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-export const SECRETS = {
-  jwt: process.env.JWT_SECRET,
-  jwtExp: "100d",
-};
-
 const userModel = (req, res, next) => {
   req.model = User;
   next();
