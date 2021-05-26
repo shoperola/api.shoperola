@@ -170,10 +170,23 @@ const getRequest = async (req, res) => {
   }
 };
 
+const answerRequest = async (req, res) => {
+  /**
+   req.body = {
+    answerText: "Here's the answer to your question"
+   }
+   req.params = { 
+     id: ObjectID
+   }
+   **/
+  console.log(req.file, req.body);
+};
+
 export {
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
   getRequest,
   getRequests,
+  answerRequest,
 };
