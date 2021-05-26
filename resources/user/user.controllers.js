@@ -1,4 +1,4 @@
-import { User } from "./user.model.js";
+import { Payment, User } from "./user.model.js";
 import { Request } from "../requests/requests.model.js";
 import mongoose from "mongoose";
 const { Types } = mongoose;
@@ -29,6 +29,19 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const Model = req.model;
+  if (!req.user) {
+    return res.status(400).json({ message: "User not Found" });
+  }
+  try {
+    const doc = await Model.findOneAndDelete({ _id: req.user._id }).exec();
+    res.json({ status: "ok", message: "User Deleted Successfully" });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: "Error deleting User" });
+  }
+};
 const updateProfilePicture = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
@@ -182,11 +195,26 @@ const answerRequest = async (req, res) => {
   console.log(req.file, req.body);
 };
 
+const getPaymentsAdded = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User not Found" });
+  }
+  try {
+    const doc = await Payment.findOne({ userID: req.user._id });
+    return res.json({ status: "ok", data: doc });
+  } catch (e) {
+    console.log(e);
+    res.json({ message: "Error getting Payments" });
+  }
+};
+
 export {
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
+  deleteUser,
   getRequest,
   getRequests,
   answerRequest,
+  getPaymentsAdded,
 };

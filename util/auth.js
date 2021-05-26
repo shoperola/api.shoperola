@@ -1,14 +1,24 @@
+import { Payment } from "../resources/user/user.model.js";
 import { newToken, verifyToken } from "./jwt.js";
 
 export const signup = async (req, res) => {
   const Model = req.model;
-  if (!req.body.email || !req.body.password || !req.body.firstName) {
+  if (
+    !req.body.email ||
+    !req.body.password ||
+    !req.body.firstName ||
+    !req.body.lastName
+  ) {
     return res.status(400).send({
       message: "Required fields missing",
     });
   }
   try {
     const user = await Model.create(req.body);
+    const collectionName = Model.collection.collectionName;
+    if (collectionName === "users") {
+      const payments = await Payment.create({ userID: user._id });
+    }
     const token = newToken(user);
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {

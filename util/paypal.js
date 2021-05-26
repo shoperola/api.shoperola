@@ -26,11 +26,14 @@ const getAuthToken = async () => {
 };
 
 const generateSignupLink = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
   try {
     const resp = await axios.post(
       "https://api-m.sandbox.paypal.com/v2/customer/partner-referrals",
       {
-        tracking_id: "60ab54e2b5c1101bf0cceda3",
+        tracking_id: req.user._id,
         partner_config_override: {
           return_url: "https://muleyashutosh.me",
           partner_logo_url:

@@ -4,14 +4,17 @@ import { upload } from "../../util/s3-spaces.js";
 import {
   getRequest,
   getRequests,
+  answerRequest,
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
-  answerRequest,
+  deleteUser,
+  getPaymentsAdded,
 } from "./user.controllers.js";
 const router = Router();
 
-router.route("/").get(getUserProfile).put(updateUserProfile);
+router.route("/").get(getUserProfile).put(updateUserProfile).delete(deleteUser);
+router.route("/payments").get(getPaymentsAdded);
 router.route("/profile").put(upload.single("picture"), updateProfilePicture);
 router.route("/requests").get(getRequests);
 router.route("/request/:id").get(getRequest);
