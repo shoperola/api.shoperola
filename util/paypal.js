@@ -31,8 +31,8 @@ const generateSignupLink = async (req, res) => {
       "https://api-m.sandbox.paypal.com/v2/customer/partner-referrals",
       {
         tracking_id: "60ab54e2b5c1101bf0cceda3",
-        partner_configuration_override: {
-          return_url: "http://localhost:5500/",
+        partner_config_override: {
+          return_url: "https://muleyashutosh.me",
           partner_logo_url:
             "https://shott.sfo3.digitaloceanspaces.com/logo_oJs-w8sDW.png",
         },
