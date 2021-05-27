@@ -72,8 +72,8 @@ const generateSignupLink = async (req, res) => {
     return res.json(resp.data);
   } catch (e) {
     if (e.response && e.response.data.error === "invalid_token") {
-      getAuthToken();
-      generateSignupLink();
+      await getAuthToken();
+      await generateSignupLink(req, res);
     } else {
       console.log(e.response.data);
       res.status(400).json({ message: "error contacting paypal" });
