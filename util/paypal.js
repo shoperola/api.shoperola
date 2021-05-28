@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SECRETS, PAYPAL_TOKEN, setPAYPAL_TOKEN } from "./config.js";
+import { User } from "../resources/user/user.model.js";
 
 const getAuthToken = async () => {
   try {
@@ -82,5 +83,102 @@ const generateSignupLink = async (req, res) => {
   }
 };
 
-// getAuthToken();
-export { getAuthToken, generateSignupLink };
+const createOrder = async (req, res) => {
+  const userID = req.body.userID;
+  if (!userID) {
+    return res.status(400).json({ message: "Merchant UserID is required" });
+  }
+  let user;
+  try {
+    user = await User.findById(userID);
+  } catch (e) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ message: "Error finding Merchant credentials" });
+  }
+  if (!user) {
+    return res.status(400).json({ message: "Merchant not Found" });
+  }
+  try {
+    const resp = await axios.post(
+      "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+      {
+        intent: "CAPTURE",
+        purchase_units: [
+          {
+            amount: {
+              currency_code: user.settings.currency,
+              value: user.fees,
+            },
+            payee: {
+              email_address: user.email,
+            },
+            payment_instruction: {
+              disbursement_mode: "INSTANT",
+              platform_fees: [
+                {
+                  amount: {
+                    currency_code: "USD",
+                    value: "0.00",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${PAYPAL_TOKEN}`,
+          "PayPal-Partner-Attribution-Id": SECRETS.paypalBNCode,
+        },
+      }
+    );
+    console.log(resp);
+    res.json({
+      status: "ok",
+      data: {
+        orderID: resp.id,
+      },
+    });
+  } catch (e) {
+    if (e.response && e.response.data.error === "invalid_token") {
+      await getAuthToken();
+      await createOrder(req, res);
+    } else {
+      console.log(e.response.data);
+      res.status(400).json({ message: "Error Creating Order" });
+    }
+  }
+};
+
+const captureOrder = async (req, res) => {
+  const OrderID = req.params;
+  try {
+    const resp = axios.post(
+      `https://api-m.sandbox.paypal.com/v2/checkout/orders/${OrderID}/capture`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${PAYPAL_TOKEN}`,
+          "PayPal-Partner-Attribution-Id": SECRETS.paypalBNCode,
+        },
+      }
+    );
+    console.log(resp);
+    res.json({ status: "success" });
+  } catch (e) {
+    if (e.response && e.response.data.error === "invalid_token") {
+      await getAuthToken();
+      await captureOrder(req, res);
+    } else {
+      console.log(e.response.data);
+      res.status(400).json({ message: "Error Capturing Order" });
+    }
+  }
+};
+
+export { getAuthToken, generateSignupLink, createOrder, captureOrder };

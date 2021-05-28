@@ -1,7 +1,7 @@
 import { Payment } from "../resources/user/user.model.js";
 import { newToken, verifyToken } from "./jwt.js";
 
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
   const Model = req.model;
   if (
     !req.body.email ||
@@ -30,7 +30,7 @@ export const signup = async (req, res) => {
   }
 };
 
-export const signin = async (req, res) => {
+const signin = async (req, res) => {
   const Model = req.model;
   if (!req.body.email || !req.body.password)
     return res.status(400).send({ message: "Email and password required" });
@@ -52,7 +52,7 @@ export const signin = async (req, res) => {
   }
 };
 
-export const protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
   const Model = req.model;
   if (!req.headers.authorization) {
     return res.status(401).end();
@@ -74,3 +74,5 @@ export const protect = async (req, res, next) => {
     return res.status(401).end();
   }
 };
+
+export { signup, signin, protect };

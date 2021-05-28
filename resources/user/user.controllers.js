@@ -16,7 +16,7 @@ const updateUserProfile = async (req, res) => {
   }
   const userID = req.user._id;
   try {
-    const doc = await User.findOneAndUpdate({ _id: userID }, req.body, {
+    const doc = await User.findByIdAndUpdate(userID, req.body, {
       new: true,
     })
       .select("-password -identities")
@@ -42,6 +42,7 @@ const deleteUser = async (req, res) => {
     res.status(400).json({ message: "Error deleting User" });
   }
 };
+
 const updateProfilePicture = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
@@ -204,7 +205,25 @@ const getPaymentsAdded = async (req, res) => {
     return res.json({ status: "ok", data: doc });
   } catch (e) {
     console.log(e);
-    res.json({ message: "Error getting Payments" });
+    res.status(400).json({ message: "Error getting Payments" });
+  }
+};
+
+const updatePaymentsInfo = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User not Found" });
+  }
+  const userID = req.user._id;
+  try {
+    const payments = Payment.findOneAndUpdate({ userID }, req.body, {
+      new: true,
+    })
+      .lean()
+      .exec();
+    res.json({ status: "ok", data: payments });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: "Error getting Payments" });
   }
 };
 
@@ -217,4 +236,5 @@ export {
   getRequests,
   answerRequest,
   getPaymentsAdded,
+  updatePaymentsInfo,
 };

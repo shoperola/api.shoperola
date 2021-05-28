@@ -10,6 +10,7 @@ import {
   updateProfilePicture,
   deleteUser,
   getPaymentsAdded,
+  updatePaymentsInfo,
 } from "./user.controllers.js";
 const router = Router();
 
@@ -20,5 +21,6 @@ router.route("/requests").get(getRequests);
 router.route("/request/:id").get(getRequest);
 router.route("/request/answer/:id").get(answerRequest);
 router.route("/paypal/getActionUrl").get(generateSignupLink);
+router.route("/paypal/updatePaymentInfo").put(updatePaymentsInfo);
 
 export default router;
