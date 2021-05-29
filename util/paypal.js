@@ -101,7 +101,7 @@ const createOrder = async (req, res) => {
     return res.status(400).json({ message: "Merchant not Found" });
   }
   try {
-    const resp = await axios.post(
+    const order = await axios.post(
       "https://api-m.sandbox.paypal.com/v2/checkout/orders",
       {
         intent: "CAPTURE",
@@ -112,7 +112,7 @@ const createOrder = async (req, res) => {
               value: user.fees,
             },
             payee: {
-              email_address: user.email,
+              email_address: "sb-o9nwd6312677@business.example.com",
             },
             payment_instruction: {
               disbursement_mode: "INSTANT",
@@ -136,12 +136,9 @@ const createOrder = async (req, res) => {
         },
       }
     );
-    console.log(resp);
+    console.log(order.data);
     res.json({
-      status: "ok",
-      data: {
-        orderID: resp.id,
-      },
+      orderID: order.data.id,
     });
   } catch (e) {
     if (e.response && e.response.data.error === "invalid_token") {
@@ -155,9 +152,9 @@ const createOrder = async (req, res) => {
 };
 
 const captureOrder = async (req, res) => {
-  const OrderID = req.params;
+  const OrderID = req.params.id;
   try {
-    const resp = axios.post(
+    const resp = await axios.post(
       `https://api-m.sandbox.paypal.com/v2/checkout/orders/${OrderID}/capture`,
       {},
       {

@@ -10,6 +10,8 @@ const SECRETS = {
   paypalClientKey: process.env.PAYPAL_CLIENT_ID,
   paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET,
   paypalBNCode: process.env.PAYPAL_BN_CODE,
+  stripePublishKey: process.env.STRIPE_PUBLISH_KEY,
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY,
 };
 
 let PAYPAL_TOKEN =

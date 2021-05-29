@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { generateSignupLink } from "../../util/paypal.js";
 import { upload } from "../../util/s3-spaces.js";
+import { onBoardUser, creatCheckoutSession } from "../../util/stripe.js";
 import {
   getRequest,
   getRequests,
@@ -12,6 +13,7 @@ import {
   getPaymentsAdded,
   updatePaymentsInfo,
 } from "./user.controllers.js";
+
 const router = Router();
 
 router.route("/").get(getUserProfile).put(updateUserProfile).delete(deleteUser);
@@ -22,5 +24,7 @@ router.route("/request/:id").get(getRequest);
 router.route("/request/answer/:id").get(answerRequest);
 router.route("/paypal/getActionUrl").get(generateSignupLink);
 router.route("/paypal/updatePaymentInfo").put(updatePaymentsInfo);
+router.route("/stripe/onboard-user").get(onBoardUser);
+router.route("/stripe/create-checkout-session").get(creatCheckoutSession);
 
 export default router;
