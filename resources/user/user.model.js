@@ -202,3 +202,8 @@ PaymentsSchema.index({ userID: 1 });
 
 export const Payment = model("payments", PaymentsSchema);
 export const User = model("users", UserSchema);
+
+UserSchema.pre("remove", function (next) {
+  Payment.deleteOne({ userID: this._id });
+  next();
+});

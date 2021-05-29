@@ -63,6 +63,7 @@ const protect = async (req, res, next) => {
   }
   try {
     const payload = await verifyToken(token);
+    console.log(payload);
     const user = await Model.findById(payload.id)
       .select("-password -identities")
       .lean()

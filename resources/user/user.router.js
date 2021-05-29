@@ -17,13 +17,12 @@ import {
 const router = Router();
 
 router.route("/").get(getUserProfile).put(updateUserProfile).delete(deleteUser);
-router.route("/payments").get(getPaymentsAdded);
+router.route("/payments").get(getPaymentsAdded).put(updatePaymentsInfo);
 router.route("/profile").put(upload.single("picture"), updateProfilePicture);
 router.route("/requests").get(getRequests);
 router.route("/request/:id").get(getRequest);
 router.route("/request/answer/:id").get(answerRequest);
 router.route("/paypal/getActionUrl").get(generateSignupLink);
-router.route("/paypal/updatePaymentInfo").put(updatePaymentsInfo);
 router.route("/stripe/onboard-user").get(onBoardUser);
 router.route("/stripe/create-checkout-session").get(creatCheckoutSession);
 

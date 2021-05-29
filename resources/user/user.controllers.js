@@ -215,7 +215,7 @@ const updatePaymentsInfo = async (req, res) => {
   }
   const userID = req.user._id;
   try {
-    const payments = Payment.findOneAndUpdate({ userID }, req.body, {
+    const payments = await Payment.findOneAndUpdate({ userID }, req.body, {
       new: true,
     })
       .lean()
