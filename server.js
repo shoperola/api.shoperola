@@ -32,11 +32,12 @@ app.post("/signin", userModel, signin);
 app.post("/signupClient", clientModel, signup);
 app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
+  console.log(req.body, req.params);
   res.json("Server is Running");
 });
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/request", clientModel, protect, RequestRouter);
-app.use("/api/client", ClientRouter);
+app.use("/api/client", clientModel, protect, ClientRouter);
 
 export const start = async () => {
   try {

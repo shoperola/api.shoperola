@@ -100,11 +100,11 @@ const UserSchema = new Schema(
     settings: {
       country: {
         type: String,
-        default: "India",
+        default: "",
       },
       currency: {
         type: String,
-        default: "INR",
+        default: "",
       },
     },
     totalEarnings: {
