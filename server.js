@@ -32,6 +32,9 @@ app.post("/signin", userModel, signin);
 app.post("/signupClient", clientModel, signup);
 app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
+  res.json("Server is Running");
+});
+app.post("/", (req, res) => {
   console.log(req.body, req.params);
   res.json("Server is Running");
 });
