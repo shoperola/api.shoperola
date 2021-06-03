@@ -6,6 +6,6 @@ const router = Router();
 
 router.route("/paypal/create-order").post(createOrder);
 router.route("/paypal/capture-order/:id").post(captureOrder);
-router.route("/stripe/create-checkout-session").get(createCheckoutSession);
+router.route("/stripe/create-checkout-session").post(createCheckoutSession);
 
 export default router;
