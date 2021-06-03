@@ -1,7 +1,7 @@
 import { SECRETS } from "./config.js";
 import stripe from "stripe";
 const STRIPE = new stripe(SECRETS.stripeSecretKey);
-import { Payment } from "../resources/user/user.model.js";
+import { User, Payment } from "../resources/user/user.model.js";
 
 const createAccount = async (user) =>
   await STRIPE.accounts.create({
@@ -113,27 +113,68 @@ const generateAccountLink = async (id) =>
   });
 
 const createCheckoutSession = async (req, res) => {
+  if (!req.user) {
+    res.status(400).json({ message: "Client Not Found" });
+  }
+  const clientID = req.user._id;
+  const { userID } = req.body;
+  const { appointment } = req.body;
+  if (!appointment || !userID) {
+    return res.status(400).json({ message: "Required fields missing" });
+  }
+  console.log("user: ", userID, "client: ", clientID);
+  let user, sellerData;
+  try {
+    user = await User.findById(userID).select("-password -identities");
+  } catch (e) {
+    console.log(e.message);
+    return res.json({ message: "Error finding seller", error: e.message });
+  }
+  console.log(user);
+
+  try {
+    sellerData = await Payment.findOne({ userID });
+  } catch (e) {
+    console.log(e.message);
+    return res.json({
+      message: "Error finding seller's payment info",
+      error: e.message,
+    });
+  }
+  console.log(sellerData);
+
   try {
     const session = await STRIPE.checkout.sessions.create(
       {
         payment_method_types: ["card"],
         line_items: [
           {
-            name: "Web Dev Product",
-            amount: 500,
-            currency: "usd",
+            name: "Appointment",
+            amount: user.fees,
+            currency: user.settings.currency,
             quantity: 1,
           },
         ],
+        metadata: {
+          clientID,
+          userID,
+          ip: req.ip,
+          processed_by: "stripe",
+          paid_by: {
+            firstName: req.user.firstName,
+            lastName: req.user.lastName,
+          },
+          appointment,
+        },
         payment_intent_data: {
-          application_fee_amount: 10,
+          application_fee_amount: 0,
         },
         mode: "payment",
         success_url: "http://localhost:5500/success.html",
         cancel_url: "http://localhost:5500/cancel",
       },
       {
-        stripeAccount: "acct_1Iw3HkSAllQxC9b5",
+        stripeAccount: sellerData.stripe.id,
       }
     );
     console.log(session);
@@ -147,9 +188,14 @@ const createCheckoutSession = async (req, res) => {
   }
 };
 
+const sessionCompleteEventListener = async (req, res) => {
+  console.log(res.body);
+};
+
 export {
   onBoardUser,
   refreshAccountUrl,
   createCheckoutSession,
   checkAccountStatus,
+  sessionCompleteEventListener,
 };

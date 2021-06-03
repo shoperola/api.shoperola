@@ -8,6 +8,7 @@ import { Client } from "./resources/client/client.model.js";
 import UserRouter from "./resources/user/user.router.js";
 import RequestRouter from "./resources/requests/requests.router.js";
 import ClientRouter from "./resources/client/client.router.js";
+import TransactionRouter from "./resources/transaction/transaction.router.js";
 import { connect } from "./util/db.js";
 
 config();
@@ -34,13 +35,11 @@ app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
-app.post("/", (req, res) => {
-  console.log(req.body, req.params);
-  res.json("Server is Running");
-});
+
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/client", clientModel, protect, ClientRouter);
+app.use("/api/transaction", TransactionRouter);
 
 export const start = async () => {
   try {
