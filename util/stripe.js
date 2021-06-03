@@ -190,6 +190,7 @@ const createCheckoutSession = async (req, res) => {
 
 const sessionCompleteEventListener = async (req, res) => {
   console.log(res.body);
+  res.json("recieved");
 };
 
 export {
