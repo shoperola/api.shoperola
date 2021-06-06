@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SECRETS, PAYPAL_TOKEN, setPAYPAL_TOKEN } from "./config.js";
-import { User } from "../resources/user/user.model.js";
+import { User, Payment } from "../resources/user/user.model.js";
 
 const getAuthToken = async () => {
   try {
@@ -85,14 +85,20 @@ const generateSignupLink = async (req, res) => {
 
 const createOrder = async (req, res) => {
   const userID = req.body.userID;
-  if (!userID) {
-    return res.status(400).json({ message: "Merchant UserID is required" });
+  // console.log(req.user);
+  const clientID = req.user._id;
+  const { appointment } = req.body;
+  if (!appointment || !userID) {
+    return res.status(400).json({
+      data: { appointment, userID },
+      message: "Required fields missing",
+    });
   }
-  let user;
+  let user, sellerData;
   try {
     user = await User.findById(userID);
   } catch (e) {
-    console.log(error);
+    console.log(e);
     return res
       .status(400)
       .json({ message: "Error finding Merchant credentials" });
@@ -100,6 +106,16 @@ const createOrder = async (req, res) => {
   if (!user) {
     return res.status(400).json({ message: "Merchant not Found" });
   }
+  try {
+    sellerData = await Payment.findOne({ userID });
+  } catch (e) {
+    console.log(e.message);
+    return res
+      .status(400)
+      .json({ message: "Seller Information Not Found", error: e.message });
+  }
+  console.log(userID, user, sellerData);
+
   try {
     const order = await axios.post(
       "https://api-m.sandbox.paypal.com/v2/checkout/orders",
@@ -112,18 +128,27 @@ const createOrder = async (req, res) => {
               value: user.fees,
             },
             payee: {
-              email_address: "sb-o9nwd6312677@business.example.com",
+              merchant_id: sellerData.paypal.merchantIdInPayPal,
             },
             payment_instruction: {
               disbursement_mode: "INSTANT",
               platform_fees: [
                 {
                   amount: {
-                    currency_code: "USD",
+                    currency_code: user.settings.currency,
                     value: "0.00",
                   },
                 },
               ],
+            },
+            metadata: {
+              clientID: clientID,
+              userID: userID,
+              ip: req.ip,
+              processed_by: "paypal",
+              paid_by_firstName: req.user.firstName,
+              paid_by_lastName: req.user.lastName,
+              appointment: appointment,
             },
           },
         ],
@@ -145,7 +170,7 @@ const createOrder = async (req, res) => {
       await getAuthToken();
       await createOrder(req, res);
     } else {
-      console.log(e.response.data);
+      console.log(e.response.data || e.message);
       res.status(400).json({ message: "Error Creating Order" });
     }
   }

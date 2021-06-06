@@ -116,13 +116,17 @@ const createCheckoutSession = async (req, res) => {
   if (!req.user) {
     res.status(400).json({ message: "Client Not Found" });
   }
-  const clientID = req.user._id;
+  const clientID = req.user._id.toString();
   const { userID } = req.body;
   const { appointment } = req.body;
   if (!appointment || !userID) {
-    return res.status(400).json({ message: "Required fields missing" });
+    return res.status(400).json({
+      data: { appointment, userID },
+      message: "Required fields missing",
+    });
   }
-  console.log("user: ", userID, "client: ", clientID);
+  console.log("user: ", typeof userID, "client: ", typeof clientID);
+  console.log("appointment: ", typeof appointment);
   let user, sellerData;
   try {
     user = await User.findById(userID).select("-password -identities");
@@ -131,6 +135,9 @@ const createCheckoutSession = async (req, res) => {
     return res.json({ message: "Error finding seller", error: e.message });
   }
   console.log(user);
+  if (!user.fees) {
+    return res.status(400).json({ message: "amount set to zero not allowed" });
+  }
 
   try {
     sellerData = await Payment.findOne({ userID });
@@ -142,7 +149,6 @@ const createCheckoutSession = async (req, res) => {
     });
   }
   console.log(sellerData);
-
   try {
     const session = await STRIPE.checkout.sessions.create(
       {
@@ -156,18 +162,16 @@ const createCheckoutSession = async (req, res) => {
           },
         ],
         metadata: {
-          clientID,
-          userID,
+          clientID: clientID,
+          userID: userID,
           ip: req.ip,
           processed_by: "stripe",
-          paid_by: {
-            firstName: req.user.firstName,
-            lastName: req.user.lastName,
-          },
-          appointment,
+          paid_by_firstName: req.user.firstName,
+          paid_by_lastName: req.user.lastName,
+          appointment: appointment,
         },
         payment_intent_data: {
-          application_fee_amount: 0,
+          application_fee_amount: 50,
         },
         mode: "payment",
         success_url: "http://localhost:5500/success.html",
@@ -178,10 +182,10 @@ const createCheckoutSession = async (req, res) => {
       }
     );
     console.log(session);
-    res.json({ session: session });
+    res.json({ id: session.id });
   } catch (e) {
     console.log(e.message);
-    res.json({
+    res.status(400).json({
       message: "Error occurred while creating checkout session",
       error: e.message,
     });
@@ -189,7 +193,7 @@ const createCheckoutSession = async (req, res) => {
 };
 
 const sessionCompleteEventListener = async (req, res) => {
-  console.log(req.body);
+  console.log(JSON.stringify(req.body));
   res.json("recieved");
 };
 
