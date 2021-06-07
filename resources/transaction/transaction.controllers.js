@@ -56,10 +56,10 @@ const sessionCompleteEventListener = async (req, res) => {
         : data.resource.purchase_units.amount.value,
     };
   })();
-
+  console.log(transactionPayload);
   // insert into transaction collection
   try {
-    const transaction = await Transaction.create(transactionPayload);
+    await Transaction.create(transactionPayload);
     res.json("Transaction Logged Successfully");
   } catch (e) {
     console.log(e.message);
