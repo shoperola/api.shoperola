@@ -6,6 +6,6 @@ import { Router } from "express";
 
 const router = Router();
 
-router.route("/").post(sessionCompleteEventListener).get(getTransactions);
+router.route("/").post(sessionCompleteEventListener);
 
 export default router;

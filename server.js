@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/client", clientModel, protect, ClientRouter);
-app.use("/api/transaction", userModel, protect, TransactionRouter);
+app.use("/api/transaction", TransactionRouter);
 
 export const start = async () => {
   try {

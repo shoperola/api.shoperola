@@ -17,6 +17,7 @@ import {
   getPaymentsAdded,
   updatePaymentsInfo,
 } from "./user.controllers.js";
+import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
 
 const router = Router();
 
@@ -30,5 +31,6 @@ router.route("/paypal/getActionUrl").get(generateSignupLink);
 router.route("/stripe/onboard-user").get(onBoardUser);
 router.route("/stripe/onboard-user/refresh").get(refreshAccountUrl);
 router.route("/stripe/checkAccountStatus").get(checkAccountStatus);
+router.route("/transaction/").get(getTransactions);
 
 export default router;
