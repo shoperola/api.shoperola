@@ -13,6 +13,7 @@ const sessionCompleteEventListener = async (req, res) => {
     ? data.resource.purchase_units[0].custom_id
     : data.data.object.metadata.custom_id;
 
+  console.log(paymentLogId);
   let logData;
   //get MetaData from paymentlogs and mark it as success
   try {
