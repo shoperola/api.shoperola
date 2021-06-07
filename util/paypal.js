@@ -184,7 +184,7 @@ const createOrder = async (req, res) => {
       await getAuthToken();
       await createOrder(req, res);
     } else {
-      console.log(e.response.data || e.message);
+      console.log(e.message);
       res.status(400).json({ message: "Error Creating Order" });
     }
   }

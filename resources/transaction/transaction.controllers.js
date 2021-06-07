@@ -55,7 +55,7 @@ const sessionCompleteEventListener = async (req, res) => {
         ? currency.toUpperCase() in zeroDecimalCurrencies
           ? data.data.object.amount_total
           : data.data.object.amount_total / 100
-        : data.resource.purchase_units.amount.value,
+        : data.resource.purchase_units[0].amount.value,
     };
   })();
   console.log(transactionPayload);
@@ -71,4 +71,18 @@ const sessionCompleteEventListener = async (req, res) => {
   }
 };
 
-export { sessionCompleteEventListener };
+const getTransactions = async (req, res) => {
+  try {
+    const transactions = await Transaction.find({
+      userID: req.user._id,
+    }).lean();
+    res.json({ status: "OK", data: transactions });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(400)
+      .json({ message: "Unable to fetch Transactions", e: e.message });
+  }
+};
+
+export { sessionCompleteEventListener, getTransactions };
