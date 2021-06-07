@@ -51,7 +51,7 @@ const sessionCompleteEventListener = async (req, res) => {
       ...logData,
       confirmationID: processedByStripe(logData)
         ? data.data.object.id
-        : data.resource.purchase_units[0].payments.captures.id,
+        : data.resource.purchase_units[0].payments.captures[0].id,
       currency: currency,
       amount: processedByStripe(logData)
         ? currency.toUpperCase() in zeroDecimalCurrencies
