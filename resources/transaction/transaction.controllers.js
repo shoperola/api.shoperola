@@ -38,7 +38,7 @@ const sessionCompleteEventListener = async (req, res) => {
   console.log(logData);
 
   //create Transaction Payload to be inserted
-  const transactionPayload = (function () {
+  const transactionPayload = (() => {
     const currency = processedByStripe(logData)
       ? data.data.object.currency
       : data.resource.purchase_units.amount.currency_code;
@@ -50,7 +50,7 @@ const sessionCompleteEventListener = async (req, res) => {
         : data.resource.purchase_units.payments.captures.id,
       currency: currency,
       amount: processedByStripe(logData)
-        ? this.currency.toUpperCase() in zeroDecimalCurrencies
+        ? currency.toUpperCase() in zeroDecimalCurrencies
           ? data.data.amount_total
           : data.data.amount_total / 100
         : data.resource.purchase_units.amount.value,
