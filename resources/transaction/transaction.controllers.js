@@ -9,9 +9,10 @@ const processedByStripe = (logData) => {
 const sessionCompleteEventListener = async (req, res) => {
   console.log(JSON.stringify(req.body));
   const data = req.body;
-  const paymentLogId = data.resource
-    ? data.resource.purchase_units[0].custom_id
-    : data.data.object.metadata.custom_id;
+  const paymentLogId =
+    data.resource !== undefined
+      ? data.resource.purchase_units[0].custom_id
+      : data.data.object.metadata.custom_id;
 
   console.log(paymentLogId);
   let logData;
@@ -44,13 +45,13 @@ const sessionCompleteEventListener = async (req, res) => {
   const transactionPayload = (() => {
     const currency = processedByStripe(logData)
       ? data.data.object.currency
-      : data.resource.purchase_units.amount.currency_code;
+      : data.resource.purchase_units[0].amount.currency_code;
 
     return {
       ...logData,
       confirmationID: processedByStripe(logData)
         ? data.data.object.id
-        : data.resource.purchase_units.payments.captures.id,
+        : data.resource.purchase_units[0].payments.captures.id,
       currency: currency,
       amount: processedByStripe(logData)
         ? currency.toUpperCase() in zeroDecimalCurrencies
