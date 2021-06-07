@@ -38,20 +38,22 @@ const sessionCompleteEventListener = async (req, res) => {
   console.log(logData);
 
   //create Transaction Payload to be inserted
-  const transactionPayload = {
-    ...logData,
-    confirmationID: processedByStripe(logData)
-      ? data.data.object.id
-      : data.resource.purchase_units.payments.captures.id,
-    currency: processedByStripe(logData)
-      ? data.data.object.currency
-      : data.resource.purchase_units.amount.currency_code,
-    amount: processedByStripe(logData)
-      ? this.currency.toUpperCase() in zeroDecimalCurrencies
-        ? data.data.amount_total
-        : data.data.amount_total / 100
-      : data.resource.purchase_units.amount.value,
-  };
+  const transactionPayload = (function () {
+    return {
+      ...logData,
+      confirmationID: processedByStripe(logData)
+        ? data.data.object.id
+        : data.resource.purchase_units.payments.captures.id,
+      currency: processedByStripe(logData)
+        ? data.data.object.currency
+        : data.resource.purchase_units.amount.currency_code,
+      amount: processedByStripe(logData)
+        ? this.currency.toUpperCase() in zeroDecimalCurrencies
+          ? data.data.amount_total
+          : data.data.amount_total / 100
+        : data.resource.purchase_units.amount.value,
+    };
+  })();
 
   // insert into transaction collection
   try {
