@@ -24,7 +24,9 @@ const sessionCompleteEventListener = async (req, res) => {
       { new: true }
     )
       .select("-createdAt -updatedAt -_id -success")
+      .lean()
       .exec();
+
     if (!logData) {
       throw new Error("No document matched");
     }
