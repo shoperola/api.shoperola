@@ -51,8 +51,8 @@ const sessionCompleteEventListener = async (req, res) => {
       currency: currency,
       amount: processedByStripe(logData)
         ? currency.toUpperCase() in zeroDecimalCurrencies
-          ? data.data.amount_total
-          : data.data.amount_total / 100
+          ? data.data.object.amount_total
+          : data.data.object.amount_total / 100
         : data.resource.purchase_units.amount.value,
     };
   })();
