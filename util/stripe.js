@@ -2,6 +2,8 @@ import { SECRETS } from "./config.js";
 import stripe from "stripe";
 const STRIPE = new stripe(SECRETS.stripeSecretKey);
 import { User, Payment } from "../resources/user/user.model.js";
+import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
+import zeroDecimalCurrencies from "./ZRC.js";
 
 const createAccount = async (user) =>
   await STRIPE.accounts.create({
@@ -127,7 +129,7 @@ const createCheckoutSession = async (req, res) => {
   }
   console.log("user: ", typeof userID, "client: ", typeof clientID);
   console.log("appointment: ", typeof appointment);
-  let user, sellerData;
+  let user, sellerData, paymentDetails;
   try {
     user = await User.findById(userID).select("-password -identities");
   } catch (e) {
@@ -149,6 +151,26 @@ const createCheckoutSession = async (req, res) => {
     });
   }
   console.log(sellerData);
+
+  try {
+    paymentDetails = await PaymentLog.create({
+      clientID: clientID,
+      userID: userID,
+      ip: req.ip,
+      processed_by: "stripe",
+      paid_by: {
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+      },
+      appointment: appointment,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res
+      .status(400)
+      .json({ message: "Error creating paymentDetails", error: e.message });
+  }
+
   try {
     const session = await STRIPE.checkout.sessions.create(
       {
@@ -156,22 +178,19 @@ const createCheckoutSession = async (req, res) => {
         line_items: [
           {
             name: "Appointment",
-            amount: user.fees,
+            amount:
+              user.settings.currency.toUpperCase() in zeroDecimalCurrencies
+                ? user.fees
+                : user.fees * 100,
             currency: user.settings.currency,
             quantity: 1,
           },
         ],
         metadata: {
-          clientID: clientID,
-          userID: userID,
-          ip: req.ip,
-          processed_by: "stripe",
-          paid_by_firstName: req.user.firstName,
-          paid_by_lastName: req.user.lastName,
-          appointment: appointment,
+          custom_id: paymentDetails._id.toString(),
         },
         payment_intent_data: {
-          application_fee_amount: 50,
+          application_fee_amount: 0,
         },
         mode: "payment",
         success_url: "http://localhost:5500/success.html",
@@ -192,15 +211,9 @@ const createCheckoutSession = async (req, res) => {
   }
 };
 
-const sessionCompleteEventListener = async (req, res) => {
-  console.log(JSON.stringify(req.body));
-  res.json("recieved");
-};
-
 export {
   onBoardUser,
   refreshAccountUrl,
   createCheckoutSession,
   checkAccountStatus,
-  sessionCompleteEventListener,
 };

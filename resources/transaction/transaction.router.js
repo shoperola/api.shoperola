@@ -1,4 +1,4 @@
-import { sessionCompleteEventListener } from "../../util/stripe.js";
+import { sessionCompleteEventListener } from "./transaction.controllers.js";
 import { Router } from "express";
 
 const router = Router();

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SECRETS, PAYPAL_TOKEN, setPAYPAL_TOKEN } from "./config.js";
 import { User, Payment } from "../resources/user/user.model.js";
+import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
 
 const getAuthToken = async () => {
   try {
@@ -94,7 +95,7 @@ const createOrder = async (req, res) => {
       message: "Required fields missing",
     });
   }
-  let user, sellerData;
+  let user, sellerData, paymentDetails;
   try {
     user = await User.findById(userID);
   } catch (e) {
@@ -103,9 +104,11 @@ const createOrder = async (req, res) => {
       .status(400)
       .json({ message: "Error finding Merchant credentials" });
   }
+
   if (!user) {
     return res.status(400).json({ message: "Merchant not Found" });
   }
+
   try {
     sellerData = await Payment.findOne({ userID });
   } catch (e) {
@@ -115,6 +118,25 @@ const createOrder = async (req, res) => {
       .json({ message: "Seller Information Not Found", error: e.message });
   }
   console.log(userID, user, sellerData);
+
+  try {
+    paymentDetails = await PaymentLog.create({
+      clientID: clientID,
+      userID: userID,
+      ip: req.ip,
+      processed_by: "paypal",
+      paid_by: {
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+      },
+      appointment: appointment,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res
+      .status(400)
+      .json({ message: "Error creating paymentDetails", error: e.message });
+  }
 
   try {
     const order = await axios.post(
@@ -141,15 +163,7 @@ const createOrder = async (req, res) => {
                 },
               ],
             },
-            metadata: {
-              clientID: clientID,
-              userID: userID,
-              ip: req.ip,
-              processed_by: "paypal",
-              paid_by_firstName: req.user.firstName,
-              paid_by_lastName: req.user.lastName,
-              appointment: appointment,
-            },
+            custom_id: paymentDetails._id,
           },
         ],
       },

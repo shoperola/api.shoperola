@@ -50,6 +50,6 @@ const TransactionSchema = new Schema(
   { timestamps: true }
 );
 
-TransacationsSchema.index({ userID: 1, clientID: 1 });
+TransactionSchema.index({ userID: 1, clientID: 1 });
 
 export const Transaction = model("transactions", TransactionSchema);
