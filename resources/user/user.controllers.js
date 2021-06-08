@@ -15,15 +15,19 @@ const updateUserProfile = async (req, res) => {
     return res.status(400).json({ message: "User not Found" });
   }
   const userID = req.user._id;
-  console.log(req.file, req.body);
+  // console.log(req.file, req.body);
+  const updateObject = req.file
+    ? { ...req.body, bannerImage: req.file.location }
+    : req.body;
+  if (!updateObject) {
+    return res.status(400).json({
+      message: "Nothing to Update",
+    });
+  }
   try {
-    const doc = await User.findByIdAndUpdate(
-      userID,
-      { ...req.body, bannerImage: req.file.location },
-      {
-        new: true,
-      }
-    )
+    const doc = await User.findByIdAndUpdate(userID, updateObject, {
+      new: true,
+    })
       .select("-password -identities")
       .lean()
       .exec();
