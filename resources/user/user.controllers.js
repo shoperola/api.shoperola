@@ -1,12 +1,14 @@
 import { Payment, User } from "./user.model.js";
 import { Request } from "../requests/requests.model.js";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 const { Types } = mongoose;
 
 const getUserProfile = (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
   }
+  delete user.password;
   res.json({ status: "ok", data: req.user });
 };
 
@@ -68,6 +70,36 @@ const updateProfilePicture = async (req, res) => {
     res.status(400).json({ message: "Error Updating Profile Picture" });
   }
   // res.json({ status: "recieved" });
+};
+
+const changeUserPassword = async (req, res) => {
+  const Modal = req.model;
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    return res.status(400).json({ message: "Required fields missing" });
+  }
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const user = await Modal.findById(req.user._id).exec();
+    const match = await user.checkPassword(oldPassword);
+    if (!match) {
+      return res.status(401).json({ message: "incorrect old password" });
+    }
+    const doc = await Modal.findByIdAndUpdate(req.user._id);
+    if (doc) {
+      doc.password = newPassword;
+      await doc.save();
+    }
+    res.json({ status: "OK", message: "Password Changed Successfully" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).json({
+      message: "Error fetching user object",
+      error: e.message,
+    });
+  }
 };
 
 const getRequests = async (req, res) => {
@@ -237,4 +269,5 @@ export {
   answerRequest,
   getPaymentsAdded,
   updatePaymentsInfo,
+  changeUserPassword,
 };

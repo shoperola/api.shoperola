@@ -13,6 +13,7 @@ import {
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
+  changeUserPassword,
   deleteUser,
   getPaymentsAdded,
   updatePaymentsInfo,
@@ -25,6 +26,7 @@ router.route("/").get(getUserProfile).put(updateUserProfile).delete(deleteUser);
 router.route("/payments").get(getPaymentsAdded).put(updatePaymentsInfo);
 router.route("/profile").put(upload.single("picture"), updateProfilePicture);
 router.route("/requests").get(getRequests);
+router.route("/password").post(changeUserPassword);
 router.route("/request/:id").get(getRequest);
 router.route("/request/answer/:id").get(answerRequest);
 router.route("/paypal/getActionUrl").get(generateSignupLink);
