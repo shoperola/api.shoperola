@@ -29,8 +29,10 @@ const updateUserProfile = async (req, res) => {
       .exec();
     return res.json({ status: "ok", data: doc });
   } catch (e) {
-    console.log(e);
-    res.status(400).send({ message: "Error performing the update" });
+    console.log(e.message);
+    res
+      .status(400)
+      .send({ message: "Error performing the update", error: e.message });
   }
 };
 
