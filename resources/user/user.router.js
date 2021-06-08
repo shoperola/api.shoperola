@@ -22,7 +22,11 @@ import { getTransactions } from "../../resources/transaction/transaction.control
 
 const router = Router();
 
-router.route("/").get(getUserProfile).put(updateUserProfile).delete(deleteUser);
+router
+  .route("/")
+  .get(getUserProfile)
+  .put(upload.single("bannerImage"), updateUserProfile)
+  .delete(deleteUser);
 router.route("/payments").get(getPaymentsAdded).put(updatePaymentsInfo);
 router.route("/profile").put(upload.single("picture"), updateProfilePicture);
 router.route("/requests").get(getRequests);
