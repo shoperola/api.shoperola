@@ -15,7 +15,21 @@ const sessionCompleteEventListener = async (req, res) => {
       : data.data.object.metadata.custom_id;
 
   console.log(paymentLogId);
+  if (!paymentLogId) {
+    return res.status(400).json({ message: "custom_id Not found" });
+  }
   let logData;
+  // get MetaData from paymentlogs and check if its success is set to true. return if success === true
+  try {
+    logData = await PaymentLog.findById(paymentLogId).lean().exec();
+    if (logData.success) {
+      return res.status(400).json({ message: "transaction already logged" });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json({ message: "Error getting metadata logs" });
+  }
+
   //get MetaData from paymentlogs and mark it as success
   try {
     logData = await PaymentLog.findByIdAndUpdate(
@@ -25,7 +39,7 @@ const sessionCompleteEventListener = async (req, res) => {
       },
       { new: true }
     )
-      .select("-createdAt -updatedAt -_id -success")
+      .select("-updatedAt -_id -success")
       .lean()
       .exec();
 
