@@ -8,7 +8,6 @@ const getUserProfile = (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
   }
-  delete user.password;
   res.json({ status: "ok", data: req.user });
 };
 
