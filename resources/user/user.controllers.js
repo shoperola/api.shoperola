@@ -1,7 +1,6 @@
 import { Payment, User } from "./user.model.js";
 import { Request } from "../requests/requests.model.js";
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 const { Types } = mongoose;
 
 const getUserProfile = (req, res) => {
