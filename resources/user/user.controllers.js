@@ -76,9 +76,82 @@ const updateProfilePicture = async (req, res) => {
     res.json({ status: "ok", data: doc });
   } catch (e) {
     console.log(e);
-    res.status(400).json({ message: "Error Updating Profile Picture" });
+    res.status(500).json({ message: "Error Updating Profile Picture" });
   }
   // res.json({ status: "recieved" });
+};
+
+const addFeatured = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  console.log(req.file);
+  try {
+    const doc = await User.findById(req.user._id);
+    doc.featured.push({
+      url: req.file.location,
+    });
+    await doc.save();
+    res.json({ status: "OK", data: doc.featured });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error adding featured media", error: e.message });
+  }
+};
+
+const updateFeatured = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  console.log(req.file);
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "id not provided" });
+  }
+  try {
+    const doc = await User.findOneAndUpdate(
+      { "featured._id": id },
+      {
+        $set: {
+          "featured.$.url": req.file.location,
+        },
+      },
+      { new: true }
+    );
+    res.json({ status: "OK", data: doc.featured });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error updating featured media", error: e.message });
+  }
+};
+
+const deleteFeatured = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "id not provided" });
+  }
+  try {
+    const doc = await User.findOneAndUpdate(
+      { "featured._id": id },
+      {
+        $pull: { featured: { _id: id } },
+      },
+      { new: true }
+    );
+    res.json({ message: "Media removed successfully", data: doc.featured });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error deleting featured media", error: e.message });
+  }
 };
 
 const changeUserPassword = async (req, res) => {
@@ -272,6 +345,9 @@ export {
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
+  updateFeatured,
+  deleteFeatured,
+  addFeatured,
   deleteUser,
   getRequest,
   getRequests,

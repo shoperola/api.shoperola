@@ -13,6 +13,9 @@ import {
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
+  addFeatured,
+  updateFeatured,
+  deleteFeatured,
   changeUserPassword,
   deleteUser,
   getPaymentsAdded,
@@ -29,6 +32,11 @@ router
   .delete(deleteUser);
 router.route("/payments").get(getPaymentsAdded).put(updatePaymentsInfo);
 router.route("/profile").put(upload.single("picture"), updateProfilePicture);
+router.route("/featured").post(upload.single("featured"), addFeatured);
+router
+  .route("/featured/:id")
+  .put(upload.single("featured"), updateFeatured)
+  .delete(deleteFeatured);
 router.route("/requests").get(getRequests);
 router.route("/password").post(changeUserPassword);
 router.route("/request/:id").get(getRequest);

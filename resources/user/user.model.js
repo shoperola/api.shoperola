@@ -74,7 +74,7 @@ const UserSchema = new Schema(
     },
     featured: [
       {
-        type: String,
+        url: String,
       },
     ],
     websiteLink: {
