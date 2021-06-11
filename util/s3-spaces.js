@@ -19,7 +19,10 @@ export const upload = multer({
     key: function (request, file, cb) {
       const filenameArray = file.originalname.split(".");
       const extension = filenameArray[filenameArray.length - 1];
-      const customFileName = `${md5(file.fieldName + Date.now())}.${extension}`;
+      const customFileName = `${md5([
+        file.fieldName,
+        Date.now(),
+      ])}.${extension}`;
       file.filename = `${file.fieldname}-${customFileName}`;
       cb(null, file.filename);
     },

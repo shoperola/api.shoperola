@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
+import md5 from "md5";
 
 const UserSchema = new Schema(
   {
@@ -21,6 +22,11 @@ const UserSchema = new Schema(
     lastName: {
       type: String,
       required: true,
+    },
+    username: {
+      type: String,
+      unique: true,
+      default: "",
     },
     identities: {
       google: {
@@ -136,12 +142,19 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre("save", function (next) {
-  if (!this.isModified("password") && !this.isModified("publicUrl")) {
+  if (!this.isModified("password") && !this.isModified("username")) {
     return next();
   }
-  this.publicUrl = `https://konsult-member.com/${
-    this._id
-  }/${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`;
+  try {
+    this.username = `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`;
+  } catch (e) {
+    console.log(e.message);
+    this.username = `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}.${md5(
+      [this.firstName, this.lastName, Date.now()]
+    )}`;
+  }
+
+  this.publicUrl = `https://konsult-member.com/${this.username}`;
 
   bcrypt.hash(this.password, 8, (err, hash) => {
     if (err) {
