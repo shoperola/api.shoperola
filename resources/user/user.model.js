@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 import md5 from "md5";
+import axios from "axios";
 
 const UserSchema = new Schema(
   {
@@ -25,6 +26,7 @@ const UserSchema = new Schema(
     },
     username: {
       type: String,
+      trim: true,
       unique: true,
       default: "",
     },
@@ -141,29 +143,63 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.pre("save", function (next) {
-  if (!this.isModified("password") && !this.isModified("username")) {
+export const generateUniqueUserName = async (
+  proposedName,
+  firstName,
+  lastName
+) => {
+  const doc = await User.findOne({ username: proposedName });
+  if (doc) {
+    const name = `${proposedName}.${md5([
+      firstName,
+      lastName,
+      Date.now(),
+    ]).slice(0, 5)}`;
+    return await generateUniqueUserName(name, firstName, lastName);
+  }
+  console.log(proposedName, firstName, lastName);
+  return proposedName;
+};
+
+UserSchema.pre("save", async function (next) {
+  if (
+    !this.isModified("password") &&
+    !this.isModified("username") &&
+    !this.isModified("picture")
+  ) {
     return next();
   }
-  try {
-    this.username = `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`;
-  } catch (e) {
-    console.log(e.message);
-    this.username = `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}.${md5(
-      [this.firstName, this.lastName, Date.now()]
-    )}`;
-  }
+  this.username = await generateUniqueUserName(
+    `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`,
+    this.firstName,
+    this.lastName
+  );
 
   this.publicUrl = `https://konsult-member.com/${this.username}`;
 
-  bcrypt.hash(this.password, 8, (err, hash) => {
-    if (err) {
-      return next(err);
-    }
+  const params = {
+    name: `${this.firstName} ${this.lastName}`,
+    size: 256,
+    rounded: true,
+    background: "3d1f98",
+    color: "fff",
+  };
+  this.picture = `https://ui-avatars.com/api/?${new URLSearchParams(
+    params
+  ).toString()}`;
 
+  try {
+    const hash = await bcrypt.hash(this.password, 8);
     this.password = hash;
     next();
-  });
+  } catch (err) {
+    next(err);
+  }
+});
+
+UserSchema.pre("remove", function (next) {
+  Payment.deleteOne({ userID: this._id });
+  next();
 });
 
 UserSchema.methods.checkPassword = function (password) {
@@ -215,8 +251,3 @@ PaymentsSchema.index({ userID: 1 });
 
 export const Payment = model("payments", PaymentsSchema);
 export const User = model("users", UserSchema);
-
-UserSchema.pre("remove", function (next) {
-  Payment.deleteOne({ userID: this._id });
-  next();
-});

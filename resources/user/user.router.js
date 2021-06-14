@@ -20,6 +20,7 @@ import {
   deleteUser,
   getPaymentsAdded,
   updatePaymentsInfo,
+  updatePublicUrl,
 } from "./user.controllers.js";
 import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
 
@@ -32,6 +33,7 @@ router
   .delete(deleteUser);
 router.route("/payments").get(getPaymentsAdded).put(updatePaymentsInfo);
 router.route("/profile").put(upload.single("picture"), updateProfilePicture);
+router.route("/profile/username").put(updatePublicUrl);
 router.route("/featured").post(upload.single("featured"), addFeatured);
 router
   .route("/featured/:id")

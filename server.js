@@ -9,6 +9,7 @@ import UserRouter from "./resources/user/user.router.js";
 import RequestRouter from "./resources/requests/requests.router.js";
 import ClientRouter from "./resources/client/client.router.js";
 import TransactionRouter from "./resources/transaction/transaction.router.js";
+import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers.js";
 import { connect } from "./util/db.js";
 
 config();
@@ -35,8 +36,8 @@ app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
-
 app.use("/api/user", userModel, protect, UserRouter);
+app.get("/profile/:username", ProfileDataController);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/client", clientModel, protect, ClientRouter);
 app.use("/api/transaction", TransactionRouter);

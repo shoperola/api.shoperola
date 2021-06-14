@@ -22,9 +22,16 @@ const signup = async (req, res) => {
     const token = newToken(user);
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
+    console.log();
     if (e.toString().includes("E11000 duplicate key error collection")) {
-      return res.status(400).send({ status: "Model Already Exists" });
+      return res
+        .status(400)
+        .send({
+          status: `${
+            Model.collection.name === "users" ? "User" : "Client"
+          } Already Exists`,
+        });
     }
     return res.status(400).send({ status: "Error Communicating with server" });
   }

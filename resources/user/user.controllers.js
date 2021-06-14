@@ -1,4 +1,4 @@
-import { Payment, User } from "./user.model.js";
+import { Payment, User, generateUniqueUserName } from "./user.model.js";
 import { Request } from "../requests/requests.model.js";
 import mongoose from "mongoose";
 const { Types } = mongoose;
@@ -184,6 +184,53 @@ const changeUserPassword = async (req, res) => {
   }
 };
 
+const updatePublicUrl = async (req, res) => {
+  const { username } = req.body;
+  try {
+    const doc = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        username: username,
+        publicUrl: `https://konsult-member.com/${username}`,
+      },
+      { new: true }
+    );
+    res.json({ status: "OK", data: doc });
+  } catch (e) {
+    console.log(e.message);
+    const newUsername = await generateUniqueUserName(
+      username,
+      req.user.firstName,
+      req.user.lastName
+    );
+    res.status(400).json({
+      status: "Error",
+      message: "Duplicate username already exists",
+      suggestion: newUsername,
+    });
+  }
+};
+
+const getPublicProfile = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const doc = await User.findOne(
+      { username: username },
+      "-reviews -reviewsCount -views -totalEarnings -settings -rating -identities -email -password"
+    ).exec();
+    if (!doc) {
+      throw new Error("No user found");
+    }
+    res.json({ status: "OK", data: doc });
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).json({
+      message: "Error finding userData",
+      error: e.message,
+    });
+  }
+};
+
 const getRequests = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
@@ -345,6 +392,7 @@ export {
   getUserProfile,
   updateUserProfile,
   updateProfilePicture,
+  getPublicProfile,
   updateFeatured,
   deleteFeatured,
   addFeatured,
@@ -355,4 +403,5 @@ export {
   getPaymentsAdded,
   updatePaymentsInfo,
   changeUserPassword,
+  updatePublicUrl,
 };
