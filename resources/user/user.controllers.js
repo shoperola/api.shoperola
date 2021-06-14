@@ -191,7 +191,7 @@ const deleteLanguage = async (req, res) => {
         "languages._id": id,
       },
       {
-        $addToSet: { languages: { _id: id } },
+        $push: { languages: { _id: id } },
       },
       {
         new: true,
