@@ -21,6 +21,8 @@ import {
   getPaymentsAdded,
   updatePaymentsInfo,
   updatePublicUrl,
+  addLanguage,
+  deleteLanguage,
 } from "./user.controllers.js";
 import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
 
@@ -39,6 +41,8 @@ router
   .route("/featured/:id")
   .put(upload.single("featured"), updateFeatured)
   .delete(deleteFeatured);
+router.route("/languages/").post(addLanguage);
+router.route("/languages/:id").delete(deleteLanguage);
 router.route("/requests").get(getRequests);
 router.route("/password").post(changeUserPassword);
 router.route("/request/:id").get(getRequest);

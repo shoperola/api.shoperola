@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 import md5 from "md5";
-import axios from "axios";
 
 const UserSchema = new Schema(
   {
@@ -83,6 +82,22 @@ const UserSchema = new Schema(
     featured: [
       {
         url: String,
+      },
+    ],
+    subjects: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        banner: String,
+      },
+    ],
+    languages: [
+      {
+        name: {
+          type: String,
+        },
       },
     ],
     websiteLink: {

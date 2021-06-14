@@ -154,6 +154,59 @@ const deleteFeatured = async (req, res) => {
   }
 };
 
+const addLanguage = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ message: "Name needs to be provieded" });
+  }
+  try {
+    const doc = await User.findById(req.user._id);
+    doc.languages.push({
+      name: name,
+    });
+    await doc.save();
+    res.json({ status: "OK", data: doc.languages });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error adding language", error: e.message });
+  }
+};
+
+const deleteLanguage = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "id not provided" });
+  }
+  try {
+    const doc = await User.findOneAndUpdate(
+      {
+        "languages._id": id,
+      },
+      {
+        $addToSet: { languages: { _id: id } },
+      },
+      {
+        new: true,
+      }
+    );
+    res.json({ status: "OK", data: doc.languages });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({
+      message: "Error Deleting Language",
+      error: e.message,
+    });
+  }
+};
+
 const changeUserPassword = async (req, res) => {
   const Modal = req.model;
   const { oldPassword, newPassword } = req.body;
@@ -396,6 +449,8 @@ export {
   updateFeatured,
   deleteFeatured,
   addFeatured,
+  addLanguage,
+  deleteLanguage,
   deleteUser,
   getRequest,
   getRequests,
