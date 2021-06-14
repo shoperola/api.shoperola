@@ -191,7 +191,7 @@ const deleteLanguage = async (req, res) => {
         "languages._id": id,
       },
       {
-        $push: { languages: { _id: id } },
+        $pull: { languages: { _id: id } },
       },
       {
         new: true,
