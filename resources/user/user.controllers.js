@@ -53,7 +53,7 @@ const updateUserProfile = async (req, res) => {
       });
     }
     res
-      .status(400)
+      .status(500)
       .send({ message: "Error performing the update", error: e.message });
   }
 };
@@ -64,11 +64,11 @@ const deleteUser = async (req, res) => {
     return res.status(400).json({ message: "User not Found" });
   }
   try {
-    const doc = await Model.findOneAndDelete({ _id: req.user._id }).exec();
+    await Model.findOneAndDelete({ _id: req.user._id }).exec();
     res.json({ status: "ok", message: "User Deleted Successfully" });
   } catch (e) {
     console.log(e);
-    res.status(400).json({ message: "Error deleting User" });
+    res.status(500).json({ message: "Error deleting User" });
   }
 };
 
@@ -385,7 +385,7 @@ const changeUserPassword = async (req, res) => {
     res.json({ status: "OK", message: "Password Changed Successfully" });
   } catch (e) {
     console.log(e.message);
-    res.status(400).json({
+    res.status(500).json({
       message: "Error fetching user object",
       error: e.message,
     });
@@ -411,7 +411,7 @@ const updatePublicUrl = async (req, res) => {
       req.user.firstName,
       req.user.lastName
     );
-    res.status(400).json({
+    res.status(500).json({
       status: "Error",
       message: "Duplicate username already exists",
       suggestion: newUsername,
@@ -432,7 +432,7 @@ const getPublicProfile = async (req, res) => {
     res.json({ status: "OK", data: doc });
   } catch (e) {
     console.log(e.message);
-    res.status(400).json({
+    res.status(500).json({
       message: "Error finding userData",
       error: e.message,
     });
@@ -483,7 +483,7 @@ const getRequests = async (req, res) => {
     res.json({ status: "ok", data: doc });
   } catch (e) {
     console.log(e);
-    res.status(400).json({ message: "Error getting requests" });
+    res.status(500).json({ message: "Error getting requests" });
   }
 };
 
@@ -549,7 +549,7 @@ const getRequest = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Invalid request ID" });
     }
-    res.status(400).json({ message: "Error getting requests" });
+    res.status(500).json({ message: "Error getting requests" });
   }
 };
 
@@ -574,7 +574,7 @@ const getPaymentsAdded = async (req, res) => {
     return res.json({ status: "ok", data: doc });
   } catch (e) {
     console.log(e);
-    res.status(400).json({ message: "Error getting Payments" });
+    res.status(500).json({ message: "Error getting Payments" });
   }
 };
 
@@ -592,7 +592,7 @@ const updatePaymentsInfo = async (req, res) => {
     res.json({ status: "ok", data: payments });
   } catch (e) {
     console.log(e);
-    res.status(400).json({ message: "Error getting Payments" });
+    res.status(500).json({ message: "Error getting Payments" });
   }
 };
 
