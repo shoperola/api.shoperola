@@ -260,6 +260,44 @@ const addSubject = async (req, res) => {
   }
 };
 
+const updateSubject = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  const { id } = req.params;
+  const { name } = req.body;
+  if (!id) {
+    return res.status(400).json({ message: "id not provided" });
+  }
+  if (!name) {
+    return res.status(400).json({ message: "Name not provided" });
+  }
+
+  console.log(req.file);
+  const updateObject = req.file
+    ? {
+        "subjects.$.name": name.toLowerCase(),
+        "subjects.$.banner": req.file.location,
+      }
+    : { "subjects.$.name": name.toLowerCase() };
+
+  try {
+    const doc = await User.findOneAndUpdate(
+      { "subjects._id": id },
+      {
+        $set: updateObject,
+      },
+      { new: true }
+    );
+    res.json({ status: "OK", data: doc.subjects });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error updating the subject", error: e.message });
+  }
+};
+
 const deleteSubject = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
@@ -533,6 +571,7 @@ export {
   deleteLanguage,
   deleteUser,
   addSubject,
+  updateSubject,
   deleteSubject,
   getRequest,
   getRequests,

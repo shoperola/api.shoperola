@@ -25,6 +25,7 @@ import {
   deleteLanguage,
   addSubject,
   deleteSubject,
+  updateSubject,
 } from "./user.controllers.js";
 import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
 
@@ -46,7 +47,10 @@ router
 router.route("/languages/").post(addLanguage);
 router.route("/languages/:id").delete(deleteLanguage);
 router.route("/subjects/").post(upload.single("banner"), addSubject);
-router.route("/subjects/:id").delete(deleteSubject);
+router
+  .route("/subjects/:id")
+  .delete(deleteSubject)
+  .put(upload.single("banner"), updateSubject);
 router.route("/requests").get(getRequests);
 router.route("/password").post(changeUserPassword);
 router.route("/request/:id").get(getRequest);
