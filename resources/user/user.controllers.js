@@ -16,9 +16,15 @@ const updateUserProfile = async (req, res) => {
   }
   const userID = req.user._id;
   // console.log(req.file, req.body);
+
+  const { username } = req.body;
   const updateObject = req.file
-    ? { ...req.body, bannerImage: req.file.location }
-    : req.body;
+    ? {
+        ...req.body,
+        bannerImage: req.file.location,
+        publicUrl: `https://konsult-member.com/${username}`,
+      }
+    : { ...req.body, publicUrl: `https://konsult-member.com/${username}` };
   if (!updateObject) {
     return res.status(400).json({
       message: "Nothing to Update",
@@ -34,6 +40,18 @@ const updateUserProfile = async (req, res) => {
     return res.json({ status: "ok", data: doc });
   } catch (e) {
     console.log(e.message);
+    if (e.message.includes("username_1 dup key")) {
+      const newUsername = await generateUniqueUserName(
+        username,
+        req.user.firstName,
+        req.user.lastName
+      );
+      return res.status(500).json({
+        message: "Error updating username, username already exists",
+        error: e.message,
+        suggestion: newUsername,
+      });
+    }
     res
       .status(400)
       .send({ message: "Error performing the update", error: e.message });
