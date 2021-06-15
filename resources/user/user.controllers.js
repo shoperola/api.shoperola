@@ -181,11 +181,19 @@ const addLanguage = async (req, res) => {
     return res.status(400).json({ message: "Name needs to be provieded" });
   }
   try {
-    const doc = await User.findById(req.user._id);
-    doc.languages.push({
-      name: name,
-    });
-    await doc.save();
+    const doc = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: {
+          languages: {
+            name: name.toLowerCase(),
+          },
+        },
+      },
+      {
+        new: true,
+      }
+    );
     res.json({ status: "OK", data: doc.languages });
   } catch (e) {
     console.log(e.message);
@@ -220,6 +228,60 @@ const deleteLanguage = async (req, res) => {
     console.log(e.message);
     res.status(500).json({
       message: "Error Deleting Language",
+      error: e.message,
+    });
+  }
+};
+
+const addSubject = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  console.log(req.file);
+  const subjectObject = req.file
+    ? { ...req.body, banner: req.file.location }
+    : { ...req.body };
+  if (!subjectObject.name) {
+    return res.status(400).json({ message: "Name of subject is required" });
+  }
+
+  try {
+    const doc = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { subjects: subjectObject },
+      },
+      { new: true }
+    );
+    res.json({ status: "OK", data: doc.subjects });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error adding Subject", error: e.message });
+  }
+};
+
+const deleteSubject = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "id not provided" });
+  }
+
+  try {
+    const doc = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { subjects: { _id: id } },
+      },
+      { new: true }
+    );
+    res.json({ status: "OK", data: doc.subjects });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({
+      message: "Error adding subject",
       error: e.message,
     });
   }
@@ -464,12 +526,14 @@ export {
   updateUserProfile,
   updateProfilePicture,
   getPublicProfile,
+  addFeatured,
   updateFeatured,
   deleteFeatured,
-  addFeatured,
   addLanguage,
   deleteLanguage,
   deleteUser,
+  addSubject,
+  deleteSubject,
   getRequest,
   getRequests,
   answerRequest,

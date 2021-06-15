@@ -89,6 +89,7 @@ const UserSchema = new Schema(
         name: {
           type: String,
           required: true,
+          unique: true,
         },
         banner: String,
       },
@@ -97,6 +98,7 @@ const UserSchema = new Schema(
       {
         name: {
           type: String,
+          unique: true,
         },
       },
     ],

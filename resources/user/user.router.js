@@ -23,6 +23,8 @@ import {
   updatePublicUrl,
   addLanguage,
   deleteLanguage,
+  addSubject,
+  deleteSubject,
 } from "./user.controllers.js";
 import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
 
@@ -43,6 +45,8 @@ router
   .delete(deleteFeatured);
 router.route("/languages/").post(addLanguage);
 router.route("/languages/:id").delete(deleteLanguage);
+router.route("/subjects/").post(upload.single("banner"), addSubject);
+router.route("/subjects/:id").delete(deleteSubject);
 router.route("/requests").get(getRequests);
 router.route("/password").post(changeUserPassword);
 router.route("/request/:id").get(getRequest);
