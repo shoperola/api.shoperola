@@ -233,6 +233,43 @@ const deleteLanguage = async (req, res) => {
   }
 };
 
+const getSubject = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "id not provided" });
+  }
+  try {
+    const doc = await User.aggregate([
+      {
+        $match: {
+          _id: Types.ObjectId(req.user._id),
+        },
+      },
+      {
+        $unwind: "$subjects",
+      },
+      {
+        $match: {
+          "subjects._id": Types.ObjectId(id),
+        },
+      },
+      {
+        $project: { subjects: true, _id: false },
+      },
+    ]);
+    res.json({ status: "OK", data: doc[0].subjects });
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ message: "Error getting Subject", error: e.message });
+  }
+};
+
 const addSubject = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
@@ -570,6 +607,7 @@ export {
   addLanguage,
   deleteLanguage,
   deleteUser,
+  getSubject,
   addSubject,
   updateSubject,
   deleteSubject,
