@@ -176,24 +176,24 @@ const addLanguage = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
-  const { name } = req.body;
-  if (!name) {
-    return res.status(400).json({ message: "Name needs to be provieded" });
+  const { id } = req.body;
+  if (!id) {
+    return res
+      .status(400)
+      .json({ message: "Language id needs to be provieded" });
   }
   try {
     const doc = await User.findByIdAndUpdate(
       req.user._id,
       {
         $addToSet: {
-          languages: {
-            name: name.toLowerCase(),
-          },
+          languages: id,
         },
       },
       {
         new: true,
       }
-    );
+    ).populate("languages");
     res.json({ status: "OK", data: doc.languages });
   } catch (e) {
     console.log(e.message);
@@ -212,12 +212,10 @@ const deleteLanguage = async (req, res) => {
     return res.status(400).json({ message: "id not provided" });
   }
   try {
-    const doc = await User.findOneAndUpdate(
+    const doc = await User.findByIdAndUpdate(
+      req.user._id,
       {
-        "languages._id": id,
-      },
-      {
-        $pull: { languages: { _id: id } },
+        $pull: { languages: id },
       },
       {
         new: true,
