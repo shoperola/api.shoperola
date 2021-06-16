@@ -37,12 +37,12 @@ app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
+app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/client", clientModel, protect, ClientRouter);
 app.use("/api/transaction", TransactionRouter);
-app.use("/api/languages", LanguageRouter);
 
 export const start = async () => {
   try {
