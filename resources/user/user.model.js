@@ -96,10 +96,9 @@ const UserSchema = new Schema(
     ],
     languages: [
       {
-        name: {
-          type: String,
-          unique: true,
-        },
+        type: SchemaTypes.ObjectId,
+        ref: "languages",
+        unique: true,
       },
     ],
     websiteLink: {
