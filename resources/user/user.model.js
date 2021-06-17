@@ -86,10 +86,11 @@ const UserSchema = new Schema(
     ],
     subjects: [
       {
-        name: {
-          type: String,
+        subject: {
+          type: SchemaTypes.ObjectId,
           required: true,
           unique: true,
+          ref: "subjects",
         },
         banner: String,
       },

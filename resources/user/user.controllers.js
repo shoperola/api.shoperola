@@ -1,5 +1,6 @@
 import { Payment, User, generateUniqueUserName } from "./user.model.js";
 import { Request } from "../requests/requests.model.js";
+import { Subject } from "../subject/subject.model.js";
 import mongoose from "mongoose";
 const { Types } = mongoose;
 
@@ -193,7 +194,7 @@ const addLanguage = async (req, res) => {
       {
         new: true,
       }
-    ).populate("languages");
+    ).populate({ path: "languages", select: "name" });
     res.json({ status: "OK", data: doc.languages });
   } catch (e) {
     console.log(e.message);
@@ -272,14 +273,55 @@ const addSubject = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
-  console.log(req.file);
-  const subjectObject = req.file
-    ? { ...req.body, banner: req.file.location }
-    : { ...req.body };
-  if (!subjectObject.name) {
-    return res.status(400).json({ message: "Name of subject is required" });
+
+  const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ message: "Subject Name required" });
   }
 
+  // find to check if subject already present.
+  let subject;
+  try {
+    subject = await Subject.findOne({ name: name });
+  } catch (e) {
+    console.log(e.message);
+    return res
+      .status(500)
+      .json({ message: "Error identifying subject", error: e.message });
+  }
+
+  if (!subject) {
+    // subject not present so create new
+    try {
+      subject = await Subject.create({ name: name });
+    } catch (e) {
+      console.log(e.message);
+      return res
+        .status(500)
+        .json({ message: "Error creating subject", error: e.message });
+    }
+  }
+
+  const subjectObject = req.file
+    ? { subject: subject._id, banner: req.file.location }
+    : { subject: subject._id };
+
+  try {
+    const doc = await User.findOne({
+      "subjects.subject": subject,
+    });
+    if (doc) {
+      throw new Error("Subject Already Exists");
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      message: "Error while subject already present",
+      error: e.message,
+    });
+  }
+
+  // add to user subjects
   try {
     const doc = await User.findByIdAndUpdate(
       req.user._id,
@@ -287,7 +329,13 @@ const addSubject = async (req, res) => {
         $addToSet: { subjects: subjectObject },
       },
       { new: true }
-    );
+    ).populate({
+      path: "subjects",
+      populate: {
+        path: "subject",
+        select: "name -_id",
+      },
+    });
     res.json({ status: "OK", data: doc.subjects });
   } catch (e) {
     console.log(e.message);
