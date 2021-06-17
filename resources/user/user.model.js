@@ -86,13 +86,9 @@ const UserSchema = new Schema(
     ],
     subjects: [
       {
-        subject: {
-          type: SchemaTypes.ObjectId,
-          required: true,
-          unique: true,
-          ref: "subjects",
-        },
-        banner: String,
+        type: SchemaTypes.ObjectId,
+        ref: "subjects",
+        unique: true,
       },
     ],
     languages: [

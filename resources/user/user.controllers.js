@@ -279,10 +279,14 @@ const addSubject = async (req, res) => {
     return res.status(400).json({ message: "Subject Name required" });
   }
 
+  const subjectObject = req.file
+    ? { name: name, addedBy: req.user._id, banner: req.file.location }
+    : { name: name, addedBy: req.user._id };
+
   // find to check if subject already present.
   let subject;
   try {
-    subject = await Subject.findOne({ name: name });
+    subject = await Subject.findOne({ name: name, addedBy: req.user._id });
   } catch (e) {
     console.log(e.message);
     return res
@@ -293,7 +297,7 @@ const addSubject = async (req, res) => {
   if (!subject) {
     // subject not present so create new
     try {
-      subject = await Subject.create({ name: name });
+      subject = await Subject.create(subjectObject);
     } catch (e) {
       console.log(e.message);
       return res
@@ -302,13 +306,12 @@ const addSubject = async (req, res) => {
     }
   }
 
-  const subjectObject = req.file
-    ? { subject: subject._id, banner: req.file.location }
-    : { subject: subject._id };
-
+  // check if subject already exists in the user model
   try {
     const doc = await User.findOne({
-      "subjects.subject": subject,
+      subjects: {
+        $in: [subject._id],
+      },
     });
     if (doc) {
       throw new Error("Subject Already Exists");
@@ -326,16 +329,10 @@ const addSubject = async (req, res) => {
     const doc = await User.findByIdAndUpdate(
       req.user._id,
       {
-        $addToSet: { subjects: subjectObject },
+        $addToSet: { subjects: subject._id },
       },
       { new: true }
-    ).populate({
-      path: "subjects",
-      populate: {
-        path: "subject",
-        select: "name -_id",
-      },
-    });
+    ).populate({ path: "subjects", select: "-addedBy -__v" });
     res.json({ status: "OK", data: doc.subjects });
   } catch (e) {
     console.log(e.message);
