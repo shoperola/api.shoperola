@@ -53,4 +53,4 @@ const LessonSchema = Schema(
   { timestamps: true }
 );
 
-export const Lesson = model("lessons");
+export const Lesson = model("lessons", LessonSchema);

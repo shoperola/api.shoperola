@@ -242,25 +242,11 @@ const getSubject = async (req, res) => {
     return res.status(400).json({ message: "id not provided" });
   }
   try {
-    const doc = await User.aggregate([
-      {
-        $match: {
-          _id: Types.ObjectId(req.user._id),
-        },
-      },
-      {
-        $unwind: "$subjects",
-      },
-      {
-        $match: {
-          "subjects._id": Types.ObjectId(id),
-        },
-      },
-      {
-        $project: { subjects: true, _id: false },
-      },
-    ]);
-    res.json({ status: "OK", data: doc[0].subjects });
+    const doc = await User.findById(req.user._id).populate({
+      path: "subjects",
+      select: "-addedBy -__v",
+    });
+    res.json({ status: "OK", data: doc.subjects });
   } catch (e) {
     console.log(e);
     res

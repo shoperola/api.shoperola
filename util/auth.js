@@ -25,13 +25,11 @@ const signup = async (req, res) => {
     console.log(e.message);
     console.log();
     if (e.toString().includes("E11000 duplicate key error collection")) {
-      return res
-        .status(400)
-        .send({
-          status: `${
-            Model.collection.name === "users" ? "User" : "Client"
-          } Already Exists`,
-        });
+      return res.status(400).send({
+        status: `${
+          Model.collection.name === "users" ? "User" : "Client"
+        } Already Exists`,
+      });
     }
     return res.status(400).send({ status: "Error Communicating with server" });
   }
@@ -72,6 +70,8 @@ const protect = async (req, res, next) => {
     const payload = await verifyToken(token);
     console.log(payload);
     const user = await Model.findById(payload.id)
+      .populate({ path: "subjects", select: "-addedBy -__v" })
+      .populate({ path: "languages", select: "name" })
       .select("-password -identities")
       .lean()
       .exec();
