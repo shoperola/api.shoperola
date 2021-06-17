@@ -8,7 +8,6 @@ const LessonSchema = Schema(
       type: SchemaTypes.ObjectId,
       ref: "user",
       required: true,
-      unique: true,
     },
     title: {
       type: String,

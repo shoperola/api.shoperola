@@ -1,8 +1,17 @@
 import { Router } from "express";
-import { createLesson } from "./lesson.controllers.js";
+import { createLesson, updateLesson } from "./lesson.controllers.js";
+import { upload } from "../../util/s3-spaces.js";
 
 const router = Router();
 
-router.route("/").post(createLesson);
+const uploadFields = [
+  { name: "video" },
+  { name: "banner" },
+  { name: "thumbnail" },
+];
+
+router.route("/").post(upload.fields(uploadFields), createLesson);
+
+router.route("/:id").put(upload.fields(uploadFields), updateLesson);
 
 export default router;
