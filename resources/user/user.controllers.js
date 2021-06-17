@@ -356,19 +356,23 @@ const updateSubject = async (req, res) => {
   console.log(req.file);
   const updateObject = req.file
     ? {
-        "subjects.$.name": name.toLowerCase(),
-        "subjects.$.banner": req.file.location,
+        name: name.toLowerCase(),
+        banner: req.file.location,
       }
-    : { "subjects.$.name": name.toLowerCase() };
+    : { name: name.toLowerCase() };
 
   try {
-    const doc = await User.findOneAndUpdate(
-      { "subjects._id": id },
+    await Subject.findByIdAndUpdate(
+      id,
       {
         $set: updateObject,
       },
       { new: true }
     );
+    const doc = await User.findById(req.user._id).populate({
+      path: "subjects",
+      select: "-addedBy -__v",
+    });
     res.json({ status: "OK", data: doc.subjects });
   } catch (e) {
     console.log(e.message);
@@ -388,13 +392,14 @@ const deleteSubject = async (req, res) => {
   }
 
   try {
+    await Subject.findByIdAndDelete(id);
     const doc = await User.findByIdAndUpdate(
       req.user._id,
       {
-        $pull: { subjects: { _id: id } },
+        $pull: { subjects: id },
       },
       { new: true }
-    );
+    ).populate({ path: "subjects", select: "-addedBy -__v" });
     res.json({ status: "OK", data: doc.subjects });
   } catch (e) {
     console.log(e.message);
