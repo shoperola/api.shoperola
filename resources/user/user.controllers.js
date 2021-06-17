@@ -242,11 +242,8 @@ const getSubject = async (req, res) => {
     return res.status(400).json({ message: "id not provided" });
   }
   try {
-    const doc = await User.findById(req.user._id).populate({
-      path: "subjects",
-      select: "-addedBy -__v",
-    });
-    res.json({ status: "OK", data: doc.subjects });
+    const doc = await Subject.findById(id).select("-addedBy -__v");
+    res.json({ status: "OK", data: doc });
   } catch (e) {
     console.log(e);
     res
