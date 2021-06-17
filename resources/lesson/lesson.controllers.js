@@ -1,5 +1,42 @@
 import { Lesson } from "./lesson.model.js";
 
+const getLessons = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const doc = await Lesson.find({ madeBy: req.user._id })
+      .populate({ path: "subject", select: "-addedBy -__v" })
+      .populate({ path: "language", select: "name" })
+      .exec();
+    res.json({ status: "OK", data: doc });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error getting requests", error: e.message });
+  }
+};
+
+const getLesson = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "Lesson id required" });
+  }
+  try {
+    const doc = await Lesson.findById(id)
+      .populate({ path: "subject", select: "-addedBy -__v" })
+      .populate({ path: "language", select: "name" });
+    res.json({ status: "OK", data: doc });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error getting Lesson", error: e.message });
+  }
+};
+
 const createLesson = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
@@ -64,4 +101,19 @@ const updateLesson = async (req, res) => {
   }
 };
 
-export { createLesson, updateLesson };
+const deleteLesson = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "Lesson id not provided" });
+  }
+  try {
+    await Lesson.findByIdAndDelete(id);
+    res.json({ status: "OK", message: "Lesson Deleted Successfully" });
+  } catch (e) {
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error deleting lesson", error: e.message });
+  }
+};
+export { getLesson, getLessons, createLesson, updateLesson, deleteLesson };
