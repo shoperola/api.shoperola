@@ -6,6 +6,7 @@ const getLessons = async (req, res) => {
   }
   try {
     const doc = await Lesson.find({ madeBy: req.user._id })
+      .sort({ updatedAt: -1 })
       .populate({ path: "subject", select: "-addedBy -__v" })
       .populate({ path: "language", select: "name" })
       .exec();
