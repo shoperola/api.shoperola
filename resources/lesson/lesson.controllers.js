@@ -69,6 +69,7 @@ const createLesson = async (req, res) => {
 };
 
 const updateLesson = async (req, res) => {
+  console.log(req.headers);
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
