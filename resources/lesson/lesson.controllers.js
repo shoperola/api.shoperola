@@ -78,13 +78,10 @@ const updateLesson = async (req, res) => {
   }
   const { banner, video, thumbnail } = req.files;
   console.log(banner, video, thumbnail);
-  const lessonObject = {
-    ...req.body,
-    madeBy: req.user._id,
-    video: video ? video[0].location : "",
-    banner: banner ? banner[0].location : "",
-    thumbnail: thumbnail ? thumbnail[0].location : "",
-  };
+  const lessonObject = req.body;
+  video ? (lessonObject.video = video[0].location) : null;
+  banner ? (lessonObject.banner = banner[0].location) : null;
+  thumbnail ? (lessonObject.thumbnail = thumbnail[0].location) : null;
 
   try {
     const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {
