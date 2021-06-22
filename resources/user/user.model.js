@@ -88,14 +88,12 @@ const UserSchema = new Schema(
       {
         type: SchemaTypes.ObjectId,
         ref: "subjects",
-        unique: true,
       },
     ],
     languages: [
       {
         type: SchemaTypes.ObjectId,
         ref: "languages",
-        unique: true,
       },
     ],
     websiteLink: {
