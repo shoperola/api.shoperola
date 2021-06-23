@@ -613,6 +613,7 @@ const updatePaymentsInfo = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
   }
+  console.log(req.body);
   const userID = req.user._id;
   try {
     const payments = await Payment.findOneAndUpdate({ userID }, req.body, {
