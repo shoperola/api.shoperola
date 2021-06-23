@@ -13,6 +13,7 @@ import LessonRouter from "./resources/lesson/lesson.router.js";
 import LanguageRouter from "./resources/language/language.router.js";
 import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers.js";
 import { connect } from "./util/db.js";
+import { getVerifyMiddleware } from "./util/cognito.js";
 
 config();
 const app = express();
@@ -42,9 +43,10 @@ app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.use("/api/request", clientModel, protect, RequestRouter);
-app.use("/api/client", clientModel, protect, ClientRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
+const cognitoAuthMiddleware = getVerifyMiddleware;
+app.use("/api/client", cognitoAuthMiddleware, ClientRouter);
 
 export const start = async () => {
   try {
