@@ -15,6 +15,9 @@ const SECRETS = {
   region: process.env.COGNITO_REGION,
   userPool: process.env.COGNITO_USERPOOL,
   clientId: process.env.COGNITO_CLIENT,
+  clientSecret: process.env.COGNITO_CLIENT_SECRET,
+  auth_domain: process.env.COGNITO_AUTH_DOMAIN,
+  redirect_uri: process.env.COGNITO_REDIRECT_URI,
 };
 
 let PAYPAL_TOKEN = "";

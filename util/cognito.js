@@ -7,11 +7,29 @@ import jwkToPem from "jwk-to-pem";
 import jwt from "jsonwebtoken";
 import { SECRETS } from "./config.js";
 import axios from "axios";
+import {
+  CognitoUserPool,
+  CognitoRefreshToken,
+  CognitoUser,
+} from "amazon-cognito-identity-js";
+import fetch from "node-fetch";
 
-const { region, userPool, clientId: _clientId } = SECRETS;
+global.fetch = fetch;
+const {
+  region,
+  userPool,
+  clientId: _clientId,
+  clientSecret,
+  auth_domain,
+  redirect_uri,
+} = SECRETS;
 const { decode, verify, TokenExpiredError } = jwt;
 const TOKEN_USE_ACCESS = "access";
 const TOKEN_USE_ID = "id";
+const poolData = {
+  UserPoolId: userPool,
+  ClientId: _clientId,
+};
 
 const MAX_TOKEN_AGE = 60 * 60; // 3600 seconds
 const ALLOWED_TOKEN_USES = [TOKEN_USE_ACCESS, TOKEN_USE_ID];
@@ -66,35 +84,33 @@ function _init() {
 }
 
 // Verify the Authorization header and call the next middleware handler if appropriate
-function _verifyMiddleWare(pemsDownloadProm, req, res, next) {
-  console.log(pemsDownloadProm);
-  pemsDownloadProm
-    .then((pems) => {
-      return _verifyProm(pems, req.get("Authorization"));
-    })
-    .then((decoded) => {
-      // Caller is authorised - copy some useful attributes into the req object for later use
-      console.debug(`Valid JWT token. Decoded: ${JSON.stringify(decoded)}.`);
-      req.user = {
-        sub: decoded.sub,
-        token_use: decoded.token_use,
-      };
-      if (decoded.token_use === TOKEN_USE_ACCESS) {
-        // access token specific fields
-        req.user.scope = decoded.scope.split(" ");
-        req.user.username = decoded.username;
-      }
-      if (decoded.token_use === TOKEN_USE_ID) {
-        // id token specific fields
-        req.user.email = decoded.email;
-        req.user.username = decoded["cognito:username"];
-      }
-      next();
-    })
-    .catch((err) => {
-      const status = err instanceof AuthError ? 401 : 500; // Either not auth or internal error
-      res.status(status).send(err.message || err);
-    });
+async function _verifyMiddleWare(pemsDownloadProm, req, res, next) {
+  // console.log(pemsDownloadProm);
+  try {
+    const decoded = await _verifyProm(
+      pemsDownloadProm,
+      req.get("Authorization")
+    );
+    console.debug(`Valid JWT token. Decoded: ${JSON.stringify(decoded)}.`);
+    req.user = {
+      sub: decoded.sub,
+      token_use: decoded.token_use,
+    };
+    if (decoded.token_use === TOKEN_USE_ACCESS) {
+      // access token specific fields
+      req.user.scope = decoded.scope.split(" ");
+      req.user.username = decoded.username;
+    }
+    if (decoded.token_use === TOKEN_USE_ID) {
+      // id token specific fields
+      req.user.email = decoded.email;
+      req.user.username = decoded["cognito:username"];
+    }
+    next();
+  } catch (err) {
+    const status = err instanceof AuthError ? 401 : 500; // Either not auth or internal error
+    res.status(status).send(err.message || err);
+  }
 }
 
 // Verify the Authorization header and return a promise.
@@ -114,7 +130,8 @@ function _verifyProm(pems, auth) {
       );
       return;
     }
-    const authPrefix = auth.split(" ").toLowerCase()[0];
+    // console.log(auth);
+    const authPrefix = auth.toLowerCase().split(" ")[0];
     if (authPrefix !== "bearer") {
       reject(
         new AuthError(
@@ -209,5 +226,75 @@ function _verifyProm(pems, auth) {
     );
   });
 }
+
+export const generateTokensfromCode = async (req, res) => {
+  const { code } = req.body;
+  console.log(code);
+  try {
+    const params = new URLSearchParams({
+      grant_type: "authorization_code",
+      code: code,
+      client_id: _clientId,
+      redirect_uri: redirect_uri,
+    });
+
+    const config = {
+      auth: {
+        username: _clientId,
+        password: clientSecret,
+      },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+
+    const resp = await axios.post(
+      `https://${auth_domain}/oauth2/token`,
+      params,
+      config
+    );
+    const data = resp.data;
+    console.log(data);
+    res.json({ status: "OK", data: data });
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).json({ message: "Error generating tokens" });
+  }
+};
+
+export const renewToken = async (req, res) => {
+  let token = req.body.refresh_token;
+  console.log(token);
+  if (!token) {
+    return res.status(401).end();
+  }
+  try {
+    const params = {
+      ClientId: _clientId,
+      AuthFlow: "REFRESH_TOKEN_AUTH",
+      AuthParameters: {
+        REFRESH_TOKEN: token,
+        SECRET_HASH: clientSecret, // In case you have configured client secret
+      },
+    };
+
+    const config = {
+      headers: {
+        "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth",
+        "Content-Type": "application/x-amz-json-1.1",
+      },
+    };
+
+    const resp = await axios.post(
+      `https://cognito-idp.${region}.amazonaws.com/`,
+      params,
+      config
+    );
+    res.json({ status: "OK", data: resp.data.AuthenticationResult });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: "Error refreshing token" });
+  }
+};
 
 export const getVerifyMiddleware = _getVerifyMiddleware;
