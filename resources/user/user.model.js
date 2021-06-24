@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 import md5 from "md5";
+import { Payment } from "../payments/payments.model.js";
 
 const UserSchema = new Schema(
   {
@@ -208,10 +209,16 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-UserSchema.pre("remove", { document: true, query: false }, function (next) {
-  Payment.deleteOne({ userID: this._id });
-  next();
-});
+UserSchema.pre(
+  "findOneAndDelete",
+  { document: true, query: true },
+  async function (next) {
+    const userID = this.getFilter()["_id"];
+    console.log("DELETING USER", userID);
+    await Payment.findOneAndDelete({ userID });
+    next();
+  }
+);
 
 UserSchema.methods.checkPassword = function (password) {
   const passwordHash = this.password;
