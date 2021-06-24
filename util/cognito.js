@@ -4,12 +4,10 @@
  * 3) frontend recieves the jwt token and sends it to backend and based on the userid being present in the database or not => either a new user is created or his details are sent if already present.
  */
 import jwkToPem from "jwk-to-pem";
-import request from "request";
 import jwt from "jsonwebtoken";
 import { SECRETS } from "./config.js";
 import axios from "axios";
 
-const { get } = request;
 const { region, userPool, clientId: _clientId } = SECRETS;
 const { decode, verify, TokenExpiredError } = jwt;
 const TOKEN_USE_ACCESS = "access";
@@ -69,6 +67,7 @@ function _init() {
 
 // Verify the Authorization header and call the next middleware handler if appropriate
 function _verifyMiddleWare(pemsDownloadProm, req, res, next) {
+  console.log(pemsDownloadProm);
   pemsDownloadProm
     .then((pems) => {
       return _verifyProm(pems, req.get("Authorization"));
