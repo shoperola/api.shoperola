@@ -109,8 +109,8 @@ const refreshAccountUrl = async (req, res) => {
 const generateAccountLink = async (id) =>
   await STRIPE.accountLinks.create({
     account: id,
-    refresh_url: "https://kourse-53d4f.web.app/#/payment/refresh",
-    return_url: "https://kourse-53d4f.web.app/#/payment/return",
+    refresh_url: "https://kourse-53d4f.web.app/#/payment/stripe/refresh",
+    return_url: "https://kourse-53d4f.web.app/#/payment/stripe/return",
     type: "account_onboarding",
   });
 
