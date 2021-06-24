@@ -32,10 +32,4 @@ const updatePaymentsInfo = async (req, res) => {
   }
 };
 
-const togglePayments = async (req, res) => {
-  if (!req.user) {
-    return res.status(400).json({ message: "User not Found" });
-  }
-};
-
 export { getPaymentsAdded, updatePaymentsInfo };
