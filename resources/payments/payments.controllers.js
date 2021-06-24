@@ -1,3 +1,5 @@
+import { Payment } from "./payments.model.js";
+
 const getPaymentsAdded = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
