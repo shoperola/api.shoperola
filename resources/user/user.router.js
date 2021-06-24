@@ -18,8 +18,6 @@ import {
   deleteFeatured,
   changeUserPassword,
   deleteUser,
-  getPaymentsAdded,
-  updatePaymentsInfo,
   updatePublicUrl,
   addLanguage,
   deleteLanguage,
@@ -29,6 +27,10 @@ import {
   getSubject,
 } from "./user.controllers.js";
 import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
+import {
+  getPaymentsAdded,
+  updatePaymentsInfo,
+} from "../../resources/payments/payments.controllers.js";
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-import { Payment } from "../resources/user/user.model.js";
+import { Payment } from "../resources/payments/payments.model.js";
 import { newToken, verifyToken } from "./jwt.js";
 
 const signup = async (req, res) => {

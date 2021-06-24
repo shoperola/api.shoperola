@@ -1,7 +1,8 @@
 import axios from "axios";
 import { SECRETS, PAYPAL_TOKEN, setPAYPAL_TOKEN } from "./config.js";
-import { User, Payment } from "../resources/user/user.model.js";
+import { User } from "../resources/user/user.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
+import { Payment } from "../resources/payments/payments.model.js";
 
 const getAuthToken = async () => {
   try {

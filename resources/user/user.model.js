@@ -208,7 +208,7 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-UserSchema.pre("remove", function (next) {
+UserSchema.pre("remove", { document: true, query: false }, function (next) {
   Payment.deleteOne({ userID: this._id });
   next();
 });
@@ -226,39 +226,4 @@ UserSchema.methods.checkPassword = function (password) {
   });
 };
 
-const PaymentsSchema = new Schema(
-  {
-    userID: {
-      type: SchemaTypes.ObjectId,
-      ref: "users",
-      required: true,
-    },
-    paypal: {
-      merchantId: String,
-      merchantIdInPayPal: String,
-      permissionsGranted: Boolean,
-      consentStatus: Boolean,
-      productIntentId: String,
-      productIntentID: String,
-      isEmailConfirmed: Boolean,
-      accountStatus: String,
-      default: {},
-    },
-    stripe: {
-      type: Object,
-      default: {},
-    },
-    razorpay: {
-      type: Object,
-      default: {},
-    },
-  },
-  {
-    minimize: false,
-  }
-);
-
-PaymentsSchema.index({ userID: 1 });
-
-export const Payment = model("payments", PaymentsSchema);
 export const User = model("users", UserSchema);

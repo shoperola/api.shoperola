@@ -1,9 +1,10 @@
 import { SECRETS } from "./config.js";
 import stripe from "stripe";
 const STRIPE = new stripe(SECRETS.stripeSecretKey);
-import { User, Payment } from "../resources/user/user.model.js";
+import { User } from "../resources/user/user.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
 import zeroDecimalCurrencies from "./ZRC.js";
+import { Payment } from "../resources/payments/payments.model.js";
 
 const createAccount = async (user) =>
   await STRIPE.accounts.create({
@@ -95,7 +96,10 @@ const refreshAccountUrl = async (req, res) => {
     return res.json({ message: "User Not Found" });
   }
   try {
-    const { accountID } = req.session;
+    // const { accountID } = req.session;
+    const userID = req.user._id;
+    const paymentDoc = await Payment.findOne({ userID });
+    const { id: accountID } = paymentDoc.stripe.id;
     const accountLinkURL = await generateAccountLink(accountID);
     res.json({ url: accountLinkURL.url });
   } catch (e) {
