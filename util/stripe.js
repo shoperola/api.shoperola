@@ -99,7 +99,7 @@ const refreshAccountUrl = async (req, res) => {
     // const { accountID } = req.session;
     const userID = req.user._id;
     const paymentDoc = await Payment.findOne({ userID });
-    const { id: accountID } = paymentDoc.stripe.id;
+    const { id: accountID } = paymentDoc.stripe;
     const accountLinkURL = await generateAccountLink(accountID);
     res.json({ url: accountLinkURL.url });
   } catch (e) {
