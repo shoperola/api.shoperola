@@ -11,7 +11,7 @@ router.route("/").get((req, res) => {
   );
 });
 
-router.route("/refreshToken").get(renewToken);
+router.route("/refreshToken").post(renewToken);
 
 router.route("/paypal/create-order").post(createOrder);
 router.route("/paypal/capture-order/:id").post(captureOrder);
