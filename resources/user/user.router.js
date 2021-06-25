@@ -66,7 +66,7 @@ router
   .put(upload.single("banner"), updateSubject)
   .delete(deleteSubject);
 
-router.route("/subscibers").get(getSubscribers);
+router.route("/subscribers").get(getSubscribers);
 
 router.route("/requests").get(getRequests);
 
