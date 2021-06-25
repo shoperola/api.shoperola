@@ -10,6 +10,8 @@ const RelationSchema = new Schema(
   { timestamps: true }
 );
 
+RelationSchema.index({ subscriber: 1, instructor: 1 }, { unique: true });
+
 export const subscriberRelation = model(
   "subscribers-relations",
   RelationSchema

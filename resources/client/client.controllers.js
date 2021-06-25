@@ -16,16 +16,27 @@ const createClient = async (req, res) => {
   if (!userID) {
     return res.status(400).json({ message: "Instructor ID not provided" });
   }
+  const { sub, username, given_name, family_name, email } = req.user;
+  let client;
   try {
-    const { sub, username, given_name, family_name, email } = req.user;
-    const client = await Client.create({
+    client = await Client.create({
       email: email,
       username: username,
       firstName: given_name,
       lastName: family_name,
       sub: sub,
     });
-
+  } catch (e) {
+    console.log(e.message);
+    if (e.message.includes("E11000 duplicate key error collection")) {
+      console.log("client already exists");
+      client = await Client.findOne({ sub: sub });
+    } else {
+      return res.status(500).json({ message: "Error creating client" });
+    }
+  }
+  // create Relation
+  try {
     const relation = await subscriberRelation.create({
       subscriber: client._id,
       instructor: userID,
@@ -33,7 +44,7 @@ const createClient = async (req, res) => {
     res.status(201).json({ status: "OK", data: client });
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ message: "Error creating Client" });
+    res.status(500).json({ message: "Error creating relation" });
   }
 };
 
