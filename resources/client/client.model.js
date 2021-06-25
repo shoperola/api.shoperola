@@ -9,10 +9,6 @@ const ClientSchema = new Schema({
     trim: true,
     unique: true,
   },
-  password: {
-    type: String,
-    trim: true,
-  },
   firstName: {
     type: String,
     required: true,
@@ -21,23 +17,11 @@ const ClientSchema = new Schema({
     type: String,
     required: true,
   },
-  identities: {
-    google: {
-      type: String,
-      default: "",
-    },
-    facebook: {
-      type: String,
-      default: "",
-    },
-    linkedin: {
-      type: String,
-      default: "",
-    },
-    twitter: {
-      type: String,
-      default: "",
-    },
+
+  sub: {
+    type: String,
+    unique: true,
+    required: true,
   },
 });
 

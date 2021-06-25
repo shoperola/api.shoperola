@@ -12,10 +12,15 @@ const SECRETS = {
   paypalBNCode: process.env.PAYPAL_BN_CODE,
   stripePublishKey: process.env.STRIPE_PUBLISH_KEY,
   stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+  region: process.env.COGNITO_REGION,
+  userPool: process.env.COGNITO_USERPOOL,
+  clientId: process.env.COGNITO_CLIENT,
+  clientSecret: process.env.COGNITO_CLIENT_SECRET,
+  auth_domain: process.env.COGNITO_AUTH_DOMAIN,
+  redirect_uri: process.env.COGNITO_REDIRECT_URI,
 };
 
-let PAYPAL_TOKEN =
-  "A21AALm6DI4r5N1vlMf7c7vgI8wVFLrnwvOUOE0GvPn1NwXnN8gzgawcH_LWOt9ZbwEq-jzqw13Nk9QOME5gbnGNnestEqcxw";
+let PAYPAL_TOKEN = "";
 const setPAYPAL_TOKEN = (token) => {
   PAYPAL_TOKEN = token;
 };
