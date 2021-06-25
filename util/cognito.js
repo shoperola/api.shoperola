@@ -257,7 +257,7 @@ export const generateTokensfromCode = async (req, res) => {
     console.log(data);
     res.json({ status: "OK", data: data });
   } catch (e) {
-    console.error(e.message);
+    console.error(e);
     res.status(500).json({ message: "Error generating tokens" });
   }
 };
