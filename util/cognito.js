@@ -105,6 +105,8 @@ async function _verifyMiddleWare(pemsDownloadProm, req, res, next) {
       // id token specific fields
       req.user.email = decoded.email;
       req.user.username = decoded["cognito:username"];
+      req.user.given_name = decoded.given_name;
+      req.user.family_name = decoded.family_name;
     }
     next();
   } catch (err) {

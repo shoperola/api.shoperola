@@ -1,15 +1,11 @@
+import { Router } from "express";
 import { createOrder, captureOrder } from "../../util/paypal.js";
 import { createCheckoutSession } from "../../util/stripe.js";
 import { renewToken } from "../../util/cognito.js";
-import { Router } from "express";
+import { getClient } from "./client.controllers.js";
 
 const router = Router();
-router.route("/").get((req, res) => {
-  res.send(
-    "Successfully verified JWT token. Extracted information: " +
-      JSON.stringify(req.user)
-  );
-});
+router.route("/").get(getClient);
 
 router.route("/refreshToken").post(renewToken);
 
