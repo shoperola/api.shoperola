@@ -23,9 +23,12 @@ const updateUserProfile = async (req, res) => {
     ? {
         ...req.body,
         bannerImage: req.file.location,
-        publicUrl: `https://konsult-member.com/${username}`,
+        publicUrl: `https://kourse-53d4f.web.app/public/${username}`,
       }
-    : { ...req.body, publicUrl: `https://konsult-member.com/${username}` };
+    : {
+        ...req.body,
+        publicUrl: `https://kourse-53d4f.web.app/public/${username}`,
+      };
   if (!updateObject) {
     return res.status(400).json({
       message: "Nothing to Update",

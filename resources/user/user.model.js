@@ -187,7 +187,7 @@ UserSchema.pre("save", async function (next) {
     this.lastName
   );
 
-  this.publicUrl = `https://kourse-53d4f.web.app/#/public/${this.username}`;
+  this.publicUrl = `https://kourse-53d4f.web.app/public/${this.username}`;
 
   const params = {
     name: `${this.firstName} ${this.lastName}`,
