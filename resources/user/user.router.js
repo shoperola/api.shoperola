@@ -25,6 +25,7 @@ import {
   deleteSubject,
   updateSubject,
   getSubject,
+  getSubscribers,
 } from "./user.controllers.js";
 import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
 import {
@@ -64,6 +65,8 @@ router
   .get(getSubject)
   .put(upload.single("banner"), updateSubject)
   .delete(deleteSubject);
+
+router.route("/subscibers").get(getSubscribers);
 
 router.route("/requests").get(getRequests);
 
