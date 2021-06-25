@@ -6,6 +6,7 @@ const RelationSchema = new Schema(
   {
     subscriber: SchemaTypes.ObjectId,
     instructor: SchemaTypes.ObjectId,
+    amount: Number,
   },
   { timestamps: true }
 );

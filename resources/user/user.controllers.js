@@ -1,6 +1,7 @@
 import { User, generateUniqueUserName } from "./user.model.js";
 import { Request } from "../requests/requests.model.js";
 import { Subject } from "../subject/subject.model.js";
+import { subscriberRelation } from '../subscriberUserRelation/subscriberUserRelation.model.js'
 import mongoose from "mongoose";
 const { Types } = mongoose;
 
@@ -598,6 +599,21 @@ const answerRequest = async (req, res) => {
    **/
   console.log(req.file, req.body);
 };
+
+const getSubscribers = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const subscribers = await subscriberRelation.find({instructor: req.user._id}).populate("subscriber")
+
+
+  }catch(e) {
+    console.log(e.message);
+    res.status(500).json({message: "Error fetching subscribers"})
+  }
+}
+
 
 export {
   getUserProfile,

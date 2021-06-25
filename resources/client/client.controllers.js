@@ -1,4 +1,5 @@
 import { Client } from "./client.model.js";
+import { User } from "../user/user.model.js";
 import { subscriberRelation } from "../subscriberUserRelation/subscriberUserRelation.model.js";
 
 const getClient = async (req, res) => {
@@ -35,16 +36,30 @@ const createClient = async (req, res) => {
       return res.status(500).json({ message: "Error creating client" });
     }
   }
+  let user;
+  try {
+    user = await User.findById(userID);
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({ message: "Error finding user" });
+  }
+
   // create Relation
   try {
     const relation = await subscriberRelation.create({
       subscriber: client._id,
       instructor: userID,
+      amount: user.fees,
     });
     res.status(201).json({ status: "OK", data: client });
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ message: "Error creating relation" });
+    if (e.message.includes("E11000 duplicate key error collection")) {
+      console.log("client already exists");
+      res.status(200).json({ status: "OK", data: client });
+    } else {
+      res.status(500).json({ message: "Error creating relation" });
+    }
   }
 };
 
