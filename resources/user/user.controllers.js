@@ -606,11 +606,11 @@ const getSubscribers = async (req, res) => {
   }
   try {
     const subscribers = await subscriberRelation
-      .find({ instructor: req.user._id })
-      .populate({
-        path: "subscriber",
-        select: "firstName lastName email amount createdAt status",
-      });
+      .find({
+        instructor: req.user._id,
+      })
+      .populate({ path: "subscriber", select: "-username -sub -__v" })
+      .exec();
     res.json({ status: "OK", data: subscribers });
   } catch (e) {
     console.log(e.message);

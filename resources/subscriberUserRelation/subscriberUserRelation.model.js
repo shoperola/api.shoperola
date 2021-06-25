@@ -4,8 +4,8 @@ const { Schema, model, SchemaTypes } = mongoose;
 
 const RelationSchema = new Schema(
   {
-    subscriber: SchemaTypes.ObjectId,
-    instructor: SchemaTypes.ObjectId,
+    subscriber: { type: SchemaTypes.ObjectId, ref: "clients" },
+    instructor: { type: SchemaTypes.ObjectId, ref: "users" },
     amount: Number,
   },
   { timestamps: true }
