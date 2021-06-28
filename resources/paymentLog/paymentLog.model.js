@@ -29,10 +29,6 @@ const PaymentLogSchema = Schema(
         required: true,
       },
     },
-    appointment: {
-      type: String,
-      required: true,
-    },
     success: {
       type: Boolean,
       default: false,

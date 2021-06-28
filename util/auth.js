@@ -37,7 +37,6 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
   const Model = req.model;
-  const collectionName = Model.collection.collectionName;
 
   if (!req.body.email || !req.body.password)
     return res.status(400).send({ message: "Email and password required" });

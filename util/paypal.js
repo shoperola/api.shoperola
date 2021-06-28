@@ -88,10 +88,10 @@ const createOrder = async (req, res) => {
   const userID = req.body.userID;
   // console.log(req.user);
   const clientID = req.user._id;
-  const { appointment } = req.body;
-  if (!appointment || !userID) {
+  const paymentType = req.body.paymentType;
+  if (!userID) {
     return res.status(400).json({
-      data: { appointment, userID },
+      data: { userID },
       message: "Required fields missing",
     });
   }
@@ -129,7 +129,6 @@ const createOrder = async (req, res) => {
         firstName: req.user.firstName,
         lastName: req.user.lastName,
       },
-      appointment: appointment,
     });
   } catch (e) {
     console.log(e.message);
@@ -147,7 +146,10 @@ const createOrder = async (req, res) => {
           {
             amount: {
               currency_code: user.settings.currency,
-              value: user.fees,
+              value:
+                paymentType === "monthly"
+                  ? user.feesPerMonth
+                  : user.feesPerYear,
             },
             payee: {
               merchant_id: sellerData.paypal.merchantIdInPayPal,
