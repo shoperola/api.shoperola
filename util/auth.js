@@ -17,7 +17,7 @@ const signup = async (req, res) => {
     const user = await Model.create(req.body);
     const collectionName = Model.collection.collectionName;
     if (collectionName === "users") {
-      const payments = await Payment.create({ userID: user._id });
+      await Payment.create({ userID: user._id });
     }
     const token = newToken(user);
     return res.status(201).send({ status: "ok", token: token });
@@ -27,7 +27,7 @@ const signup = async (req, res) => {
     if (e.toString().includes("E11000 duplicate key error collection")) {
       return res.status(400).send({
         status: `${
-          Model.collection.name === "users" ? "User" : "Client"
+          collectionName === "users" ? "User" : "Client"
         } Already Exists`,
       });
     }
@@ -37,11 +37,13 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
   const Model = req.model;
+  const collectionName = Model.collection.collectionName;
+
   if (!req.body.email || !req.body.password)
     return res.status(400).send({ message: "Email and password required" });
   const user = await Model.findOne({ email: req.body.email }).exec();
   if (!user) {
-    return res.status(400).send({ message: "Model Not found" });
+    return res.status(400).send({ message: "Invalid Email or Password" });
   }
 
   try {

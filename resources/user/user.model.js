@@ -113,7 +113,11 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
-    fees: {
+    feesPerMonth: {
+      type: Number,
+      default: 0,
+    },
+    feesPerYear: {
       type: Number,
       default: 0,
     },
