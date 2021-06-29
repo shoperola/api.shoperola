@@ -29,6 +29,7 @@ const getAuthToken = async () => {
 };
 
 const generateSignupLink = async (req, res) => {
+  console.log(PAYPAL_TOKEN);
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
@@ -71,7 +72,6 @@ const generateSignupLink = async (req, res) => {
         },
       }
     );
-    console.log(PAYPAL_TOKEN);
     console.log(resp.data);
     return res.json(resp.data);
   } catch (e) {
