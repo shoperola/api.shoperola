@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SECRETS, PAYPAL_TOKEN, setPAYPAL_TOKEN } from "./config.js";
 import { User } from "../resources/user/user.model.js";
+import { Client } from "../resources/client/client.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
 import { Payment } from "../resources/payments/payments.model.js";
 
@@ -90,8 +91,21 @@ const generateSignupLink = async (req, res) => {
 
 const createOrder = async (req, res) => {
   const userID = req.body.userID;
-  // console.log(req.user);
-  const clientID = req.user._id;
+  console.log(req.user);
+
+  let client;
+  try {
+    client = await Client.findOne({ sub: req.user.sub });
+    console.log(client);
+    if (!client) {
+      return res.status(400).json({ message: "client not found" });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json({ message: "client not found" });
+  }
+
+  const clientID = client._id;
   const paymentType = req.body.paymentType;
   if (!userID) {
     return res.status(400).json({
@@ -130,8 +144,8 @@ const createOrder = async (req, res) => {
       ip: req.ip,
       processed_by: "paypal",
       paid_by: {
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
+        firstName: client.firstName,
+        lastName: client.lastName,
       },
     });
   } catch (e) {
@@ -186,11 +200,14 @@ const createOrder = async (req, res) => {
       orderID: order.data.id,
     });
   } catch (e) {
-    if (e.response && e.response.data.error === "invalid_token") {
+    if (
+      (e.response && e.response.data.error === "invalid_token") ||
+      e.response.data.name === "AUTHENTICATION_FAILURE"
+    ) {
       await getAuthToken();
       await createOrder(req, res);
     } else {
-      console.log(e.message);
+      console.log(e.response.data);
       res.status(400).json({ message: "Error Creating Order" });
     }
   }
@@ -210,7 +227,7 @@ const captureOrder = async (req, res) => {
         },
       }
     );
-    console.log(resp);
+    console.log(resp.data);
     res.json({ status: "success" });
   } catch (e) {
     if (e.response && e.response.data.error === "invalid_token") {

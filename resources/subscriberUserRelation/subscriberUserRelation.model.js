@@ -14,6 +14,6 @@ const RelationSchema = new Schema(
 RelationSchema.index({ subscriber: 1, instructor: 1 }, { unique: true });
 
 export const subscriberRelation = model(
-  "subscribers-relations",
+  "subscribers_relations",
   RelationSchema
 );
