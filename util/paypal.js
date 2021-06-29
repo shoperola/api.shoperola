@@ -71,6 +71,7 @@ const generateSignupLink = async (req, res) => {
         },
       }
     );
+    console.log(PAYPAL_TOKEN);
     console.log(resp.data);
     return res.json(resp.data);
   } catch (e) {
