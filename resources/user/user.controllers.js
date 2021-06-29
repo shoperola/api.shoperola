@@ -461,7 +461,9 @@ const getPublicProfile = async (req, res) => {
     const doc = await User.findOne(
       { username: username },
       "-reviews -reviewsCount -views -totalEarnings -settings -rating -identities -email -password"
-    ).exec();
+    )
+      .lean()
+      .exec();
     if (!doc) {
       throw new Error("No user found");
     }
