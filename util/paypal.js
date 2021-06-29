@@ -39,7 +39,7 @@ const generateSignupLink = async (req, res) => {
       {
         tracking_id: req.user._id,
         partner_config_override: {
-          return_url: "https://kourse-53d4f.web.app/#/payment",
+          return_url: "https://kourse-53d4f.web.app/payment",
           partner_logo_url:
             "https://shott.sfo3.digitaloceanspaces.com/logo_oJs-w8sDW.png",
         },
