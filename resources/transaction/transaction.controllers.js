@@ -23,6 +23,7 @@ const sessionCompleteEventListener = async (req, res) => {
   try {
     logData = await PaymentLog.findById(paymentLogId).lean().exec();
     if (logData.success) {
+      console.log(logData);
       return res.status(400).json({ message: "transaction already logged" });
     }
   } catch (e) {
