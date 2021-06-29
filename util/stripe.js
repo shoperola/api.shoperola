@@ -2,6 +2,7 @@ import { SECRETS } from "./config.js";
 import stripe from "stripe";
 const STRIPE = new stripe(SECRETS.stripeSecretKey);
 import { User } from "../resources/user/user.model.js";
+import { Client } from "../resources/client/client.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
 import zeroDecimalCurrencies from "./ZRC.js";
 import { Payment } from "../resources/payments/payments.model.js";
@@ -122,17 +123,26 @@ const createCheckoutSession = async (req, res) => {
   if (!req.user) {
     res.status(400).json({ message: "Client Not Found" });
   }
-  const clientID = req.user._id.toString();
-  const { userID } = req.body;
-  const { appointment } = req.body;
-  if (!appointment || !userID) {
+
+  let client;
+  try {
+    client = await Client.findOne({ sub: req.user.sub });
+    if (!client) {
+      throw new Error("Unable to find client");
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json({ message: "Unable to find client" });
+  }
+  const clientID = client._id.toString();
+  const { userID, paymentType } = req.body;
+  if (!userID) {
     return res.status(400).json({
-      data: { appointment, userID },
+      data: { userID },
       message: "Required fields missing",
     });
   }
-  console.log("user: ", typeof userID, "client: ", typeof clientID);
-  console.log("appointment: ", typeof appointment);
+  // console.log("user: ", typeof userID, "client: ", typeof clientID);
   let user, sellerData, paymentDetails;
   try {
     user = await User.findById(userID).select("-password -identities");
@@ -141,7 +151,7 @@ const createCheckoutSession = async (req, res) => {
     return res.json({ message: "Error finding seller", error: e.message });
   }
   console.log(user);
-  if (!user.fees) {
+  if (!user.feesPerMonth && !user.feesPerYear) {
     return res.status(400).json({ message: "amount set to zero not allowed" });
   }
 
@@ -158,15 +168,11 @@ const createCheckoutSession = async (req, res) => {
 
   try {
     paymentDetails = await PaymentLog.create({
-      clientID: clientID,
-      userID: userID,
+      client: clientID,
+      user: userID,
       ip: req.ip,
       processed_by: "stripe",
-      paid_by: {
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-      },
-      appointment: appointment,
+      paymentType: paymentType,
     });
   } catch (e) {
     console.log(e.message);
@@ -175,21 +181,25 @@ const createCheckoutSession = async (req, res) => {
       .json({ message: "Error creating paymentDetails", error: e.message });
   }
 
+  const item = {
+    name: "Subsription",
+    amount:
+      user.settings.currency.toUpperCase() in zeroDecimalCurrencies
+        ? paymentType === "monthly"
+          ? user.feesPerMonth
+          : user.feesPerYear
+        : paymentType === "monthly"
+        ? user.feesPerMonth * 100
+        : user.feesPerYear * 100,
+    currency: user.settings.currency,
+    quantity: 1,
+  };
+  console.log(item);
   try {
     const session = await STRIPE.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: [
-          {
-            name: "Appointment",
-            amount:
-              user.settings.currency.toUpperCase() in zeroDecimalCurrencies
-                ? user.fees
-                : user.fees * 100,
-            currency: user.settings.currency,
-            quantity: 1,
-          },
-        ],
+        line_items: [item],
         metadata: {
           custom_id: paymentDetails._id.toString(),
         },

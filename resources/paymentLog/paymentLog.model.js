@@ -3,13 +3,15 @@ const { SchemaTypes, model, Schema } = mongoose;
 
 const PaymentLogSchema = Schema(
   {
-    clientID: {
+    client: {
       type: SchemaTypes.ObjectId,
       required: true,
+      ref: "clients",
     },
-    userID: {
+    user: {
       type: SchemaTypes.ObjectId,
       required: true,
+      ref: "users",
     },
     ip: {
       type: String,
@@ -19,19 +21,13 @@ const PaymentLogSchema = Schema(
       type: String,
       required: true,
     },
-    paid_by: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-    },
     success: {
       type: Boolean,
       default: false,
+    },
+    paymentType: {
+      type: String,
+      enum: ["monthly", "yearly"],
     },
   },
   {

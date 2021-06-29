@@ -139,14 +139,11 @@ const createOrder = async (req, res) => {
 
   try {
     paymentDetails = await PaymentLog.create({
-      clientID: clientID,
-      userID: userID,
+      client: clientID,
+      user: userID,
       ip: req.ip,
       processed_by: "paypal",
-      paid_by: {
-        firstName: client.firstName,
-        lastName: client.lastName,
-      },
+      paymentType,
     });
   } catch (e) {
     console.log(e.message);

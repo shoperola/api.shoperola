@@ -5,7 +5,7 @@ const TransactionSchema = new Schema(
   {
     processed_by: {
       type: String,
-      enum: ["stripe", "paypal", "razorpay"],
+      enum: ["stripe", "paypal"],
       required: true,
     },
     confirmationID: {
@@ -16,11 +16,11 @@ const TransactionSchema = new Schema(
       type: String,
       required: true,
     },
-    clientID: {
+    client: {
       type: SchemaTypes.ObjectId,
       ref: "clients",
     },
-    userID: {
+    user: {
       type: SchemaTypes.ObjectId,
       ref: "users",
     },
@@ -32,19 +32,10 @@ const TransactionSchema = new Schema(
       type: String,
       required: true,
     },
-    paid_by: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
-    },
-    appointment: {
-      type: Date,
+    paymentType: {
+      type: String,
       required: true,
+      enum: ["monthly", "yearly"],
     },
   },
   { timestamps: true }

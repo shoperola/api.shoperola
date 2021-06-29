@@ -92,7 +92,7 @@ const getTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find({
       userID: req.user._id,
-    }).lean();
+    }).populate({ path: "client", select: "firstName lastName" });
     res.json({ status: "OK", data: transactions });
   } catch (e) {
     console.log(e.message);
