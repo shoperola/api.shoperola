@@ -75,7 +75,10 @@ const generateSignupLink = async (req, res) => {
     console.log(resp.data);
     return res.json(resp.data);
   } catch (e) {
-    if (e.response && e.response.data.error === "invalid_token") {
+    if (
+      (e.response && e.response.data.error === "invalid_token") ||
+      e.response.data.name === "AUTHENTICATION_FAILURE"
+    ) {
       await getAuthToken();
       await generateSignupLink(req, res);
     } else {
