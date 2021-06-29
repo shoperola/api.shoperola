@@ -1,4 +1,5 @@
 import { User, generateUniqueUserName } from "./user.model.js";
+import { Payment } from "../payments/payments.model.js";
 import { Request } from "../requests/requests.model.js";
 import { Subject } from "../subject/subject.model.js";
 import { subscriberRelation } from "../subscriberUserRelation/subscriberUserRelation.model.js";
