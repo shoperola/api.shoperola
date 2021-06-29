@@ -464,7 +464,8 @@ const getPublicProfile = async (req, res) => {
     if (!doc) {
       throw new Error("No user found");
     }
-    res.json({ status: "OK", data: doc });
+    const payments = await Payment.findOne({ userID: doc._id });
+    res.json({ status: "OK", data: { ...doc, payments } });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({
