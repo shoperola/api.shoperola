@@ -1,6 +1,8 @@
 import { PaymentLog } from "../paymentLog/paymentLog.model.js";
 import { Transaction } from "./transactions.model.js";
+import { Subscription } from "../subscription/subscription.model.js";
 import zeroDecimalCurrencies from "../../util/ZRC.js";
+import { Client } from "../client/client.model.js";
 
 const processedByStripe = (logData) => {
   return logData.processed_by === "stripe";
@@ -73,18 +75,51 @@ const sessionCompleteEventListener = async (req, res) => {
           ? data.data.object.amount_total
           : data.data.object.amount_total / 100
         : data.resource.amount.value,
+      status: "SUCCESS",
     };
   })();
   console.log(transactionPayload);
   // insert into transaction collection
+  let transaction;
   try {
-    await Transaction.create(transactionPayload);
-    res.json("Transaction Logged Successfully");
+    transaction = await Transaction.create(transactionPayload);
   } catch (e) {
     console.log(e.message);
     return res
       .status(400)
       .json({ message: "Error inserting transaction data", error: e.message });
+  }
+
+  //subscription as active
+
+  try {
+    const startDate = new Date(transaction.createdAt);
+    const endDate =
+      transaction.paymentType === "monthly"
+        ? startDate.setMonth(startDate.getMonth() + 1)
+        : startDate.setYear(startDate.getFullYear() + 1);
+
+    const sub = await Subscription.findOneAndUpdate(
+      {
+        client: transaction.client,
+        user: transaction.user,
+      },
+      {
+        amount: transaction.amount,
+        subType: transaction.paymentType,
+        subStart: transaction.createdAt,
+        subEnd: endDate.toISOString(),
+      }
+    );
+
+    const client = await Client.findByIdAndUpdate(transaction.client, {
+      status: true,
+    });
+
+    res.json({ message: "Transaction Logged Successfully" });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({ message: "Error updating subscription" });
   }
 };
 

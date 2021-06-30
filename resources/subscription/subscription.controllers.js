@@ -20,7 +20,7 @@ const getSubscription = async (req, res) => {
     const subscription = await Subscription.findOne({
       subscriber: client._id,
       instructor: userID,
-    });
+    }).populate({ path: "subscriber", select: "status" });
     console.log(subscription);
     res.json({ status: "OK", data: subscription });
   } catch (e) {
@@ -28,5 +28,7 @@ const getSubscription = async (req, res) => {
     res.status(500).json({ message: "Error finding Subscription" });
   }
 };
+
+const updateSubscription = async () => {};
 
 export { getSubscription };

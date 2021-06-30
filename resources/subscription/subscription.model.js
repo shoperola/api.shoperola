@@ -6,13 +6,22 @@ const SubscriptionSchema = new Schema(
   {
     subscriber: { type: SchemaTypes.ObjectId, ref: "clients" },
     instructor: { type: SchemaTypes.ObjectId, ref: "users" },
-    amount: Number,
+    amount: {
+      type: Number,
+      default: 0,
+    },
     subType: {
       type: String,
       enum: ["monthly", "yearly"],
+      default: "monthly",
+    },
+    subStart: {
+      type: Date,
+      default: "",
     },
     subEnd: {
       type: Date,
+      default: "",
     },
   },
   { timestamps: true }
