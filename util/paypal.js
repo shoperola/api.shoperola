@@ -107,9 +107,9 @@ const createOrder = async (req, res) => {
 
   const clientID = client._id;
   const paymentType = req.body.paymentType;
-  if (!userID) {
+  if (!userID && !paymentType) {
     return res.status(400).json({
-      data: { userID },
+      data: { userID, paymentType },
       message: "Required fields missing",
     });
   }
@@ -143,7 +143,7 @@ const createOrder = async (req, res) => {
       user: userID,
       ip: req.ip,
       processed_by: "paypal",
-      paymentType,
+      paymentType.toLowerCase(),
     });
   } catch (e) {
     console.log(e.message);
