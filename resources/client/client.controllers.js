@@ -1,6 +1,6 @@
 import { Client } from "./client.model.js";
 import { User } from "../user/user.model.js";
-import { subscriberRelation } from "../subscriberUserRelation/subscriberUserRelation.model.js";
+import { Subscription } from "../subscription/subscription.model.js";
 
 const getClient = async (req, res) => {
   try {
@@ -46,10 +46,10 @@ const createClient = async (req, res) => {
 
   // create Relation
   try {
-    const relation = await subscriberRelation.create({
+    const relation = await Subscription.create({
       subscriber: client._id,
       instructor: userID,
-      amount: user.fees,
+      amount: 0,
     });
     res.status(201).json({ status: "OK", data: client });
   } catch (e) {

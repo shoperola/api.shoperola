@@ -1,9 +1,9 @@
+import mongoose from "mongoose";
 import { User, generateUniqueUserName } from "./user.model.js";
 import { Payment } from "../payments/payments.model.js";
 import { Request } from "../requests/requests.model.js";
 import { Subject } from "../subject/subject.model.js";
-import { subscriberRelation } from "../subscriberUserRelation/subscriberUserRelation.model.js";
-import mongoose from "mongoose";
+import { Subscription } from "../subscription/subscription.model.js";
 const { Types } = mongoose;
 
 const getUserProfile = (req, res) => {
@@ -609,10 +609,9 @@ const getSubscribers = async (req, res) => {
     return res.status(400).json({ message: "User Not Found" });
   }
   try {
-    const subscribers = await subscriberRelation
-      .find({
-        instructor: req.user._id,
-      })
+    const subscribers = await Subscription.find({
+      instructor: req.user._id,
+    })
       .populate({ path: "subscriber", select: "-username -sub -__v" })
       .exec();
     res.json({ status: "OK", data: subscribers });

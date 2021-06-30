@@ -37,6 +37,11 @@ const TransactionSchema = new Schema(
       required: true,
       enum: ["monthly", "yearly"],
     },
+    status: {
+      type: String,
+      required: true,
+      enum: ["SUCCESS", "FAILED"],
+    },
   },
   { timestamps: true }
 );

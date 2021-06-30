@@ -91,8 +91,10 @@ const sessionCompleteEventListener = async (req, res) => {
 const getTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find({
-      userID: req.user._id,
-    }).populate({ path: "client", select: "firstName lastName" });
+      user: req.user._id,
+    })
+      .sort({ createdAt: -1 })
+      .populate({ path: "client", select: "firstName lastName" });
     res.json({ status: "OK", data: transactions });
   } catch (e) {
     console.log(e.message);
