@@ -11,7 +11,7 @@ const sessionCompleteEventListener = async (req, res) => {
   const data = req.body;
   const paymentLogId =
     data.resource !== undefined
-      ? data.resource.purchase_units[0].custom_id
+      ? data.resource.custom_id
       : data.data.object.metadata.custom_id;
 
   console.log(paymentLogId);
@@ -60,19 +60,19 @@ const sessionCompleteEventListener = async (req, res) => {
   const transactionPayload = (() => {
     const currency = processedByStripe(logData)
       ? data.data.object.currency
-      : data.resource.purchase_units[0].amount.currency_code;
+      : data.resource.amount.currency_code;
 
     return {
       ...logData,
       confirmationID: processedByStripe(logData)
         ? data.data.object.id
-        : data.resource.purchase_units[0].payments.captures[0].id,
+        : data.resource.id,
       currency: currency,
       amount: processedByStripe(logData)
         ? currency.toUpperCase() in zeroDecimalCurrencies
           ? data.data.object.amount_total
           : data.data.object.amount_total / 100
-        : data.resource.purchase_units[0].amount.value,
+        : data.resource.amount.value,
     };
   })();
   console.log(transactionPayload);
