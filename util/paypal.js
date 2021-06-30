@@ -143,7 +143,7 @@ const createOrder = async (req, res) => {
       user: userID,
       ip: req.ip,
       processed_by: "paypal",
-      paymentType.toLowerCase(),
+      paymentType: paymentType.toLowerCase(),
     });
   } catch (e) {
     console.log(e.message);
