@@ -98,7 +98,7 @@ const sessionCompleteEventListener = async (req, res) => {
       transaction.paymentType === "monthly"
         ? startDate.setMonth(startDate.getMonth() + 1)
         : startDate.setYear(startDate.getFullYear() + 1);
-
+    console.log(typeof endDate, endDate);
     const sub = await Subscription.findOneAndUpdate(
       {
         client: transaction.client,
