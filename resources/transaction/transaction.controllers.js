@@ -140,4 +140,28 @@ const getTransactions = async (req, res) => {
   }
 };
 
-export { sessionCompleteEventListener, getTransactions };
+const getTransactionById = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "OrderId not provided" });
+  }
+  try {
+    const doc = await Transaction.findById(id).populate({
+      path: "client",
+      select: "firstName lastName",
+    });
+    if (!doc) {
+      throw new Error("Transaction not found");
+    }
+    res.json({ status: "OK", data: doc });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error getting transaction" });
+  }
+};
+
+export { sessionCompleteEventListener, getTransactions, getTransactionById };

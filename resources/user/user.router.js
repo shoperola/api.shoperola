@@ -27,7 +27,10 @@ import {
   getSubject,
   getSubscribers,
 } from "./user.controllers.js";
-import { getTransactions } from "../../resources/transaction/transaction.controllers.js";
+import {
+  getTransactionById,
+  getTransactions,
+} from "../../resources/transaction/transaction.controllers.js";
 import {
   getPaymentsAdded,
   updatePaymentsInfo,
@@ -85,5 +88,7 @@ router.route("/stripe/onboard-user/refresh").get(refreshAccountUrl);
 router.route("/stripe/checkAccountStatus").get(checkAccountStatus);
 
 router.route("/transaction/").get(getTransactions);
+
+router.route("/transaction/:id").get(getTransactionById);
 
 export default router;
