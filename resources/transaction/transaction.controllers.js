@@ -102,8 +102,8 @@ const sessionCompleteEventListener = async (req, res) => {
     // console.log(typeof endDate, endDate);
     const sub = await Subscription.findOneAndUpdate(
       {
-        client: transaction.client,
-        user: transaction.user,
+        subscriber: transaction.client,
+        instructor: transaction.user,
       },
       {
         amount: transaction.amount,
