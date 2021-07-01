@@ -29,6 +29,4 @@ const getSubscription = async (req, res) => {
   }
 };
 
-const updateSubscription = async () => {};
-
 export { getSubscription };

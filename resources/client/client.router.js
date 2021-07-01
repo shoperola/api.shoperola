@@ -9,7 +9,7 @@ const router = Router();
 router.route("/").get(getClient).post(createClient);
 router.route("/refreshToken").post(renewToken);
 
-router.route("/subscription").get(getSubscription);
+router.route("/subscription").post(getSubscription);
 
 router.route("/paypal/create-order").post(createOrder);
 router.route("/paypal/capture-order/:id").post(captureOrder);
