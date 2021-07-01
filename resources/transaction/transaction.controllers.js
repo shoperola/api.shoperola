@@ -93,6 +93,7 @@ const sessionCompleteEventListener = async (req, res) => {
   //subscription as active
 
   try {
+    console.log(transaction);
     const startDate = new Date(transaction.createdAt);
     const endDate =
       transaction.paymentType === "monthly"
@@ -111,7 +112,7 @@ const sessionCompleteEventListener = async (req, res) => {
         subEnd: endDate.toISOString(),
       }
     );
-
+    console.log(sub);
     const client = await Client.findByIdAndUpdate(transaction.client, {
       status: true,
     });
