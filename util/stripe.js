@@ -1,6 +1,6 @@
 import { SECRETS } from "./config.js";
 import stripe from "stripe";
-const STRIPE = new stripe(SECRETS.stripeSecretKey);
+const STRIPE = stripe(SECRETS.stripeSecretKey);
 import { User } from "../resources/user/user.model.js";
 import { Client } from "../resources/client/client.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
@@ -236,7 +236,7 @@ const checkSessionStatusOnSuccess = async (req, res) => {
       return res.status(400).json({ message: "Session Id not provided" });
     }
     console.log(typeof session_id);
-    const session = await STRIPE.checkout.sessions.list({ limit: 10 });
+    const session = await STRIPE.checkout.sessions.list({ limit: 3 });
     const customer = await STRIPE.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
   } catch (e) {
