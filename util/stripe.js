@@ -237,6 +237,7 @@ const checkSessionStatusOnSuccess = async (req, res) => {
     }
     console.log(req.body);
     const session = await STRIPE.checkout.sessions.retrieve(session_id);
+    console.log(session);
     const customer = await STRIPE.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
   } catch (e) {
