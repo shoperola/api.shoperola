@@ -5,6 +5,9 @@ import {
   getLessons,
   updateLesson,
   deleteLesson,
+  imdb_searchmovie,
+  imdb_searchbyid,
+  metadata,
 } from "./lesson.controllers.js";
 import { upload } from "../../util/s3-spaces.js";
 
@@ -27,4 +30,7 @@ router
   .put(upload.fields(uploadFields), updateLesson)
   .delete(deleteLesson);
 
+router.post("/search_metadata/:name", imdb_searchmovie);
+router.post("/search_metadata_id/:id", imdb_searchbyid);
+router.patch("/metadata/:id", metadata);
 export default router;

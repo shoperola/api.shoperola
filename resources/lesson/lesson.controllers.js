@@ -1,5 +1,7 @@
 import { Lesson } from "./lesson.model.js";
 import { scheduleJob } from "node-schedule";
+import axios from "axios";
+import { SECRETS } from "../../util/config.js";
 
 const getLessons = async (req, res) => {
   if (!req.user) {
@@ -131,4 +133,62 @@ const deleteLesson = async (req, res) => {
       .json({ message: "Error deleting lesson", error: e.message });
   }
 };
-export { getLesson, getLessons, createLesson, updateLesson, deleteLesson };
+
+const imdb_searchmovie = async (req, res) => {
+  try {
+    const name = req.params.name;
+    if (!name) return res.status(400).json({ message: "Name not provided" });
+    const api_key = SECRETS.imDb_key;
+    const resp = await axios.get(
+      `https://imdb-api.com/en/API/SearchMovie/${api_key}/${name}`
+    );
+    res.send(resp.data);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
+const imdb_searchbyid = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) return res.status(400).json({ message: "Id not provided" });
+    const api_key = SECRETS.imDb_key;
+    const resp = await axios.get(
+      `https://imdb-api.com/en/API/Title/${api_key}/${id}/Ratings`
+    );
+    res.send(resp.data);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
+const metadata = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const check = await Lesson.findById(id);
+    if (!check) {
+      res.status(400).send("something went wrong");
+    }
+    console.log(check);
+    const video = await Lesson.findByIdAndUpdate(
+      id,
+      { $set: req.body },
+      { new: true }
+    );
+    console.log(video);
+    res.send(video);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
+export {
+  getLesson,
+  getLessons,
+  createLesson,
+  updateLesson,
+  deleteLesson,
+  imdb_searchmovie,
+  imdb_searchbyid,
+  metadata,
+};

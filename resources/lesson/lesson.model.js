@@ -40,6 +40,10 @@ const LessonSchema = Schema(
       type: String,
       default: "",
     },
+    launch: {
+      type: Boolean,
+      default: false,
+    },
     launchDate: {
       type: Date,
       default: "",
@@ -47,6 +51,44 @@ const LessonSchema = Schema(
     video: {
       type: String,
       default: "",
+    },
+
+    ////////////////////////////////////////IMDB - METADATA///////////////////////////////////////////
+    Id: {
+      type: String,
+    },
+    directors: {
+      type: String,
+    },
+    type: {
+      type: String,
+    },
+    year: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
+    genres: {
+      type: Array,
+    },
+    Languages: {
+      type: Array,
+    },
+    RuntimeStr: {
+      type: String,
+    },
+    Plot: {
+      type: String,
+    },
+    Actors_list: {
+      type: Array,
+    },
+    Writers: {
+      type: String,
+    },
+    Ratings: {
+      type: Array,
     },
   },
   { timestamps: true }

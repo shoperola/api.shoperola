@@ -18,6 +18,8 @@ const SECRETS = {
   clientSecret: process.env.COGNITO_CLIENT_SECRET,
   auth_domain: process.env.COGNITO_AUTH_DOMAIN,
   redirect_uri: process.env.COGNITO_REDIRECT_URI,
+  node_env: process.env.NODE_ENV,
+  imDb_key: process.env.IMDB_API_KEY,
 };
 
 let PAYPAL_TOKEN = "";

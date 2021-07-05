@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "format": "prettier --write \"**/*.(js)\"",
-    "deploy": "npm run format && git push heroku master"
+    "deploy": "npm run format && git push && git push heroku master"
   },
   "keywords": [],
   "author": "",
