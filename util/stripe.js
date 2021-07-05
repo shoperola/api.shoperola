@@ -207,8 +207,8 @@ const createCheckoutSession = async (req, res) => {
           application_fee_amount: 0,
         },
         mode: "payment",
-        success_url: "http://localhost:5500/success.html",
-        cancel_url: "http://localhost:5500/cancel",
+        success_url: "https://kourse-53d4f.web.app/paymentDetails",
+        cancel_url: "https://kourse-53d4f.web.app/customer",
       },
       {
         stripeAccount: sellerData.stripe.id,
