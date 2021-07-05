@@ -1,6 +1,6 @@
+import axios from "axios";
 import { Lesson } from "./lesson.model.js";
 import { scheduleJob } from "node-schedule";
-import axios from "axios";
 import { SECRETS } from "../../util/config.js";
 
 const getLessons = async (req, res) => {
