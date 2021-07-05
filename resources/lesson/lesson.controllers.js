@@ -1,4 +1,5 @@
 import { Lesson } from "./lesson.model.js";
+import { scheduleJob } from "node-schedule";
 
 const getLessons = async (req, res) => {
   if (!req.user) {
@@ -70,7 +71,6 @@ const createLesson = async (req, res) => {
 };
 
 const updateLesson = async (req, res) => {
-  console.log(req.headers);
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
@@ -79,11 +79,27 @@ const updateLesson = async (req, res) => {
     return res.status(400).json({ message: "Lesson id not provided" });
   }
   const { banner, video, thumbnail } = req.files;
+  const { launchDate } = req.body;
   console.log(banner, video, thumbnail);
   const lessonObject = req.body;
   video ? (lessonObject.video = video[0].location) : null;
   banner ? (lessonObject.banner = banner[0].location) : null;
   thumbnail ? (lessonObject.thumbnail = thumbnail[0].location) : null;
+
+  // schedule a job for the given launchDate if launchdate is provided
+  if (launchDate) {
+    try {
+      const job = scheduleJob(launchDate, async () => {
+        const doc = await Lesson.findByIdAndUpdate(id, { live: true });
+        console.log("Video is Live ");
+      });
+    } catch (e) {
+      console.log(e.message);
+      res
+        .status(500)
+        .json({ message: "Error scheduling job", error: e.message });
+    }
+  }
 
   try {
     const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {
