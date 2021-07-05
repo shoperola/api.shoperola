@@ -230,12 +230,12 @@ const checkSessionStatusOnSuccess = async (req, res) => {
   if (!req.user) {
     res.status(400).json({ message: "Client Not Found" });
   }
-  const { session_id } = req.body;
-  if (!session_id) {
-    return res.status(400).json({ message: "Session Id not provided" });
-  }
-  console.log(session_id);
   try {
+    const { session_id } = req.body;
+    if (!session_id) {
+      return res.status(400).json({ message: "Session Id not provided" });
+    }
+    console.log(session_id);
     const session = await STRIPE.checkout.sessions.retrieve(session_id);
     const customer = await STRIPE.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
