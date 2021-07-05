@@ -2,6 +2,7 @@ import express, { urlencoded, json } from "express";
 import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";
+import expressListRoutes from "express-list-routes";
 import { signup, signin, protect } from "./util/auth.js";
 import { User } from "./resources/user/user.model.js";
 import { Client } from "./resources/client/client.model.js";
@@ -14,6 +15,7 @@ import LanguageRouter from "./resources/language/language.router.js";
 import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers.js";
 import { connect } from "./util/db.js";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito.js";
+import { SECRETS } from "./util/config.js";
 
 config();
 const app = express();
@@ -59,6 +61,9 @@ export const start = async () => {
     await connect();
     app.listen(PORT, () => {
       console.log(`REST API on http://localhost:${PORT}/`);
+      if (SECRETS.node_env === "development") {
+        expressListRoutes(app);
+      }
     });
   } catch (e) {
     console.error(e);
