@@ -240,7 +240,7 @@ const checkSessionStatusOnSuccess = async (req, res) => {
     const customer = await STRIPE.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
   } catch (e) {
-    console.log(e.message);
+    console.log(e);
     res.status(500).json({ message: "Error finding session details" });
   }
 };
