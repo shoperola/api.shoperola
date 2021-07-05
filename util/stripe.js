@@ -1,6 +1,7 @@
 import { SECRETS } from "./config.js";
 import stripe from "stripe";
 const STRIPE = stripe(SECRETS.stripeSecretKey);
+// console.log(STRIPE);
 import { User } from "../resources/user/user.model.js";
 import { Client } from "../resources/client/client.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
@@ -236,12 +237,13 @@ const checkSessionStatusOnSuccess = async (req, res) => {
       return res.status(400).json({ message: "Session Id not provided" });
     }
     console.log(req.body);
+    console.log("EHLLLO");
     const session = await STRIPE.checkout.sessions.retrieve(session_id);
     console.log(session);
     const customer = await STRIPE.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
     res.status(500).json({ message: "Error finding session details" });
   }
 };
