@@ -234,6 +234,7 @@ const checkSessionStatusOnSuccess = async (req, res) => {
   if (!session_id) {
     return res.status(400).json({ message: "Session Id not provided" });
   }
+  console.log(session_id);
   try {
     const session = await STRIPE.checkout.sessions.retrieve(session_id);
     const customer = await STRIPE.customers.retrieve(session.customer);
