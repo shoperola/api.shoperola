@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { createOrder, captureOrder } from "../../util/paypal.js";
-import { createCheckoutSession } from "../../util/stripe.js";
+import {
+  checkSessionStatusOnSuccess,
+  createCheckoutSession,
+} from "../../util/stripe.js";
 import { renewToken } from "../../util/cognito.js";
 import { createClient, getClient } from "./client.controllers.js";
 import { getSubscription } from "../subscription/subscription.controllers.js";
@@ -14,5 +17,8 @@ router.route("/subscription").post(getSubscription);
 router.route("/paypal/create-order").post(createOrder);
 router.route("/paypal/capture-order/:id").post(captureOrder);
 router.route("/stripe/create-checkout-session").post(createCheckoutSession);
+router
+  .route("/stripe/check-checkout-session")
+  .post(checkSessionStatusOnSuccess);
 
 export default router;

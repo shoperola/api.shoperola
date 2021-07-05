@@ -207,7 +207,8 @@ const createCheckoutSession = async (req, res) => {
           application_fee_amount: 0,
         },
         mode: "payment",
-        success_url: "https://kourse-53d4f.web.app/paymentDetails",
+        success_url:
+          "https://kourse-53d4f.web.app/paymentDetails?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://kourse-53d4f.web.app/customer",
       },
       {
@@ -225,9 +226,28 @@ const createCheckoutSession = async (req, res) => {
   }
 };
 
+const checkSessionStatusOnSuccess = async (req, res) => {
+  if (!req.user) {
+    res.status(400).json({ message: "Client Not Found" });
+  }
+  const { session_id } = req.body;
+  if (!session_id) {
+    return res.status(400).json({ message: "Session Id not provided" });
+  }
+  try {
+    const session = await STRIPE.checkout.sessions.retrieve(session_id);
+    const customer = await STRIPE.customers.retrieve(session.customer);
+    return res.json({ status: "OK", data: { session, customer } });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error finding session details" });
+  }
+};
+
 export {
   onBoardUser,
   refreshAccountUrl,
   createCheckoutSession,
   checkAccountStatus,
+  checkSessionStatusOnSuccess,
 };
