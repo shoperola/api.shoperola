@@ -91,7 +91,7 @@ const updateLesson = async (req, res) => {
     try {
       const job = scheduleJob(launchDate, async () => {
         const doc = await Lesson.findByIdAndUpdate(id, { live: true });
-        console.log("Video is Live ");
+        console.log(`Video:id(${doc._id}) is live`);
       });
     } catch (e) {
       console.log(e.message);
