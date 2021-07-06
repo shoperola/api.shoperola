@@ -248,8 +248,8 @@ const checkSessionStatusOnSuccess = async (req, res) => {
       stripeAccount: sellerData.stripe.id,
     });
     console.log(session);
-    const customer = await stripe.customers.retrieve(session.customer);
-    return res.json({ status: "OK", data: { session, customer } });
+    // const customer = await stripe.customers.retrieve(session.customer);
+    return res.json({ status: "OK", data: { session } });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error finding session details" });
