@@ -1,7 +1,7 @@
 import { SECRETS } from "./config.js";
-import stripe from "stripe";
-const STRIPE = stripe(SECRETS.stripeSecretKey);
-// console.log(STRIPE);
+import Stripe from "stripe";
+// console.log(stripe);
+const stripe = new Stripe(SECRETS.stripeSecretKey);
 import { User } from "../resources/user/user.model.js";
 import { Client } from "../resources/client/client.model.js";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
@@ -9,7 +9,7 @@ import zeroDecimalCurrencies from "./ZRC.js";
 import { Payment } from "../resources/payments/payments.model.js";
 
 const createAccount = async (user) =>
-  await STRIPE.accounts.create({
+  await stripe.accounts.create({
     type: "standard",
     business_type: "individual",
     email: user.email,
@@ -66,7 +66,7 @@ const checkAccountStatus = async (req, res) => {
   try {
     const account = await Payment.findOne({ userID });
     const accountID = account.stripe.id;
-    const acc = await STRIPE.accounts.retrieve(accountID);
+    const acc = await stripe.accounts.retrieve(accountID);
     console.log(acc);
     if (acc.details_submitted && acc.charges_enabled) {
       const doc = await Payment.findOneAndUpdate(
@@ -113,7 +113,7 @@ const refreshAccountUrl = async (req, res) => {
 };
 
 const generateAccountLink = async (id) =>
-  await STRIPE.accountLinks.create({
+  await stripe.accountLinks.create({
     account: id,
     refresh_url: "https://kourse-53d4f.web.app/payment/stripe/refresh",
     return_url: "https://kourse-53d4f.web.app/payment/stripe/return",
@@ -196,27 +196,25 @@ const createCheckoutSession = async (req, res) => {
   };
   console.log(item);
   try {
-    const session = await STRIPE.checkout.sessions.create(
-      {
-        payment_method_types: ["card"],
-        line_items: [item],
-        metadata: {
-          custom_id: paymentDetails._id.toString(),
-        },
-        payment_intent_data: {
-          application_fee_amount: 0,
-        },
-        mode: "payment",
-        success_url:
-          "https://kourse-53d4f.web.app/paymentDetails?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "https://kourse-53d4f.web.app/customer",
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [item],
+      metadata: {
+        custom_id: paymentDetails._id.toString(),
       },
-      {
-        stripeAccount: sellerData.stripe.id,
-      }
-    );
+      payment_intent_data: {
+        application_fee_amount: 0,
+        transfer_data: {
+          destination: sellerData.stripe.id,
+        },
+      },
+      mode: "payment",
+      success_url:
+        "https://kourse-53d4f.web.app/paymentDetails?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "https://kourse-53d4f.web.app/customer",
+    });
     console.log(session);
-    // console.log(await STRIPE.checkout.sessions.retrieve(session.id));
+    // console.log(await stripe.checkout.sessions.retrieve(session.id));
     res.json({ id: session.id });
   } catch (e) {
     console.log(e.message);
@@ -238,9 +236,9 @@ const checkSessionStatusOnSuccess = async (req, res) => {
     }
     console.log(req.body);
     console.log("EHLLLO");
-    const session = await STRIPE.checkout.sessions.retrieve(session_id);
+    const session = await stripe.checkout.sessions.retrieve(session_id);
     console.log(session);
-    const customer = await STRIPE.customers.retrieve(session.customer);
+    const customer = await stripe.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
   } catch (e) {
     console.log(e.message);
