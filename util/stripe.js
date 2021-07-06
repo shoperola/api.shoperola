@@ -182,20 +182,52 @@ const createCheckoutSession = async (req, res) => {
       .json({ message: "Error creating paymentDetails", error: e.message });
   }
 
+  /*
+  {
+    price_data: {
+      currency: 'usd',
+      product_data: {
+        name: 'T-shirt',
+      },
+      unit_amount: 2000,
+    },
+    quantity: 1,
+  },
+*/
+
   const item = {
-    name: "Subsription",
-    amount:
-      user.settings.currency.toUpperCase() in zeroDecimalCurrencies
-        ? paymentType === "monthly"
-          ? user.feesPerMonth
-          : user.feesPerYear
-        : paymentType === "monthly"
-        ? user.feesPerMonth * 100
-        : user.feesPerYear * 100,
-    currency: user.settings.currency,
+    price_data: {
+      currency: user.settings.currency,
+      product_data: {
+        name: "Subsription",
+      },
+      unit_amount:
+        user.settings.currency.toUpperCase() in zeroDecimalCurrencies
+          ? paymentType === "monthly"
+            ? user.feesPerMonth
+            : user.feesPerYear
+          : paymentType === "monthly"
+          ? user.feesPerMonth * 100
+          : user.feesPerYear * 100,
+    },
     quantity: 1,
   };
   console.log(item);
+
+  // const item = {
+  //   name: "Subsription",
+  //   amount:
+  //     user.settings.currency.toUpperCase() in zeroDecimalCurrencies
+  //       ? paymentType === "monthly"
+  //         ? user.feesPerMonth
+  //         : user.feesPerYear
+  //       : paymentType === "monthly"
+  //       ? user.feesPerMonth * 100
+  //       : user.feesPerYear * 100,
+  //   currency: user.settings.currency,
+  //   quantity: 1,
+  // };
+  // console.log(item);
   try {
     const session = await STRIPE.checkout.sessions.create(
       {
