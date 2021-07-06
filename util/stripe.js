@@ -240,25 +240,29 @@ const checkSessionStatusOnSuccess = async (req, res) => {
     }
     console.log(req.body);
 
-    const client = await Client.findOne({ sub: req.user.sub }).select(
-      "firstName lastName"
-    );
+    const client = await Client.findOne({ sub: req.user.sub })
+      .select("firstName lastName")
+      .lean();
+    if (!client) {
+      throw new Error("Client not found");
+    }
 
     const sellerData = await Payment.findOne({ userID });
     if (!sellerData) {
       throw new Error("Payment Details not found");
     }
-    const session = await stripe.checkout.sessions
-      .retrieve(session_id, {
-        stripeAccount: sellerData.stripe.id,
-      })
-      .lean();
+    const session = await stripe.checkout.sessions.retrieve(session_id, {
+      stripeAccount: sellerData.stripe.id,
+    });
+
     console.log(session);
     // const customer = await stripe.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, client } });
   } catch (e) {
     console.log(e.message);
-    res.status(500).json({ message: "Error finding session details" });
+    res
+      .status(500)
+      .json({ message: "Error finding session details", e: e.message });
   }
 };
 
