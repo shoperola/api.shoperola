@@ -114,8 +114,8 @@ const refreshAccountUrl = async (req, res) => {
 const generateAccountLink = async (id) =>
   await stripe.accountLinks.create({
     account: id,
-    refresh_url: "https://kourse-53d4f.web.app/payment/stripe/refresh",
-    return_url: "https://kourse-53d4f.web.app/payment/stripe/return",
+    refresh_url: `${SECRETS.domain_url}/payment/stripe/refresh`,
+    return_url: `${SECRETS.domain_url}/payment/stripe/return`,
     type: "account_onboarding",
   });
 
@@ -206,9 +206,8 @@ const createCheckoutSession = async (req, res) => {
           application_fee_amount: 0,
         },
         mode: "payment",
-        success_url:
-          "https://kourse-53d4f.web.app/paymentDetails?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "https://kourse-53d4f.web.app/customer",
+        success_url: `${SECRETS.domain_url}/paymentDetails?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${SECRETS.domain_url}/customer`,
       },
       {
         stripeAccount: sellerData.stripe.id,

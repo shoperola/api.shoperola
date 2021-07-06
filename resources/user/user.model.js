@@ -3,6 +3,7 @@ const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 import md5 from "md5";
 import { Payment } from "../payments/payments.model.js";
+import { SECRETS } from "../../util/config.js";
 
 const UserSchema = new Schema(
   {
@@ -191,7 +192,7 @@ UserSchema.pre("save", async function (next) {
     this.lastName
   );
 
-  this.publicUrl = `https://kourse-53d4f.web.app/public/${this.username}`;
+  this.publicUrl = `${SECRETS.domain_url}/public/${this.username}`;
 
   const params = {
     name: `${this.firstName} ${this.lastName}`,

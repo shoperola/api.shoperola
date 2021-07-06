@@ -4,6 +4,7 @@ import { Payment } from "../payments/payments.model.js";
 import { Request } from "../requests/requests.model.js";
 import { Subject } from "../subject/subject.model.js";
 import { Subscription } from "../subscription/subscription.model.js";
+import { SECRETS } from "../../util/config.js";
 const { Types } = mongoose;
 
 const getUserProfile = (req, res) => {
@@ -25,11 +26,11 @@ const updateUserProfile = async (req, res) => {
     ? {
         ...req.body,
         bannerImage: req.file.location,
-        publicUrl: `https://kourse-53d4f.web.app/public/${username}`,
+        publicUrl: `${SECRETS.domain_url}/public/${username}`,
       }
     : {
         ...req.body,
-        publicUrl: `https://kourse-53d4f.web.app/public/${username}`,
+        publicUrl: `${SECRETS.domain_url}/public/${username}`,
       };
   if (!updateObject) {
     return res.status(400).json({

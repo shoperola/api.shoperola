@@ -20,6 +20,7 @@ const SECRETS = {
   redirect_uri: process.env.COGNITO_REDIRECT_URI,
   node_env: process.env.NODE_ENV,
   imDb_key: process.env.IMDB_API_KEY,
+  domain_url: process.env.DOMAIN_URL,
 };
 
 let PAYPAL_TOKEN = "";
