@@ -249,6 +249,7 @@ const createCheckoutSession = async (req, res) => {
       }
     );
     console.log(session);
+    console.log(await STRIPE.checkout.sessions.retrieve(session.id));
     res.json({ id: session.id });
   } catch (e) {
     console.log(e.message);
