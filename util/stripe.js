@@ -1,5 +1,5 @@
 import { SECRETS } from "./config.js";
-import stripe from "stripe";
+import * as stripe from "stripe";
 const STRIPE = stripe(SECRETS.stripeSecretKey);
 // console.log(STRIPE);
 import { User } from "../resources/user/user.model.js";
