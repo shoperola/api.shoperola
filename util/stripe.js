@@ -196,23 +196,25 @@ const createCheckoutSession = async (req, res) => {
   };
   console.log(item);
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [item],
-      metadata: {
-        custom_id: paymentDetails._id.toString(),
-      },
-      payment_intent_data: {
-        application_fee_amount: 0,
-        transfer_data: {
-          destination: sellerData.stripe.id,
+    const session = await stripe.checkout.sessions.create(
+      {
+        payment_method_types: ["card"],
+        line_items: [item],
+        metadata: {
+          custom_id: paymentDetails._id.toString(),
         },
+        payment_intent_data: {
+          application_fee_amount: 0,
+        },
+        mode: "payment",
+        success_url:
+          "https://kourse-53d4f.web.app/paymentDetails?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://kourse-53d4f.web.app/customer",
       },
-      mode: "payment",
-      success_url:
-        "https://kourse-53d4f.web.app/paymentDetails?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "https://kourse-53d4f.web.app/customer",
-    });
+      {
+        stripeAccount: sellerData.stripe.id,
+      }
+    );
     console.log(session);
     // console.log(await stripe.checkout.sessions.retrieve(session.id));
     res.json({ id: session.id });
@@ -230,13 +232,21 @@ const checkSessionStatusOnSuccess = async (req, res) => {
     res.status(400).json({ message: "Client Not Found" });
   }
   try {
-    const { session_id } = req.body;
-    if (!session_id) {
-      return res.status(400).json({ message: "Session Id not provided" });
+    const { session_id, userID } = req.body;
+    if (!session_id || !userID) {
+      return res
+        .status(400)
+        .json({ message: "Session Id or userID not provided" });
     }
     console.log(req.body);
-    console.log("EHLLLO");
-    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    const sellerData = await Payment.findOne({ userID });
+    if (!sellerData) {
+      throw new Error("Payment Details not found");
+    }
+    const session = await stripe.checkout.sessions.retrieve(session_id, {
+      stripeAccount: sellerData.stripe.id,
+    });
     console.log(session);
     const customer = await stripe.customers.retrieve(session.customer);
     return res.json({ status: "OK", data: { session, customer } });
