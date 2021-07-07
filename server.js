@@ -2,7 +2,6 @@ import express, { urlencoded, json } from "express";
 import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";
-import expressListRoutes from "express-list-routes";
 import { signup, signin, protect } from "./util/auth.js";
 import { User } from "./resources/user/user.model.js";
 import { Client } from "./resources/client/client.model.js";
@@ -10,12 +9,13 @@ import UserRouter from "./resources/user/user.router.js";
 import RequestRouter from "./resources/requests/requests.router.js";
 import ClientRouter from "./resources/client/client.router.js";
 import TransactionRouter from "./resources/transaction/transaction.router.js";
+import TvshowRouter from "./resources/tvshows/tvshow_routes.js";
+import BannerRouter from "./resources/banners/banner_routes.js";
 import LessonRouter from "./resources/lesson/lesson.router.js";
 import LanguageRouter from "./resources/language/language.router.js";
 import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers.js";
 import { connect } from "./util/db.js";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito.js";
-import { SECRETS } from "./util/config.js";
 
 config();
 const app = express();
@@ -46,7 +46,9 @@ app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
+app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
+app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use(
   "/api/client",
@@ -60,9 +62,6 @@ export const start = async () => {
   try {
     await connect();
     app.listen(PORT, () => {
-      if (SECRETS.node_env === "development") {
-        expressListRoutes(app);
-      }
       console.log(`REST API on http://localhost:${PORT}/`);
     });
   } catch (e) {
