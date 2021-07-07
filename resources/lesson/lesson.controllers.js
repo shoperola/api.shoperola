@@ -45,8 +45,8 @@ const createLesson = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
-  const { title, subject, language } = req.body;
-  if (!title || !subject || !language) {
+  const { title, language } = req.body;
+  if (!title || !language) {
     return res.status(400).json({ message: "Required fields missing" });
   }
   // console.log(req.files.banner[0]);
