@@ -106,9 +106,7 @@ const updateLesson = async (req, res) => {
   try {
     const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {
       new: true,
-    })
-      .populate({ path: "subject", select: "-addedBy -__v" })
-      .populate({ path: "language", select: "name" });
+    }).populate({ path: "language", select: "name" });
     res.json({ status: "OK", data: doc });
   } catch (e) {
     console.log(e.message);
@@ -170,11 +168,7 @@ const metadata = async (req, res) => {
       res.status(400).send("something went wrong");
     }
     console.log(check);
-    const video = await Lesson.findByIdAndUpdate(
-      id,
-      { $set: req.body },
-      { new: true }
-    );
+    const video = await Lesson.findByIdAndUpdate(id, req.body, { new: true });
     console.log(video);
     res.send(video);
   } catch (e) {
