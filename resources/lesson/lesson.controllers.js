@@ -182,6 +182,20 @@ const metadata = async (req, res) => {
   }
 };
 
+const getVideo = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const check = await Lesson.findById(id);
+    if (!check) {
+      return res.status(404).send("no video found");
+    }
+    console.log(check.video);
+    res.send({ video: check.video });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
 export {
   getLesson,
   getLessons,
@@ -191,4 +205,5 @@ export {
   imdb_searchmovie,
   imdb_searchbyid,
   metadata,
+  getVideo,
 };
