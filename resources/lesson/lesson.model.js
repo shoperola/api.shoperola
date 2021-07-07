@@ -18,11 +18,6 @@ const LessonSchema = Schema(
       type: String,
       default: "",
     },
-    subject: {
-      type: SchemaTypes.ObjectId,
-      required: true,
-      ref: "subjects",
-    },
     language: {
       type: SchemaTypes.ObjectId,
       required: true,
@@ -56,39 +51,59 @@ const LessonSchema = Schema(
     ////////////////////////////////////////IMDB - METADATA///////////////////////////////////////////
     Id: {
       type: String,
+      default: "",
     },
     directors: {
       type: String,
+      default: "",
     },
     type: {
       type: String,
+      default: "",
     },
     year: {
       type: String,
+      default: "",
     },
     image: {
       type: String,
+      default: "",
     },
     genres: {
-      type: Array,
+      type: String,
+      default: "",
     },
     Languages: {
-      type: Array,
+      type: String,
+      default: "",
     },
     RuntimeStr: {
       type: String,
+      default: "",
     },
     Plot: {
       type: String,
+      default: "",
     },
-    Actors_list: {
-      type: Array,
-    },
+    Actors_list: [
+      {
+        id: String,
+        name: String,
+        image: String,
+        asCharacter: String,
+      },
+    ],
     Writers: {
       type: String,
+      default: "",
     },
     Ratings: {
-      type: Array,
+      imDb: { type: String, default: "" },
+      metacritic: { type: String, default: "" },
+      theMovieDb: { type: String, default: "" },
+      rottenTomatoes: { type: String, default: "" },
+      tV_com: { type: String, default: "" },
+      filmAffinity: { type: String, default: "" },
     },
   },
   { timestamps: true }
