@@ -168,6 +168,7 @@ const metadata = async (req, res) => {
       res.status(400).send("something went wrong");
     }
     console.log(check);
+    console.log(req.body);
     const video = await Lesson.findByIdAndUpdate(id, req.body, { new: true });
     console.log(video);
     res.send(video);
