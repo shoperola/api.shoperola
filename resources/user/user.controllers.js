@@ -22,6 +22,7 @@ const updateUserProfile = async (req, res) => {
   // console.log(req.file, req.body);
 
   const { username } = req.body;
+  console.log(username);
   const updateObject = req.file
     ? {
         ...req.body,
