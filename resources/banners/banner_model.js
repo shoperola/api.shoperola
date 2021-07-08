@@ -11,11 +11,11 @@ const BannerSchema = Schema({
     required: true,
   },
   startdate: {
-    type: String,
+    type: Date,
     required: true,
   },
   enddate: {
-    type: String,
+    type: Date,
     required: true,
   },
   status: {
