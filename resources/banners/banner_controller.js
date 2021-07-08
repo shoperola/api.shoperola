@@ -69,14 +69,18 @@ const editbanner = async (req, res) => {
     if (!check) {
       res.send("no banner found");
     }
-    const banner = await Banner.findByIdAndUpdate(id, {
-      ...req.body,
-      bannerimage: `${
-        req.files[0] && req.files[0].location
-          ? req.files[0].location
-          : check.bannerimage
-      }`,
-    });
+    const banner = await Banner.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        bannerimage: `${
+          req.files[0] && req.files[0].location
+            ? req.files[0].location
+            : check.bannerimage
+        }`,
+      },
+      { new: true }
+    );
     res.send(banner);
   } catch (e) {
     console.log(e);
