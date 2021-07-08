@@ -63,4 +63,18 @@ const createClient = async (req, res) => {
   }
 };
 
-export { getClient, createClient };
+const suspendClient = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    const id = req.params.id;
+    const client = await Client.findByIdAndUpdate(id, { status: false });
+    res.json({ status: "OK", message: "Subscriber suspended" });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error suspending subscription" });
+  }
+};
+
+export { getClient, createClient, suspendClient };

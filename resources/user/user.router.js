@@ -35,6 +35,7 @@ import {
   getPaymentsAdded,
   updatePaymentsInfo,
 } from "../../resources/payments/payments.controllers.js";
+import { suspendClient } from "../client/client.controllers.js";
 
 const router = Router();
 
@@ -70,6 +71,8 @@ router
   .delete(deleteSubject);
 
 router.route("/subscribers").get(getSubscribers);
+
+router.route("/subscribers/suspend/:id").patch(suspendClient);
 
 router.route("/requests").get(getRequests);
 
