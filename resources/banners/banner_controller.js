@@ -21,6 +21,7 @@ const addbanner = async (req, res) => {
     console.log(banner);
     res.send(banner);
   } catch (err) {
+    console.log(err);
     res.send(err);
   }
 };
