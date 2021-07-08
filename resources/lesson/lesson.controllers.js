@@ -132,6 +132,23 @@ const deleteLesson = async (req, res) => {
   }
 };
 
+const suspendLesson = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "video Id not provided" });
+    }
+    const lesson = await Lesson.findByIdAndUpdate(id, { live: false });
+    res.json({ status: "OK", data: lesson });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error Suspending video", e: e.message });
+  }
+};
+
 const imdb_searchmovie = async (req, res) => {
   try {
     const name = req.params.name;
@@ -201,4 +218,5 @@ export {
   imdb_searchbyid,
   metadata,
   getVideo,
+  suspendLesson,
 };

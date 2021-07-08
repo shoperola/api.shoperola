@@ -9,6 +9,7 @@ import {
   imdb_searchbyid,
   metadata,
   getVideo,
+  suspendLesson,
 } from "./lesson.controllers.js";
 import { upload } from "../../util/s3-spaces.js";
 
@@ -29,6 +30,7 @@ router
   .route("/:id")
   .get(getLesson)
   .put(upload.fields(uploadFields), updateLesson)
+  .patch(suspendLesson)
   .delete(deleteLesson);
 
 router.post("/search_metadata/:name", imdb_searchmovie);
