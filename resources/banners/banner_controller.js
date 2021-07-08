@@ -70,10 +70,10 @@ const editbanner = async (req, res) => {
       res.send("no banner found");
     }
     const banner = await Banner.findByIdAndUpdate(id, {
+      ...req.body,
       bannerimage: `${
         req.files[0] && req.files[0].filename ? req.files[0].filename : ""
       }`,
-      $set: req.body,
     });
     res.send(banner);
   } catch (e) {
