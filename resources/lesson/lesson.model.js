@@ -35,10 +35,6 @@ const LessonSchema = Schema(
       type: String,
       default: "",
     },
-    launch: {
-      type: Boolean,
-      default: false,
-    },
     launchDate: {
       type: Date,
       default: "",
