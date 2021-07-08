@@ -72,7 +72,9 @@ const editbanner = async (req, res) => {
     const banner = await Banner.findByIdAndUpdate(id, {
       ...req.body,
       bannerimage: `${
-        req.files[0] && req.files[0].filename ? req.files[0].filename : ""
+        req.files[0] && req.files[0].location
+          ? req.files[0].location
+          : check.bannerimage
       }`,
     });
     res.send(banner);
