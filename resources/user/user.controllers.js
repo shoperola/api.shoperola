@@ -441,7 +441,7 @@ const updatePublicUrl = async (req, res) => {
       req.user._id,
       {
         username: username,
-        publicUrl: `https://konsult-member.com/${username}`,
+        publicUrl: `${SECRETS.domain_url}/${username}`,
       },
       { new: true }
     );
