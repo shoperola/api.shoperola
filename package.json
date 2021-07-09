@@ -8,7 +8,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "format": "prettier --write \"**/*.(js)\"",
-    "deploy": "npm run format && git push && git push heroku master"
+    "deploy": "npm run format && git push && git push heroku master",
+    "start:pm2": "pm2 start index.js"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +33,7 @@
     "multer-s3": "^2.9.0",
     "node-fetch": "^2.6.1",
     "node-schedule": "^2.0.0",
+    "pm2": "^5.1.0",
     "stripe": "^8.150.0"
   },
   "devDependencies": {
