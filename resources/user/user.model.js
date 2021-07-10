@@ -192,7 +192,7 @@ UserSchema.pre("save", async function (next) {
     this.lastName
   );
 
-  this.publicUrl = `${SECRETS.domain_url}/public/${this.username}`;
+  this.publicUrl = `${SECRETS.domain_url}/${this.username}`;
 
   const params = {
     name: `${this.firstName} ${this.lastName}`,
