@@ -466,7 +466,7 @@ const getPublicProfile = async (req, res) => {
   try {
     const doc = await User.findOne(
       { username: username },
-      "-reviews -reviewsCount -views -totalEarnings -settings -rating -identities -email -password"
+      "-reviews -reviewsCount -views -totalEarnings -settings -rating -identities -email -password -subjects -lanugages"
     )
       .lean()
       .exec();
