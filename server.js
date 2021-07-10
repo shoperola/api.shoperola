@@ -18,6 +18,8 @@ import { getPublicProfile as ProfileDataController } from "./resources/user/user
 import { connect } from "./util/db.js";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito.js";
 import { SECRETS } from "./util/config.js";
+import { getUserById } from "./util/grabUserbyId.js";
+import { getLessons } from "./resources/lesson/lesson.controllers.js";
 
 config();
 const app = express();
@@ -46,6 +48,7 @@ app.get("/", (req, res) => {
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
+app.get("/movies/:id", getUserById, getLessons);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
