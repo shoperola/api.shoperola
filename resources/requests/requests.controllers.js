@@ -1,5 +1,5 @@
-import { Request } from "./requests.model.js";
-import { User } from "../user/user.model.js";
+import { Request } from "./requests.model";
+import { User } from "../user/user.model";
 
 export const createRequest = async (req, res) => {
   console.log(req.files, req.body);

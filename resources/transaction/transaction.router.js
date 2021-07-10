@@ -1,7 +1,7 @@
 import {
   sessionCompleteEventListener,
   getTransactions,
-} from "./transaction.controllers.js";
+} from "./transaction.controllers";
 import { Router } from "express";
 
 const router = Router();

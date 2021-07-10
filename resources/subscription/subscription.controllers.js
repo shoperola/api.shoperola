@@ -1,5 +1,5 @@
-import { Client } from "../client/client.model.js";
-import { Subscription } from "../subscription/subscription.model.js";
+import { Client } from "../client/client.model";
+import { Subscription } from "../subscription/subscription.model";
 
 const getSubscription = async (req, res) => {
   const { userID } = req.body;

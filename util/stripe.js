@@ -1,11 +1,11 @@
-import { SECRETS } from "./config.js";
+import { SECRETS } from "./config";
 import Stripe from "stripe";
 const stripe = new Stripe(SECRETS.stripeSecretKey);
-import { User } from "../resources/user/user.model.js";
-import { Client } from "../resources/client/client.model.js";
-import { PaymentLog } from "../resources/paymentLog/paymentLog.model.js";
-import zeroDecimalCurrencies from "./ZRC.js";
-import { Payment } from "../resources/payments/payments.model.js";
+import { User } from "../resources/user/user.model";
+import { Client } from "../resources/client/client.model";
+import { PaymentLog } from "../resources/paymentLog/paymentLog.model";
+import zeroDecimalCurrencies from "./ZRC";
+import { Payment } from "../resources/payments/payments.model";
 
 const createAccount = async (user) =>
   await stripe.accounts.create({

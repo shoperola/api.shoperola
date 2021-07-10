@@ -1,8 +1,8 @@
-import { PaymentLog } from "../paymentLog/paymentLog.model.js";
-import { Transaction } from "./transactions.model.js";
-import { Subscription } from "../subscription/subscription.model.js";
-import zeroDecimalCurrencies from "../../util/ZRC.js";
-import { Client } from "../client/client.model.js";
+import { PaymentLog } from "../paymentLog/paymentLog.model";
+import { Transaction } from "./transactions.model";
+import { Subscription } from "../subscription/subscription.model";
+import zeroDecimalCurrencies from "../../util/ZRC";
+import { Client } from "../client/client.model";
 
 const processedByStripe = (logData) => {
   return logData.processed_by === "stripe";

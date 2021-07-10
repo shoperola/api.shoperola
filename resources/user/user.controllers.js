@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { User, generateUniqueUserName } from "./user.model.js";
-import { Payment } from "../payments/payments.model.js";
-import { Request } from "../requests/requests.model.js";
-import { Subject } from "../subject/subject.model.js";
-import { Subscription } from "../subscription/subscription.model.js";
-import { SECRETS } from "../../util/config.js";
+import { User, generateUniqueUserName } from "./user.model";
+import { Payment } from "../payments/payments.model";
+import { Request } from "../requests/requests.model";
+import { Subject } from "../subject/subject.model";
+import { Subscription } from "../subscription/subscription.model";
+import { SECRETS } from "../../util/config";
 const { Types } = mongoose;
 
 const getUserProfile = (req, res) => {

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createRequest } from "./requests.controllers.js";
-import { upload } from "../../util/s3-spaces.js";
+import { createRequest } from "./requests.controllers";
+import { upload } from "../../util/s3-spaces";
 
 const router = Router();
 

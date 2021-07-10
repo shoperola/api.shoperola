@@ -1,4 +1,4 @@
-import { Language } from "./langauge.model.js";
+import { Language } from "./langauge.model";
 
 const getLanguagesList = async (req, res) => {
   try {

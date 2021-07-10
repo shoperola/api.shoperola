@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { generateSignupLink } from "../../util/paypal.js";
-import { upload } from "../../util/s3-spaces.js";
+import { generateSignupLink } from "../../util/paypal";
+import { upload } from "../../util/s3-spaces";
 import {
   onBoardUser,
   refreshAccountUrl,
   checkAccountStatus,
-} from "../../util/stripe.js";
+} from "../../util/stripe";
 import {
   getRequest,
   getRequests,
@@ -26,16 +26,16 @@ import {
   updateSubject,
   getSubject,
   getSubscribers,
-} from "./user.controllers.js";
+} from "./user.controllers";
 import {
   getTransactionById,
   getTransactions,
-} from "../../resources/transaction/transaction.controllers.js";
+} from "../../resources/transaction/transaction.controllers";
 import {
   getPaymentsAdded,
   updatePaymentsInfo,
-} from "../../resources/payments/payments.controllers.js";
-import { suspendClient } from "../client/client.controllers.js";
+} from "../../resources/payments/payments.controllers";
+import { suspendClient } from "../client/client.controllers";
 
 const router = Router();
 

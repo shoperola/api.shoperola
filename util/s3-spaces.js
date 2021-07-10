@@ -2,7 +2,7 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import AWS from "aws-sdk";
 import md5 from "md5";
-import { SECRETS } from "./config.js";
+import { SECRETS } from "./config";
 
 const spacesEndpoint = new AWS.Endpoint(SECRETS.spacesEndpoint);
 const s3 = new AWS.S3({

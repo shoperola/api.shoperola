@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { upload } from "../../util/s3-spaces.js";
+import { upload } from "../../util/s3-spaces";
 import {
   addtvshow,
   edit_banner,
@@ -12,7 +12,7 @@ import {
   delete_episode,
   edit_episode,
   viewall_tvshow,
-} from "./tvshow_controller.js";
+} from "./tvshow_controller";
 const router = Router();
 
 router.post("/addtvshow", addtvshow);

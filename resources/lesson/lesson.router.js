@@ -10,8 +10,8 @@ import {
   metadata,
   getVideo,
   suspendLesson,
-} from "./lesson.controllers.js";
-import { upload } from "../../util/s3-spaces.js";
+} from "./lesson.controllers";
+import { upload } from "../../util/s3-spaces";
 
 const router = Router();
 

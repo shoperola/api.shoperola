@@ -1,4 +1,4 @@
-import { Payment } from "./payments.model.js";
+import { Payment } from "./payments.model";
 
 const getPaymentsAdded = async (req, res) => {
   if (!req.user) {

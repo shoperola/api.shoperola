@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { createOrder, captureOrder } from "../../util/paypal.js";
+import { createOrder, captureOrder } from "../../util/paypal";
 import {
   checkSessionStatusOnSuccess,
   createCheckoutSession,
-} from "../../util/stripe.js";
-import { renewToken } from "../../util/cognito.js";
-import { createClient, getClient } from "./client.controllers.js";
-import { getSubscription } from "../subscription/subscription.controllers.js";
+} from "../../util/stripe";
+import { renewToken } from "../../util/cognito";
+import { createClient, getClient } from "./client.controllers";
+import { getSubscription } from "../subscription/subscription.controllers";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Lesson } from "./lesson.model.js";
+import { Lesson } from "./lesson.model";
 import { scheduleJob } from "node-schedule";
-import { SECRETS } from "../../util/config.js";
+import { SECRETS } from "../../util/config";
 
 const getLessons = async (req, res) => {
   if (!req.user) {

@@ -1,5 +1,5 @@
-import { Tvshow } from "./tvshow_model.js";
-import { Season } from "../season_model.js";
+import { Tvshow } from "./tvshow_model";
+import { Season } from "../season_model";
 import { scheduleJob } from "node-schedule";
 
 //constant for response

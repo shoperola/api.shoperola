@@ -1,4 +1,4 @@
-import { Banner } from "./banner_model.js";
+import { Banner } from "./banner_model";
 
 //constant for response
 const defaultResponseObject = {

@@ -5,7 +5,7 @@
  */
 import jwkToPem from "jwk-to-pem";
 import jwt from "jsonwebtoken";
-import { SECRETS } from "./config.js";
+import { SECRETS } from "./config";
 import axios from "axios";
 import {
   CognitoUserPool,

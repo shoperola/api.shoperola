@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 import md5 from "md5";
-import { Payment } from "../payments/payments.model.js";
-import { SECRETS } from "../../util/config.js";
+import { Payment } from "../payments/payments.model";
+import { SECRETS } from "../../util/config";
 
 const UserSchema = new Schema(
   {
