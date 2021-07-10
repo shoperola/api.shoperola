@@ -5,11 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node --es-module-specifier-resolution=node index",
+    "dev": "nodemon --es-module-specifier-resolution=node index",
     "format": "prettier --write \"**/*.(js)\"",
     "deploy": "npm run format && git push && git push heroku master",
-    "start:pm2": "pm2 start index.js"
+    "start:pm2": "pm2 start index.js --node-args=\"--es-module-specifier-resolution=node\""
   },
   "keywords": [],
   "author": "",

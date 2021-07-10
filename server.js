@@ -3,7 +3,7 @@ import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";
 import expressListRoutes from "express-list-routes";
-import { signup, signin, protect } from "./util/auth.js";
+import { signup, signin, protect } from "./util/auth";
 import { User } from "./resources/user/user.model.js";
 import { Client } from "./resources/client/client.model.js";
 import UserRouter from "./resources/user/user.router.js";
