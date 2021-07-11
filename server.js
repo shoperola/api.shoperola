@@ -55,13 +55,7 @@ app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
-app.use(
-  "/api/client",
-  async (req, res, next) => {
-    (await getVerifyMiddleware())(req, res, next);
-  },
-  ClientRouter
-);
+app.use("/api/client", await getVerifyMiddleware(), ClientRouter);
 
 export const start = async () => {
   try {

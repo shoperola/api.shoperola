@@ -227,7 +227,7 @@ const createCheckoutSession = async (req, res) => {
 
 const checkSessionStatusOnSuccess = async (req, res) => {
   if (!req.user) {
-    res.status(400).json({ message: "Client Not Found" });
+    return res.status(400).json({ message: "Client Not Found" });
   }
   try {
     const { session_id, userID } = req.body;
