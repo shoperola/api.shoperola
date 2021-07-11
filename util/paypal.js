@@ -5,17 +5,25 @@ import { Client } from "../resources/client/client.model";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model";
 import { Payment } from "../resources/payments/payments.model";
 
+const {
+  paypalBaseUrl,
+  paypalClientKey,
+  paypalClientSecret,
+  domain_url,
+  paypalBNCode,
+} = SECRETS;
+
 const getAuthToken = async () => {
   try {
     const resp = await axios.post(
-      "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+      `${paypalBaseUrl}/v1/oauth2/token`,
       new URLSearchParams({
         grant_type: "client_credentials",
       }).toString(),
       {
         auth: {
-          username: SECRETS.paypalClientKey,
-          password: SECRETS.paypalClientSecret,
+          username: paypalClientKey,
+          password: paypalClientSecret,
         },
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -36,11 +44,11 @@ const generateSignupLink = async (req, res) => {
   }
   try {
     const resp = await axios.post(
-      "https://api-m.sandbox.paypal.com/v2/customer/partner-referrals",
+      `${paypalBaseUrl}/v2/customer/partner-referrals`,
       {
         tracking_id: req.user._id,
         partner_config_override: {
-          return_url: `${SECRETS.domain_url}/payment`,
+          return_url: `${domain_url}/payment`,
           partner_logo_url:
             "https://shott.sfo3.digitaloceanspaces.com/logo_oJs-w8sDW.png",
         },
@@ -154,7 +162,7 @@ const createOrder = async (req, res) => {
 
   try {
     const order = await axios.post(
-      "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+      `${paypalBaseUrl}/v2/checkout/orders`,
       {
         intent: "CAPTURE",
         purchase_units: [
@@ -188,7 +196,7 @@ const createOrder = async (req, res) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${PAYPAL_TOKEN}`,
-          "PayPal-Partner-Attribution-Id": SECRETS.paypalBNCode,
+          "PayPal-Partner-Attribution-Id": paypalBNCode,
         },
       }
     );
@@ -214,13 +222,13 @@ const captureOrder = async (req, res) => {
   const OrderID = req.params.id;
   try {
     const resp = await axios.post(
-      `https://api-m.sandbox.paypal.com/v2/checkout/orders/${OrderID}/capture`,
+      `${paypalBaseUrl}/v2/checkout/orders/${OrderID}/capture`,
       {},
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${PAYPAL_TOKEN}`,
-          "PayPal-Partner-Attribution-Id": SECRETS.paypalBNCode,
+          "PayPal-Partner-Attribution-Id": paypalBNCode,
         },
       }
     );
