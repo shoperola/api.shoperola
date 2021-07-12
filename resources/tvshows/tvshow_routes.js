@@ -14,6 +14,7 @@ import {
   viewall_tvshow,
   view_season_id,
   view_season,
+  edit_season_no,
 } from "./tvshow_controller";
 const router = Router();
 
@@ -25,6 +26,7 @@ router.patch(
 );
 router.patch("/metadata/:id", metadata);
 router.patch("/edit_season/:id", edit_season);
+router.patch("/edit_season_byID/:sid", edit_season_no);
 router.patch("/edit_video/:id", upload.single("video"), edit_video);
 router.get("/view_tvshow/:id", view_tvshow);
 router.delete("/delete_season/:sid", delete_season);
