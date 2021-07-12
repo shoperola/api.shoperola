@@ -19,7 +19,6 @@ const {
   region,
   userPool,
   clientId: _clientId,
-  clientSecret,
   auth_domain,
   redirect_uri,
 } = SECRETS;
@@ -241,10 +240,6 @@ export const generateTokensfromCode = async (req, res) => {
     });
 
     const config = {
-      // auth: {
-      //   username: _clientId,
-      //   password: clientSecret,
-      // },
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

@@ -184,19 +184,41 @@ const edit_episode = async (req, res) => {
     if (!check) {
       res.send("no season found");
     }
-    const index = check.episode.findIndex(
-      (x) => JSON.stringify(x._id) === JSON.stringify(req.params.eid)
-    );
-    (check.episode[index].bannerimage = `${
-      req.files[0] && req.files[0].filename ? req.files[0].filename : ""
-    }`),
-      (check.episode[index].name = req.body.name),
-      (check.episode[index].video = `${
-        req.files[1] && req.files[1].filename ? req.files[1].filename : ""
-      }`);
+    console.log(check);
+    console.log(req.files);
+    const eid = req.params.eid;
+    // const index = check.episode.findIndex(
+    //   (x) => JSON.stringify(x._id) === JSON.stringify(req.params.eid)
+    // );
+    // // (check.episode[index].bannerimage = `${
+    // //   req.files[0] && req.files[0].location ? req.files[0].location : ""
+    // // }`),
+    // check.episode[index].image = check.episode[index].image;
+    // (check.episode[index].title = req.body.title),
+    //   (check.episode[index].video = `${
+    //     req.files[1] && req.files[1].location ? req.files[1].location : ""
+    //   }`);
 
-    const show = await check.save();
-    res.send(show);
+    // const show = await check.save();
+    const updateObject = {};
+    for (const [key, value] of Object.entries(req.body)) {
+      updateObject[`episode.$.${key}`] = value;
+    }
+
+    req.files[0] && req.files[0].location
+      ? (updateObject["episode.$.video"] = req.files[0].location)
+      : null;
+
+    console.log(updateObject);
+    const episode = await Season.findOneAndUpdate(
+      { "episode._id": eid },
+      { $set: updateObject },
+      {
+        new: true,
+      }
+    );
+    console.log(episode);
+    res.send(episode);
   } catch (e) {
     res.status(500).send(e);
   }
