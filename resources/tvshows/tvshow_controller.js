@@ -220,6 +220,28 @@ const viewall_tvshow = async (req, res) => {
   }
 };
 
+const view_season_id = async (req, res) => {
+  try{
+    const id = req.params.id;
+    const check = await Season.findById(id);
+    if(!check){
+      res.send("no season found");
+    }
+    res.send(check)
+  }catch (e) {
+    res.send(e.message)
+  }
+};
+
+const view_season = async (req, res) => {
+  try{
+    const check = await Season.find({});
+    res.send(check)
+  }catch (e) {
+    res.send(e.message)
+  }
+};
+
 export {
   addtvshow,
   edit_banner,
@@ -233,4 +255,6 @@ export {
   delete_episode,
   edit_episode,
   viewall_tvshow,
+  view_season_id,
+  view_season
 };

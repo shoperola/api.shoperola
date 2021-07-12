@@ -208,6 +208,26 @@ const getVideo = async (req, res) => {
   }
 };
 
+const trending = async (req, res) => {
+
+    Lesson.aggregate(
+      [
+      {
+        $limit : 4, 
+         
+    }
+    
+    ], (err, data) => {
+  
+        if (err) {
+          console.log(err);
+        }
+  
+        res.status(200).json(data);
+      })
+  
+};
+
 export {
   getLesson,
   getLessons,
@@ -219,4 +239,5 @@ export {
   metadata,
   getVideo,
   suspendLesson,
+ trending 
 };

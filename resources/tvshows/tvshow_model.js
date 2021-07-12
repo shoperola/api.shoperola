@@ -13,6 +13,9 @@ const TvshowSchema = Schema({
   plot_show: {
     type: String,
   },
+  language:{
+    type: String
+  },
   thumbnail: {
     type: String,
   },
