@@ -32,14 +32,17 @@ const edit_banner = async (req, res) => {
       res.send("add a title and plot");
     }
     console.log(req.files);
-    const show = await Tvshow.findByIdAndUpdate(id, {
-      thumbnail: `${
-        req.files[0] && req.files[0].location ? req.files[0].location : ""
-      }`,
-      bannerimage: `${
-        req.files[1] && req.files[1].location ? req.files[1].location : ""
-      }`,
-    });
+
+    const updateObject = {};
+    req.files && req.files.thumbnail
+      ? (updateObject.thumbnail = req.files.thumbnail[0].location)
+      : null;
+
+    req.files && req.files.bannerImage
+      ? (updateObject.bannerimage = req.files.bannerImage[0].location)
+      : null;
+
+    const show = await Tvshow.findByIdAndUpdate(id, updateObject);
     const response = { ...defaultResponseObject, data: show };
     res.send(response);
   } catch (e) {
@@ -104,7 +107,7 @@ const edit_video = async (req, res) => {
     if (!check) {
       res.send("no season added");
     }
-    const episode = { ...req.body, video: req.files[0].location };
+    const episode = { ...req.body, video: req.file.location };
     console.log(check);
     check.episode.push(episode);
     await check.save();
@@ -223,24 +226,24 @@ const viewall_tvshow = async (req, res) => {
 };
 
 const view_season_id = async (req, res) => {
-  try{
+  try {
     const id = req.params.id;
     const check = await Season.findById(id);
-    if(!check){
+    if (!check) {
       res.send("no season found");
     }
-    res.send(check)
-  }catch (e) {
-    res.send(e.message)
+    res.send(check);
+  } catch (e) {
+    res.send(e.message);
   }
 };
 
 const view_season = async (req, res) => {
-  try{
+  try {
     const check = await Season.find({});
-    res.send(check)
-  }catch (e) {
-    res.send(e.message)
+    res.send(check);
+  } catch (e) {
+    res.send(e.message);
   }
 };
 
@@ -258,5 +261,5 @@ export {
   edit_episode,
   viewall_tvshow,
   view_season_id,
-  view_season
+  view_season,
 };

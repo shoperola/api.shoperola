@@ -18,14 +18,14 @@ import {
 const router = Router();
 
 router.post("/addtvshow", addtvshow);
-router.patch("/edit_banner/:id", upload.array("file"), edit_banner);
+router.patch(
+  "/edit_banner/:id",
+  upload.fields([{ name: "bannerImage" }, { name: "thumbnail" }]),
+  edit_banner
+);
 router.patch("/metadata/:id", metadata);
 router.patch("/edit_season/:id", edit_season);
-router.patch(
-  "/edit_video/:id",
-  upload.fields([{ name: "thumbnail" }, { name: "bannerImage" }]),
-  edit_video
-);
+router.patch("/edit_video/:id", upload.single("video"), edit_video);
 router.get("/view_tvshow/:id", view_tvshow);
 router.delete("/delete_season/:sid", delete_season);
 router.delete("/delete_tvshow/:id", delete_tvshow);
