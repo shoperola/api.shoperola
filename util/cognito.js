@@ -241,10 +241,10 @@ export const generateTokensfromCode = async (req, res) => {
     });
 
     const config = {
-      auth: {
-        username: _clientId,
-        password: clientSecret,
-      },
+      // auth: {
+      //   username: _clientId,
+      //   password: clientSecret,
+      // },
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
