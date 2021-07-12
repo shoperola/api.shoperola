@@ -20,7 +20,8 @@ import { connect } from "./util/db";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
 import { SECRETS } from "./util/config";
 import { getUserById } from "./util/grabUserbyId";
-import { getLessons } from "./resources/lesson/lesson.controllers";
+import { getLessons, getLesson } from "./resources/lesson/lesson.controllers";
+import { viewbanner } from "./resources/banners/banner_controller";
 
 config();
 const app = express();
@@ -49,7 +50,9 @@ app.get("/", (req, res) => {
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
-app.get("/movies/:id", getUserById, getLessons);
+app.get("/movies/:username", getUserById, getLessons);
+app.get("/movie/:username/:id", getUserById, getLesson);
+app.get("/banners/:username/", getUserById, viewbanner);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
