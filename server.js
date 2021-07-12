@@ -19,7 +19,7 @@ import { connect } from "./util/db";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
 import { SECRETS } from "./util/config";
 import { getUserById } from "./util/grabUserbyId";
-import { getLessons } from "./resources/lesson/lesson.controllers";
+import { getLessons, getLesson } from "./resources/lesson/lesson.controllers";
 
 config();
 const app = express();
@@ -48,7 +48,8 @@ app.get("/", (req, res) => {
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
-app.get("/movies/:id", getUserById, getLessons);
+app.get("/movies/:userid", getUserById, getLessons);
+app.get("/movie/:userid/:id", getUserById, getLesson);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);

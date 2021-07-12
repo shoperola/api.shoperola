@@ -1,7 +1,7 @@
 import { User } from "../resources/user/user.model";
 
 export const getUserById = async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.params.userid;
   if (!id) {
     return res.status(400).json({ message: "ID required" });
   }
