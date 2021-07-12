@@ -48,8 +48,8 @@ app.get("/", (req, res) => {
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
-app.get("/movies/:userid", getUserById, getLessons);
-app.get("/movie/:userid/:id", getUserById, getLesson);
+app.get("/movies/:username", getUserById, getLessons);
+app.get("/movie/:username/:id", getUserById, getLesson);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
