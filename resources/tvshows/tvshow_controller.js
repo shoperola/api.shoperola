@@ -97,19 +97,21 @@ const edit_season = async (req, res) => {
 
 const edit_video = async (req, res) => {
   try {
+    console.log(req.files);
     console.log(req.params.id);
     const id = req.params.id;
     const check = await Season.findById(id);
     if (!check) {
       res.send("no season added");
     }
-    const episode = { ...req.body, video: req.file.location };
+    const episode = { ...req.body, video: req.files[0].location };
     console.log(check);
     check.episode.push(episode);
     await check.save();
 
     res.send(episode);
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 };
