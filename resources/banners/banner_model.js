@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = mongoose;
 
 const BannerSchema = Schema({
   title: {
     type: String,
     required: true,
+  },
+  userID: {
+    type: SchemaTypes.ObjectId,
+    ref: "users",
   },
   bannerimage: {
     type: String,

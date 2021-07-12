@@ -17,6 +17,7 @@ const addbanner = async (req, res) => {
       category: req.body.category,
       startdate: req.body.startdate,
       enddate: req.body.enddate,
+      userID: req.user._id,
     });
     console.log(banner);
     res.send(banner);
@@ -28,7 +29,7 @@ const addbanner = async (req, res) => {
 
 const viewbanner = async (req, res) => {
   try {
-    const banner = await Banner.find({});
+    const banner = await Banner.find({ userID: req.user._id });
     const response = { ...defaultResponseObject };
     response.data = banner;
 
