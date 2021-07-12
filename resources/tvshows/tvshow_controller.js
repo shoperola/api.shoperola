@@ -100,7 +100,7 @@ const edit_season = async (req, res) => {
 
 const edit_video = async (req, res) => {
   try {
-    console.log(req.files);
+    console.log(req.file);
     console.log(req.params.id);
     const id = req.params.id;
     const check = await Season.findById(id);
