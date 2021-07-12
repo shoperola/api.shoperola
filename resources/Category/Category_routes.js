@@ -1,20 +1,19 @@
 import { Router } from "express";
 import {
-    add_category,
-    view_category,
-    view,
-    update_category,
-    delete_category
-  } from "./Category_controller";
+  add_category,
+  view_category,
+  view,
+  update_category,
+  delete_category,
+} from "./Category_controller";
 
-  const router = Router();
+const router = Router();
 
-  router.post("/add-category", add_category);
-  router.get("/view_category/:id", view_category);
-  router.get("/view_all", view);
-  router.patch("/update_category/:id" , update_category);
-  router.delete("/delete_category/:id", delete_category);
+router.route("/").get(view).post(add_category);
+router
+  .route("/:id")
+  .get(view_category)
+  .patch(update_category)
+  .delete(delete_category);
 
-  export default router;
-
-  
+export default router;
