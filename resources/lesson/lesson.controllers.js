@@ -210,7 +210,7 @@ const getVideo = async (req, res) => {
 
 const trending = async (req, res) => {
 try{
-  const trend = await Lesson.find({}).sort({_id:-1}).limit(4)
+  const trend = await Lesson.find({madeBy: req.user._id}).sort({_id:-1}).limit(4)
   res.json({data: trend})
 
 }catch(e)
