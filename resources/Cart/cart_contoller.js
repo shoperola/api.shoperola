@@ -16,7 +16,7 @@ const update_cart = async (req, res) => {
     const cart = await Cart.findByIdAndUpdate(
       client.cartid,
       {
-        $addToSet: { products: req.body.productid },
+        $addToSet: { products: id },
         $inc: { total_price: product.price },
       },
       { new: true }
