@@ -29,6 +29,10 @@ const ClientSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  cartid:{
+    type: SchemaTypes.ObjectId,
+    ref: 'Cart'
+  }
 });
 
 export const Client = model("clients", ClientSchema);

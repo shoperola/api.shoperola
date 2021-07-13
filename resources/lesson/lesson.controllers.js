@@ -209,23 +209,15 @@ const getVideo = async (req, res) => {
 };
 
 const trending = async (req, res) => {
+try{
+  const trend = await Lesson.find({}).sort({_id:-1}).limit(4)
+  res.json({data: trend})
 
-    Lesson.aggregate(
-      [
-      {
-        $limit : 4, 
-         
-    }
-    
-    ], (err, data) => {
-  
-        if (err) {
-          console.log(err);
-        }
-  
-        res.status(200).json(data);
-      })
-  
+}catch(e)
+{
+  console.log(e);
+  res.send(e.message)
+}
 };
 
 export {

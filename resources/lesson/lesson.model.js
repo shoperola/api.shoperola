@@ -4,6 +4,7 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const LessonSchema = Schema(
   {
+    _id: Object,
     madeBy: {
       type: SchemaTypes.ObjectId,
       ref: "user",
