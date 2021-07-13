@@ -27,7 +27,6 @@ router
   .get(getLessons)
   .post(upload.fields(uploadFields), createLesson);
 
-router.get("/trending", trending);
 router
   .route("/:id")
   .get(getLesson)

@@ -23,11 +23,15 @@ import { connect } from "./util/db";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
 import { SECRETS } from "./util/config";
 import { getUserById } from "./util/grabUserbyId";
-import { getLessons, getLesson } from "./resources/lesson/lesson.controllers";
+import {
+  getLessons,
+  getLesson,
+  trending,
+} from "./resources/lesson/lesson.controllers";
 import { viewbanner } from "./resources/banners/banner_controller";
-import {viewall_tvshow} from "./resources/tvshows/tvshow_controller";
-import {getProducts} from "./resources/Ecommerce/Ecommerce_controller";
-import {view_tvshow} from "./resources/tvshows/tvshow_controller";
+import { viewall_tvshow } from "./resources/tvshows/tvshow_controller";
+import { getProducts } from "./resources/Ecommerce/Ecommerce_controller";
+import { view_tvshow } from "./resources/tvshows/tvshow_controller";
 
 config();
 const app = express();
@@ -59,9 +63,10 @@ app.get("/profile/:username", ProfileDataController);
 app.get("/tvshow/:username", getUserById, viewall_tvshow);
 app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 app.get("/movies/:username", getUserById, getLessons);
-app.get("/movie/:username/:id", getUserById,getLesson);
+app.get("/movie/:username/:id", getUserById, getLesson);
 app.get("/banners/:username/", getUserById, viewbanner);
 app.get("/products/:username/", getUserById, getProducts);
+app.get("/latest/:username", getUserById, trending);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
