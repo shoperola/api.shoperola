@@ -23,20 +23,19 @@ const getLessons = async (req, res) => {
 };
 
 const getLesson = async (req, res) => {
-  if (!req.user) {
-    return res.status(400).json({ message: "User Not Found" });
-  }
-  const { id } = req.params;
-  if (!id) {
-    return res.status(400).json({ message: "Lesson id required" });
-  }
   try {
-    const doc = await Lesson.findById(id)
-      .populate({ path: "subject", select: "-addedBy -__v" })
-      .populate({ path: "language", select: "name" });
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "Lesson id required" });
+    }
+    const doc = await Lesson.findById(id);
+    console.log(doc);
     res.json({ status: "OK", data: doc });
   } catch (e) {
-    console.log(e.message);
+    console.log(e);
     res.status(500).json({ message: "Error getting Lesson", error: e.message });
   }
 };
