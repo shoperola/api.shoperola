@@ -209,15 +209,15 @@ const getVideo = async (req, res) => {
 };
 
 const trending = async (req, res) => {
-try{
-  const trend = await Lesson.find({madeBy: req.user._id}).sort({_id:-1}).limit(4)
-  res.json({data: trend})
-
-}catch(e)
-{
-  console.log(e);
-  res.send(e.message)
-}
+  try {
+    const trend = await Lesson.find({ madeBy: req.user._id })
+      .sort({ _id: -1 })
+      .limit(4);
+    res.json({ data: trend });
+  } catch (e) {
+    console.log(e);
+    res.send(e.message);
+  }
 };
 
 export {
@@ -231,5 +231,5 @@ export {
   metadata,
   getVideo,
   suspendLesson,
- trending 
+  trending,
 };
