@@ -26,6 +26,7 @@ import { getLessons, getLesson } from "./resources/lesson/lesson.controllers";
 import { viewbanner } from "./resources/banners/banner_controller";
 import {viewall_tvshow} from "./resources/tvshows/tvshow_controller";
 import {getProducts} from "./resources/Ecommerce/Ecommerce_controller";
+import {view_tvshow} from "./resources/tvshows/tvshow_controller";
 
 config();
 const app = express();
@@ -55,6 +56,7 @@ app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.get("/tvshow/:username", getUserById, viewall_tvshow);
+app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 app.get("/movies/:username", getUserById, getLessons);
 app.get("/movie/:username/:id", getUserById, getLesson);
 app.get("/banners/:username/", getUserById, viewbanner);
