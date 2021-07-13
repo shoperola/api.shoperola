@@ -3,7 +3,7 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const StudiSchema = Schema({
   duration: String,
-  current_time: Date,
+  current_time: String,
   product: {
     type: Schema.Types.ObjectId,
     ref: "Ecommerce",
