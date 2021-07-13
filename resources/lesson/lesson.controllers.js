@@ -207,16 +207,6 @@ const getVideo = async (req, res) => {
   }
 };
 
-// const trending = async (req, res) => {
-//   try {
-//     const trend = await Lesson.findOne({ madeBy: req.user._id }).limit(4);
-//     res.json({ data: trend });
-//   } catch (e) {
-//     console.log(e);
-//     res.send(e.message);
-//   }
-// };
-
 const trending = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
