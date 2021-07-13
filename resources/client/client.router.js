@@ -23,6 +23,6 @@ router
   .post(checkSessionStatusOnSuccess);
 
 router.post("/studio/", view_list);
-router.post("/studio/:id", view_listbyid);
+router.get("/studio/:id", view_listbyid);
 
 export default router;
