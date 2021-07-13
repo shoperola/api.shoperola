@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const TvshowSchema = Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: "users",
     required: true,
   },
   title: {
@@ -13,8 +13,8 @@ const TvshowSchema = Schema({
   plot_show: {
     type: String,
   },
-  language:{
-    type: String
+  language: {
+    type: String,
   },
   thumbnail: {
     type: String,

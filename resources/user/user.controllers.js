@@ -4,6 +4,9 @@ import { Payment } from "../payments/payments.model";
 import { Request } from "../requests/requests.model";
 import { Subject } from "../subject/subject.model";
 import { Subscription } from "../subscription/subscription.model";
+import { Lesson } from "../lesson/lesson.model";
+import { Ecommerce } from "../Ecommerce/ecomerce_model";
+import { Tvshow } from "../tvshows/tvshow_model";
 import { SECRETS } from "../../util/config";
 const { Types } = mongoose;
 
@@ -627,6 +630,32 @@ const getSubscribers = async (req, res) => {
   }
 };
 
+const getDashboardDetails = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const videos = await Lesson.find({ madeBy: req.user._id });
+    const products = await Ecommerce.find({ userID: req.user._id });
+    const subscribers = await Subscription.find({
+      instructor: req.user._id,
+    });
+    const tvshows = await Tvshow.find({ user: req.user._id });
+    res.json({
+      status: "OK",
+      data: {
+        videosCount: videos.length,
+        tvshowsCount: tvshows.length,
+        productsCount: products.length,
+        subscriberCount: subscribers.length,
+      },
+    });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error getting details" });
+  }
+};
+
 export {
   getUserProfile,
   updateUserProfile,
@@ -648,4 +677,5 @@ export {
   changeUserPassword,
   updatePublicUrl,
   getSubscribers,
+  getDashboardDetails,
 };
