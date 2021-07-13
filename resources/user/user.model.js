@@ -86,18 +86,7 @@ const UserSchema = new Schema(
         url: String,
       },
     ],
-    subjects: [
-      {
-        type: SchemaTypes.ObjectId,
-        ref: "subjects",
-      },
-    ],
-    languages: [
-      {
-        type: SchemaTypes.ObjectId,
-        ref: "languages",
-      },
-    ],
+    categories: [{ type: SchemaTypes.ObjectId, ref: "Category" }],
     websiteLink: {
       type: String,
       default: "",
