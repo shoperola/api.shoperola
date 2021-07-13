@@ -1,7 +1,7 @@
 import { Client } from "./client.model";
 import { User } from "../user/user.model";
 import { Subscription } from "../subscription/subscription.model";
-import {Cart} from "../Cart/cart_model";
+import { Cart } from "../Cart/cart_model";
 
 const getClient = async (req, res) => {
   try {
@@ -21,14 +21,14 @@ const createClient = async (req, res) => {
   const { sub, username, given_name, family_name, email } = req.user;
   let client;
   try {
-    const cart = await Cart.create({})
+    const cart = await Cart.create({});
     client = await Client.create({
       email: email,
       username: username,
       firstName: given_name,
       lastName: family_name,
       sub: sub,
-      cartid: cart._id
+      cartid: cart._id,
     });
   } catch (e) {
     console.log(e.message);

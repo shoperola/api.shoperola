@@ -72,7 +72,7 @@ app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
-app.use("/api/cart", cognitoAuthMiddleware,CartRouter);
+app.use("/api/cart", cognitoAuthMiddleware, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);

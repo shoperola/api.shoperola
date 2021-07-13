@@ -1,5 +1,10 @@
-import { Router } from "express"
-import {add_product, delete_product, view_list, view_listbyid} from "./studio_contoller";
+import { Router } from "express";
+import {
+  add_product,
+  delete_product,
+  view_list,
+  view_listbyid,
+} from "./studio_contoller";
 const router = Router();
 
 router.post("/add_product_list", add_product);
