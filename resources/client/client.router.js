@@ -22,7 +22,7 @@ router
   .route("/stripe/check-checkout-session")
   .post(checkSessionStatusOnSuccess);
 
-router.route("/studio/", view_list);
-router.route("/studio/:id", view_listbyid);
+router.post("/studio/", view_list);
+router.post("/studio/:id", view_listbyid);
 
 export default router;
