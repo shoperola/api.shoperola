@@ -144,18 +144,6 @@ const UserSchema = new Schema(
       type: Number,
       default: 0,
     },
-    reviews: [
-      {
-        writtenBy: {
-          type: SchemaTypes.ObjectId,
-          ref: "clients",
-        },
-        text: String,
-        timestamp: Date,
-        replied: Boolean,
-        reply: String,
-      },
-    ],
   },
   { timestamps: true }
 );
