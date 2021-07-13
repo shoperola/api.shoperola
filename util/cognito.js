@@ -271,7 +271,7 @@ export const renewToken = async (req, res) => {
       AuthFlow: "REFRESH_TOKEN_AUTH",
       AuthParameters: {
         REFRESH_TOKEN: token,
-     //   SECRET_HASH: clientSecret, // In case you have configured client secret
+        //   SECRET_HASH: clientSecret, // In case you have configured client secret
       },
     };
 
