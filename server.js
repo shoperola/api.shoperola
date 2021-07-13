@@ -45,7 +45,7 @@ const clientModel = (req, res, next) => {
   req.model = Client;
   next();
 };
-
+const cognitoAuthMiddleware = await getVerifyMiddleware();
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cors());
@@ -72,12 +72,11 @@ app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
-app.use("/api/cart",  (req,res,next) => {req.user = {sub : "e0e253d1-6156-4728-8ec5-f99784b10023"};next()},CartRouter);
+app.use("/api/cart", cognitoAuthMiddleware,CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
-const cognitoAuthMiddleware = await getVerifyMiddleware();
 app.use("/api/client", cognitoAuthMiddleware, ClientRouter);
 
 export const start = async () => {

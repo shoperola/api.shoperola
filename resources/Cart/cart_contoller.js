@@ -21,7 +21,8 @@ const update_cart = async (req, res) => {
         $inc: { total_price: product.price },
       },
       { new: true }
-    );
+    ).populate("products")
+    console.log(cart);
     res.send(cart);
   } catch (e) {
     res.send(e);
@@ -34,7 +35,7 @@ const view_cart = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const client = await Client.findOne({ sub: req.user.sub });
-    const check = await Cart.findOne({});
+    const check = await Cart.findById(client.cartid).populate("products");
     res.status(200).send(check);
   } catch (e) {
     res.send(e);
@@ -55,7 +56,7 @@ const remove_product = async (req, res) => {
     const remove = await Cart.findByIdAndUpdate(client.cartid, {
       $pull: { products: id },
       $inc: { total_price: -product.price },
-    });
+    }).populate("products");
     res.send(remove);
   } catch (e) {
     res.send(e);
