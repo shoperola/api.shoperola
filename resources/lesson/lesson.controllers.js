@@ -207,15 +207,31 @@ const getVideo = async (req, res) => {
   }
 };
 
+// const trending = async (req, res) => {
+//   try {
+//     const trend = await Lesson.findOne({ madeBy: req.user._id }).limit(4);
+//     res.json({ data: trend });
+//   } catch (e) {
+//     console.log(e);
+//     res.send(e.message);
+//   }
+// };
+
 const trending = async (req, res) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
   try {
-    const trend = await Lesson.find({ madeBy: req.user._id })
-      .sort({ _id: -1 })
-      .limit(4);
-    res.json({ data: trend });
+    const doc = await Lesson.find({ madeBy: req.user._id })
+      .sort({ updatedAt: -1 })
+      .limit(4)
+      .exec();
+    res.json({ status: "OK", data: doc });
   } catch (e) {
-    console.log(e);
-    res.send(e.message);
+    console.log(e.message);
+    res
+      .status(500)
+      .json({ message: "Error getting requests", error: e.message });
   }
 };
 
