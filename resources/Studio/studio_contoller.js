@@ -10,9 +10,10 @@ const add_product = async (req, res) => {
     const current_time = req.body.current_time;
     const updateObject = {
       ...req.body,
-      productid: undefined,
-      current_time: undefined,
+
     };
+    delete updateObject[productid];
+    delete updateObject[current_time];
     const product = await Studio.findByIdAndUpdate(id, {
       $addToSet: {
         current_time: current_time,

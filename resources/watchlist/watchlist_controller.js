@@ -50,7 +50,11 @@ const remove_watchlist = async (req, res) => {
   try {
     const id = req.params.vid;
     console.log(id);
-    const check = await Watchlist.find({ addedby: req.body._id });
+    const client = await Client.findOne({ sub: req.user.sub });
+    if (!client) {
+      return res.status(400).json({ message: "User not Found" });
+    }
+    const check = await Watchlist.find({ addedby: client._id });
     console.log(check);
     if (!check) {
       res.send("no videos found");
@@ -73,6 +77,13 @@ const remove_watchlist = async (req, res) => {
   }
 };
 
-const viewWatchlist = async (req, res) => {};
+const viewWatchlist = async (req, res) => {
+    try{
+        const view = await Watchlist.find({})
+        res.send(view);
+    }catch(e){
+        res.send(e);
+    }
+};
 
-export { add_watchlist, remove_watchlist };
+export { add_watchlist, remove_watchlist, viewWatchlist };

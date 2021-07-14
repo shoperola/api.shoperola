@@ -5,7 +5,7 @@ import {
   createCheckoutSession,
 } from "../../util/stripe";
 import { renewToken } from "../../util/cognito";
-import { createClient, getClient } from "./client.controllers";
+import { createClient, getClient,resumeplay, continueplaying , resume_watching } from "./client.controllers";
 import { getSubscription } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
 
@@ -24,5 +24,7 @@ router
 
 router.post("/studio/", view_list);
 router.get("/studio/:id", view_listbyid);
-
+router.post("/resumeplay", resumeplay);
+router.get("/get_time/:vid", continueplaying);
+router.get("/view_continue", resume_watching);
 export default router;
