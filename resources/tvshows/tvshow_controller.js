@@ -262,6 +262,17 @@ const view_season = async (req, res) => {
   }
 };
 
+const tvShowLatest = async (req, res) => {
+  try {
+    const show = await Tvshow.find({})
+      .sort({ createdAt: -1 })
+      .populate("season");
+    res.json({ show });
+  } catch (e) {
+    res.status(500).send("something went wrong" + e);
+  }
+};
+
 export {
   addtvshow,
   edit_banner,
@@ -277,4 +288,5 @@ export {
   viewall_tvshow,
   view_season_id,
   view_season,
+  tvShowLatest,
 };
