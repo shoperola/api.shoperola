@@ -8,7 +8,7 @@ var watchlistSchema = new Schema({
 },
   video:[{ // will return an array of favorite dishes
       type: SchemaTypes.ObjectId,
-      ref: "Lesson"
+      ref: "lessons"
   }],
 }, {
     timestamps: true
