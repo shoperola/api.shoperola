@@ -83,7 +83,7 @@ const viewWatchlist = async (req, res) => {
     if (!client) {
       return res.status(400).json({ message: "User not Found" });
     }
-    const view = await Watchlist.find({});
+    const view = await Watchlist.find({}).populate("video");
     res.send(view);
   } catch (e) {
     res.send(e);

@@ -135,7 +135,7 @@ const resume_watching = async(req, res) => {
       if (!client) {
         return res.status(400).json({ message: "User not Found" });
       }
-           res.send(check).populate('lessons')
+           res.send(client).populate('lessons')
 
     }catch(e){
       console.log(e);

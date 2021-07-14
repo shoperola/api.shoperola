@@ -5,9 +5,16 @@ import {
   createCheckoutSession,
 } from "../../util/stripe";
 import { renewToken } from "../../util/cognito";
-import { createClient, getClient,resumeplay, continueplaying , resume_watching } from "./client.controllers";
+import {
+  createClient,
+  getClient,
+  resumeplay,
+  continueplaying,
+  resume_watching,
+} from "./client.controllers";
 import { getSubscription } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
+import { videosViewsIncrement } from "../lesson/lesson.controllers";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);
@@ -27,4 +34,5 @@ router.get("/studio/:id", view_listbyid);
 router.post("/resumeplay", resumeplay);
 router.get("/get_time/:vid", continueplaying);
 router.get("/view_continue", resume_watching);
+router.post("/videos/increment/:id", videosViewsIncrement);
 export default router;
