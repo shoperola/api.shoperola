@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const TvshowSchema = Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: SchemaTypes.ObjectId,
     ref: "users",
     required: true,
   },
@@ -87,7 +87,7 @@ const TvshowSchema = Schema({
   },
   season: [
     {
-      type: Schema.Types.ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "Season",
     },
   ],

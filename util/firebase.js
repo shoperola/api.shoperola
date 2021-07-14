@@ -7,7 +7,10 @@ admin.initializeApp({
 
 export const firebaseAuthProtect = async (req, res, next) => {
   try {
-    const Authorization = req.authorization;
+    const Authorization = req.headers.authorization;
+    if (!Authorization) {
+      return res.status(401).json({ message: "Token Not Provided" });
+    }
     const token = Authorization.split("Bearer ")[1].trim();
     if (!token) {
       return res.status(401).json({ message: "Token Not Provided" });
