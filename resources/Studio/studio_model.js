@@ -3,7 +3,7 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const StudiSchema = Schema({
   duration: String,
-  current_time: Date,
+  current_time: [{ type:Date}],
   url:{ type:String},
   product: {
     type: SchemaTypes.ObjectId,
@@ -11,6 +11,8 @@ const StudiSchema = Schema({
   },
   videoId: { type: SchemaTypes.ObjectId,
     ref: "lessons"},
+    Cta_products:{type: String},
+    Cta_shop:{ type:String},
   userID: { type: SchemaTypes.ObjectId, ref: "users" },
 });
 
