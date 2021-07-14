@@ -37,6 +37,7 @@
     "stripe": "^8.150.0"
   },
   "devDependencies": {
+    "firebase-admin": "^9.10.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.0"
   }

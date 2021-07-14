@@ -1,8 +1,10 @@
+// packages
 import express, { urlencoded, json } from "express";
 import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";
 import expressListRoutes from "express-list-routes";
+// modules
 import { signup, signin, protect } from "./util/auth";
 import { User } from "./resources/user/user.model";
 import { Client } from "./resources/client/client.model";
@@ -32,6 +34,7 @@ import { viewbanner } from "./resources/banners/banner_controller";
 import { viewall_tvshow } from "./resources/tvshows/tvshow_controller";
 import { getProducts } from "./resources/Ecommerce/Ecommerce_controller";
 import { view_tvshow } from "./resources/tvshows/tvshow_controller";
+import { firebaseAuthProtect } from "./util/firebase";
 
 config();
 const app = express();
@@ -78,7 +81,10 @@ app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/client", cognitoAuthMiddleware, ClientRouter);
-
+app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
+  console.log("Recieved");
+  res.json("Success");
+});
 export const start = async () => {
   try {
     await connect();
