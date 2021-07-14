@@ -75,16 +75,16 @@ app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
-app.use("/api/cart", cognitoAuthMiddleware, CartRouter);
+app.use("/api/cart", firebaseAuthProtect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
-app.use("/api/client", cognitoAuthMiddleware, ClientRouter);
-app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
-  console.log("Recieved");
-  res.json("Success");
-});
+app.use("/api/client", firebaseAuthProtect, ClientRouter);
+// app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
+//   console.log("Recieved");
+//   res.json("Success");
+// });
 export const start = async () => {
   try {
     await connect();
