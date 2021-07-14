@@ -31,7 +31,7 @@ const add_product = async (req, res) => {
     console.log(product);
     res.status(201).send(product);
   } catch (e) {
-    res.send(e);
+    res.status(500).send(e);
   }
 };
 
