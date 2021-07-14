@@ -11,6 +11,7 @@ const add_product = async (req, res) => {
 
     const updateObject = {
       ...req.body,
+      userID: req.user._id,
     };
 
     // console.log(id, productid, current_time, updateObject);

@@ -273,6 +273,18 @@ const tvShowLatest = async (req, res) => {
   }
 };
 
+const videosViewsIncrement = async (req, res) => {
+  try {
+    const tvshow = await Tvshow.findById(req.params.id);
+    video.views = Number(video.views) + 1;
+    await video.save();
+    res.json({ status: "OK", data: video });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error updating " });
+  }
+};
+
 export {
   addtvshow,
   edit_banner,
