@@ -79,6 +79,10 @@ const remove_watchlist = async (req, res) => {
 
 const viewWatchlist = async (req, res) => {
     try{
+        const client = await Client.findOne({ sub: req.user.sub });
+    if (!client) {
+      return res.status(400).json({ message: "User not Found" });
+    }
         const view = await Watchlist.find({})
         res.send(view);
     }catch(e){

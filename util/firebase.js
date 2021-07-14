@@ -4,6 +4,7 @@ import serviceAccount from "../tellytell-236a3-firebase-adminsdk-5j5og-9217d9f85
 // console.log(serviceAccount);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
+  projectId: serviceAccount.project_id,
 });
 
 export const firebaseAuthProtect = async (req, res, next) => {
@@ -12,7 +13,9 @@ export const firebaseAuthProtect = async (req, res, next) => {
     if (!Authorization) {
       return res.status(401).json({ message: "Token Not Provided" });
     }
+    console.log(Authorization);
     const token = Authorization.split("Bearer ")[1].trim();
+    console.log(token);
     if (!token) {
       return res.status(401).json({ message: "Token Not Provided" });
     }
