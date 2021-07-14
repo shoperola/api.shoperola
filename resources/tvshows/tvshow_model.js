@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+const { Schema, model,SchemaTypes } = mongoose;
 
 const TvshowSchema = Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: SchemaTypes.ObjectId,
     ref: "users",
     required: true,
   },

@@ -32,7 +32,9 @@ const ClientSchema = new Schema({
   cartid:{
     type: SchemaTypes.ObjectId,
     ref: 'Cart'
-  }
+  },
+  watchlist:{type: SchemaTypes.ObjectId,
+    ref: 'Watchlist'}
 });
 
 export const Client = model("clients", ClientSchema);

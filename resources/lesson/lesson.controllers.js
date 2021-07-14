@@ -2,6 +2,7 @@ import axios from "axios";
 import { Lesson } from "./lesson.model";
 import { scheduleJob } from "node-schedule";
 import { SECRETS } from "../../util/config";
+import {Studio} from "../Studio/studio_model";
 
 const getLessons = async (req, res) => {
   if (!req.user) {
@@ -51,12 +52,14 @@ const createLesson = async (req, res) => {
   // console.log(req.files.banner[0]);
   const { banner, video, thumbnail } = req.files;
   console.log(banner, video, thumbnail);
+  const studio = await Studio.create({})
   const lessonObject = {
     ...req.body,
     madeBy: req.user._id,
     video: video ? video[0].location : "",
     banner: banner ? banner[0].location : "",
     thumbnail: thumbnail ? thumbnail[0].location : "",
+    studio_id: studio._id
   };
 
   try {
@@ -201,7 +204,7 @@ const getVideo = async (req, res) => {
       return res.status(404).send("no video found");
     }
     console.log(check.video);
-    res.send({ video: check.video });
+    res.json({ video: check.video , studio_id: check.studio_id});
   } catch (e) {
     res.status(500).send(e);
   }
