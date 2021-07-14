@@ -50,15 +50,16 @@ const remove_watchlist = async (req, res) => {
         if(!check){
           res.send('no videos found')
         }
-        const remove = check[0].video.findIndex(x => JSON.stringify(x._id) === JSON.stringify(id))
-        console.log(remove);
-        if(remove === -1){
-          res.send('eror')
-        }
-       const as = check[0].video.splice(remove,1);
-       console.log(check[0].video);
-        const show = await check[0].save();
-        res.send("success");
+    
+    //     const remove = check[0].video.findIndex(x => JSON.stringify(x._id) === JSON.stringify(id))
+    //     console.log(remove);
+    //     if(remove === -1){
+    //       res.send('eror')
+    //     }
+    //    const as = check[0].video.splice(remove,1);
+    //    console.log(check[0].video);
+    //     const show = await check[0].save();
+    //     res.send("success");
         
       }catch(e){
         console.log(e);
