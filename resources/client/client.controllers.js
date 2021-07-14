@@ -1,8 +1,8 @@
 import { Client } from "./client.model";
 import { User } from "../user/user.model";
 import { Subscription } from "../subscription/subscription.model";
-import {Cart} from "../Cart/cart_model";
-import {Watchlist} from "../watchlist/watchlist_model";
+import { Cart } from "../Cart/cart_model";
+import { Watchlist } from "../watchlist/watchlist_model";
 
 const getClient = async (req, res) => {
   try {
@@ -22,8 +22,8 @@ const createClient = async (req, res) => {
   const { sub, username, given_name, family_name, email } = req.user;
   let client;
   try {
-    const cart = await Cart.create({})
-    const watchlist = await Watchlist.create({})
+    const cart = await Cart.create({});
+    const watchlist = await Watchlist.create({});
     client = await Client.create({
       email: email,
       username: username,
@@ -31,7 +31,8 @@ const createClient = async (req, res) => {
       lastName: family_name,
       sub: sub,
       cartid: cart._id,
-      watchlist: watchlist._id
+      watchlist: watchlist._id,
+      ...req.body,
     });
   } catch (e) {
     console.log(e.message);
