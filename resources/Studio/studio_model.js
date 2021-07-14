@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 
 const StudiSchema = Schema({
-  duration: String,
+  duration: [String],
   current_time: [String],
-  url: { type: String },
+  url: [{ type: String }],
   products: [
     {
       type: SchemaTypes.ObjectId,
@@ -12,7 +12,7 @@ const StudiSchema = Schema({
     },
   ],
   videoId: { type: SchemaTypes.ObjectId, ref: "lessons" },
-  CTA: String,
+  CTA: [String],
   userID: { type: SchemaTypes.ObjectId, ref: "users" },
 });
 

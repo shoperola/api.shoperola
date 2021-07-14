@@ -8,22 +8,16 @@ const add_product = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const id = req.params.id;
-    const productid = req.body.productid;
-    const current_time = req.body.current_time;
+
     const updateObject = {
       ...req.body,
     };
-    delete updateObject.productid;
-    delete updateObject.current_time;
-    console.log(id, productid, current_time, updateObject);
+
+    // console.log(id, productid, current_time, updateObject);
     const product = await Studio.findByIdAndUpdate(
       id,
       {
-        $addToSet: {
-          current_time: current_time,
-          products: productid,
-        },
-        $set: updateObject,
+        $addToSet: updateObject,
       },
       { new: true }
     ).populate("products");
@@ -31,6 +25,7 @@ const add_product = async (req, res) => {
     console.log(product);
     res.status(201).send(product);
   } catch (e) {
+    console.log(e.message);
     res.status(500).send(e);
   }
 };
