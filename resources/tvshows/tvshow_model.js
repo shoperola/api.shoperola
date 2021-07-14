@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = mongoose;
 
 const TvshowSchema = Schema({
   user: {
