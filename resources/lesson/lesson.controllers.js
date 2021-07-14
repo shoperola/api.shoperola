@@ -230,7 +230,7 @@ const trending = async (req, res) => {
 
 const videosViewsIncrement = async (req, res) => {
   try {
-    const video = await Video.findById(req.params.id);
+    const video = await Lessson.findById(req.params.id);
     video.views = Number(video.views) + 1;
     await video.save();
     res.json({ status: "OK", data: video });
