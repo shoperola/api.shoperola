@@ -21,7 +21,7 @@ const update_cart = async (req, res) => {
         $inc: { total_price: product.price },
       },
       { new: true }
-    ).populate("products")
+    ).populate("products");
     console.log(cart);
     res.send(cart);
   } catch (e) {

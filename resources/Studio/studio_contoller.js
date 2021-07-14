@@ -1,5 +1,4 @@
 import {Studio} from "./studio_model";
-import {Lesson} from "../lesson/lesson.model";
 
 const add_product = async (req, res) => {
     try{
