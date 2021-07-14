@@ -12,8 +12,7 @@ const StudiSchema = Schema({
     },
   ],
   videoId: { type: SchemaTypes.ObjectId, ref: "lessons" },
-  CTA_product: String,
-  CTA_shop: String,
+  CTA: String,
   userID: { type: SchemaTypes.ObjectId, ref: "users" },
 });
 
