@@ -3,7 +3,7 @@ import serviceAccount from "../tellytell-236a3-firebase-adminsdk-5j5og-9217d9f85
 
 console.log(serviceAccount);
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credentials: admin.credential.cert(serviceAccount),
 });
 
 export const firebaseAuthProtect = async (req, res, next) => {
