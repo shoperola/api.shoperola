@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 const ClientSchema = new Schema({
   username: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -14,11 +13,9 @@ const ClientSchema = new Schema({
   },
   firstName: {
     type: String,
-    required: true,
   },
   lastName: {
     type: String,
-    required: true,
   },
   sub: {
     type: String,
@@ -31,10 +28,9 @@ const ClientSchema = new Schema({
   },
   cartid: {
     type: SchemaTypes.ObjectId,
-    ref: 'Cart'
+    ref: "Cart",
   },
-  watchlist:{type: SchemaTypes.ObjectId,
-    ref: 'Watchlist'}
+  watchlist: { type: SchemaTypes.ObjectId, ref: "Watchlist" },
 });
 
 export const Client = model("clients", ClientSchema);
