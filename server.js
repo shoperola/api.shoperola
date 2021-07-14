@@ -33,7 +33,10 @@ import {
   trending,
 } from "./resources/lesson/lesson.controllers";
 import { viewbanner } from "./resources/banners/banner_controller";
-import { viewall_tvshow } from "./resources/tvshows/tvshow_controller";
+import {
+  tvShowTrending,
+  viewall_tvshow,
+} from "./resources/tvshows/tvshow_controller";
 import { getProducts } from "./resources/Ecommerce/Ecommerce_controller";
 import {
   view_tvshow,
@@ -76,7 +79,7 @@ app.get("/banners/:username/", getUserById, viewbanner);
 app.get("/products/:username/", getUserById, getProducts);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
-app.get("/trendingTvShows/:username", getUserById, tvShowLatest);
+app.get("/trendingTvShows/:username", getUserById, tvShowTrending);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
@@ -94,6 +97,7 @@ app.use("/api/client", firebaseAuthProtect, ClientRouter);
 //   console.log("Recieved");
 //   res.json("Success");
 // });
+
 export const start = async () => {
   try {
     await connect();

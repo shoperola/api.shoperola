@@ -15,6 +15,7 @@ import {
 import { getSubscription } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
 import { videosViewsIncrement } from "../lesson/lesson.controllers";
+import { tvShowsViewsIncrement } from "../tvshows/tvshow_controller";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);
@@ -35,4 +36,5 @@ router.post("/resumeplay", resumeplay);
 router.get("/get_time/:vid", continueplaying);
 router.get("/view_continue", resume_watching);
 router.post("/videos/increment/:id", videosViewsIncrement);
+router.post("/tvshow/increment/:id", tvShowsViewsIncrement);
 export default router;

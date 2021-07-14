@@ -216,7 +216,7 @@ const trending = async (req, res) => {
   }
   try {
     const doc = await Lesson.find({ madeBy: req.user._id })
-      .sort({ updatedAt: -1 })
+      .sort({ views: -1 })
       .limit(4)
       .exec();
     res.json({ status: "OK", data: doc });
@@ -230,7 +230,7 @@ const trending = async (req, res) => {
 
 const videosViewsIncrement = async (req, res) => {
   try {
-    const video = await Video.findById(req.params.id);
+    const video = await Lesson.findById(req.params.id);
     video.views = Number(video.views) + 1;
     await video.save();
     res.json({ status: "OK", data: video });
