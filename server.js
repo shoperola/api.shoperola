@@ -83,10 +83,10 @@ app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/client", firebaseAuthProtect, ClientRouter);
-app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
-  console.log("Recieved");
-  res.json("Success");
-});
+// app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
+//   console.log("Recieved");
+//   res.json("Success");
+// });
 export const start = async () => {
   try {
     await connect();
