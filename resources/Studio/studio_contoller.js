@@ -1,4 +1,6 @@
 import { Studio } from "./studio_model";
+import mongoose from "mongoose";
+const { Types } = mongoose;
 
 const add_product = async (req, res) => {
   try {
@@ -10,16 +12,22 @@ const add_product = async (req, res) => {
     const current_time = req.body.current_time;
     const updateObject = {
       ...req.body,
-      productid: undefined,
-      current_time: undefined,
     };
-    const product = await Studio.findByIdAndUpdate(id, {
-      $addToSet: {
-        current_time: current_time,
-        products: productid,
+    delete updateObject.productid;
+    delete updateObject.current_time;
+    console.log(id, productid, current_time, updateObject);
+    const product = await Studio.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: {
+          current_time: current_time,
+          products: productid,
+        },
+        $set: updateObject,
       },
-      $set: updateObject,
-    }).populate("products");
+      { new: true }
+    ).populate("products");
+    // const product = await Studio.findById(Types.ObjectId(id));
     console.log(product);
     res.status(201).send(product);
   } catch (e) {

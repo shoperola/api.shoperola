@@ -6,7 +6,7 @@ const LessonSchema = Schema(
   {
     madeBy: {
       type: SchemaTypes.ObjectId,
-      ref: "user",
+      ref: "users",
       required: true,
     },
     title: {
@@ -44,8 +44,7 @@ const LessonSchema = Schema(
       default: "",
     },
     views: { type: Number, default: 0 },
-    studio_id : { type: SchemaTypes.ObjectId,
-      ref: "Studio"},
+    studio_id: { type: SchemaTypes.ObjectId, ref: "studios" },
     ////////////////////////////////////////IMDB - METADATA///////////////////////////////////////////
     Id: {
       type: String,
