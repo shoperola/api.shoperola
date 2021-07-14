@@ -15,7 +15,7 @@ export const firebaseAuthProtect = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "Token Not Provided" });
     }
-    const decoded = await admin.auth.verifyIdToken(token);
+    const decoded = await admin.auth().verifyIdToken(token);
     console.log(decoded);
     next();
   } catch (e) {
