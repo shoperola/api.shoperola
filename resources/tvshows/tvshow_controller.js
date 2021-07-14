@@ -107,7 +107,7 @@ const edit_video = async (req, res) => {
     if (!check) {
       res.send("no season added");
     }
-    const episode = { ...req.body, video: req.file.location };
+    const episode = { ...req.body, tvshow: req.file.location };
     console.log(check);
     check.episode.push(episode);
     await check.save();
@@ -194,7 +194,7 @@ const edit_episode = async (req, res) => {
     }
 
     req.files[0] && req.files[0].location
-      ? (updateObject["episode.$.video"] = req.files[0].location)
+      ? (updateObject["episode.$.tvshow"] = req.files[0].location)
       : null;
 
     console.log(updateObject);
@@ -273,12 +273,21 @@ const tvShowLatest = async (req, res) => {
   }
 };
 
-const videosViewsIncrement = async (req, res) => {
+const tvShowTrending = async (req, res) => {
+  try {
+    const show = await Tvshow.find({}).sort({ views: -1 }).populate("season");
+    res.json({ show });
+  } catch (e) {
+    res.status(500).send("something went wrong" + e);
+  }
+};
+
+const tvShowsViewsIncrement = async (req, res) => {
   try {
     const tvshow = await Tvshow.findById(req.params.id);
-    video.views = Number(video.views) + 1;
-    await video.save();
-    res.json({ status: "OK", data: video });
+    tvshow.views = Number(tvshow.views) + 1;
+    await tvshow.save();
+    res.json({ status: "OK", data: tvshow });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error updating " });
@@ -301,4 +310,6 @@ export {
   view_season_id,
   view_season,
   tvShowLatest,
+  tvShowsViewsIncrement,
+  tvShowTrending,
 };
