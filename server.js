@@ -78,7 +78,7 @@ app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
 app.use("/api/cart", firebaseAuthProtect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
-app.use("/api/watchlist", userModel, protect, WatchlistRouter);
+app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
