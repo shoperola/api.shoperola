@@ -35,7 +35,7 @@ const view_list = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-    const view = await Studio.find({}).populate("product");
+    const view = await Studio.find({}).populate("products");
     res.status(200).send({ view });
   } catch (e) {
     res.send(e);
