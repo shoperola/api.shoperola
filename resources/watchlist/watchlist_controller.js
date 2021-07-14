@@ -1,5 +1,6 @@
 import { Watchlist } from "./watchlist_model";
 import { Client } from "../client/client.model";
+
 const add_watchlist = async (req, res) => {
   try {
     const videoId = req.params.vid;
@@ -71,5 +72,7 @@ const remove_watchlist = async (req, res) => {
     res.send(e);
   }
 };
+
+const viewWatchlist = async (req, res) => {};
 
 export { add_watchlist, remove_watchlist };

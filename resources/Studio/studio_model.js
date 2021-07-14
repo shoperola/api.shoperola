@@ -3,16 +3,16 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const StudiSchema = Schema({
   duration: String,
-  current_time: [{ type:Date}],
-  url:{ type:String},
-  product: {
-    type: SchemaTypes.ObjectId,
-    ref: "Ecommerce",
-  },
-  videoId: { type: SchemaTypes.ObjectId,
-    ref: "lessons"},
-    Cta_products:{type: String},
-    Cta_shop:{ type:String},
+  current_time: [String],
+  url: { type: String },
+  products: [
+    {
+      type: SchemaTypes.ObjectId,
+      ref: "Ecommerce",
+    },
+  ],
+  videoId: { type: SchemaTypes.ObjectId, ref: "lessons" },
+  CTA: String,
   userID: { type: SchemaTypes.ObjectId, ref: "users" },
 });
 
