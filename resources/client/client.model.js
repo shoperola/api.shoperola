@@ -2,28 +2,28 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
 const watchhistory = new Schema({
-  vid:{
+  vid: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "lessons"
+    ref: "lessons",
   },
-  time:{
-    type: String
-  }
+  time: {
+    type: String,
+  },
 });
 
 const ClientSchema = new Schema({
   username: {
-    type: String
+    type: String,
   },
   email: {
     type: String,
     trim: true,
   },
   firstName: {
-    type: String
+    type: String,
   },
   lastName: {
-    type: String
+    type: String,
   },
   sub: {
     type: String,
@@ -38,9 +38,8 @@ const ClientSchema = new Schema({
     type: SchemaTypes.ObjectId,
     ref: "Cart",
   },
-  watchhistory:[watchhistory],
-  watchlist:{type: SchemaTypes.ObjectId,
-    ref: 'Watchlist'}
+  watchhistory: [watchhistory],
+  watchlist: { type: SchemaTypes.ObjectId, ref: "Watchlist" },
 });
 
 export const Client = model("clients", ClientSchema);

@@ -1,9 +1,8 @@
 // import {Tvwatchlist} from "./watchTv_model";
 // import { Client } from "../client/client.model";
 
-
 // const add_tvshow = async (req, res) => {
-        
+
 //     const tvshowid = req.params.tid;
 //     const client = await Client.findOne({ sub: req.user.sub });
 //     if (!client) {
@@ -13,7 +12,7 @@
 //       addedby: client._id,
 //       tvshow: [tvshowid]
 //     };
-  
+
 //     Tvwatchlist.findOne({
 //       addedby: watchData.addedby,
 //     }, function (err, favorite) {
@@ -66,12 +65,11 @@
 //        console.log(check[0].video);
 //         const show = await check[0].save();
 //         res.send("success");
-        
+
 //       }catch(e){
 //         console.log(e);
 //         res.send(e)
 //       }
 // }
-
 
 // export {add_tvshow,remove_tvshow};

@@ -84,63 +84,68 @@ const suspendClient = async (req, res) => {
   }
 };
 
-const resumeplay = async(req, res) => {
-  try{
+const resumeplay = async (req, res) => {
+  try {
     const client = await Client.findOne({ sub: req.user.sub });
     if (!client) {
       return res.status(400).json({ message: "User not Found" });
     }
     const data = {
-      vid:req.body.videoid,
-      time:req.body.timeid
-    }
-    const store = client.watchhistory.findIndex(x => x.vid == data.vid)
-    if(store === -1){
-      client.watchhistory.push(data)
-    }
-    else{
-      client.watchhistory[store] = data
+      vid: req.body.videoid,
+      time: req.body.timeid,
+    };
+    const store = client.watchhistory.findIndex((x) => x.vid == data.vid);
+    if (store === -1) {
+      client.watchhistory.push(data);
+    } else {
+      client.watchhistory[store] = data;
     }
     const x = await client.save();
-    res.send(x)
-  }catch(e){
+    res.send(x);
+  } catch (e) {
     console.log(e);
-    res.send(e)
+    res.send(e);
   }
 };
 
-const continueplaying = async(req, res) => {
-  try{
+const continueplaying = async (req, res) => {
+  try {
     const client = await Client.findOne({ sub: req.user.sub });
     if (!client) {
       return res.status(400).json({ message: "User not Found" });
     }
-    const store = client.watchhistory.find(x => x.vid == req.params.vid)
-    if(store === -1){
-      res.send('error')
+    const store = client.watchhistory.find((x) => x.vid == req.params.vid);
+    if (store === -1) {
+      res.send("error");
+    } else {
+      res.send(store.time);
     }
-    else{
-      res.send(store.time)
-    }
-
-  }catch(e){
+  } catch (e) {
     console.log(e);
-    res.send(e)
+    res.send(e);
   }
 };
 
-const resume_watching = async(req, res) => {
-    try{
-      const client = await Client.findOne({ sub: req.user.sub }).populate('watchhistory.vid')
-      if (!client) {
-        return res.status(400).json({ message: "User not Found" });
-      }
-           res.send(client).populate('lessons')
-
-    }catch(e){
-      console.log(e);
-      res.send(e)
+const resume_watching = async (req, res) => {
+  try {
+    const client = await Client.findOne({ sub: req.user.sub }).populate(
+      "watchhistory.vid"
+    );
+    if (!client) {
+      return res.status(400).json({ message: "User not Found" });
     }
-  };
+    res.send(client).populate("lessons");
+  } catch (e) {
+    console.log(e);
+    res.send(e);
+  }
+};
 
-export { getClient, createClient, suspendClient, resumeplay, continueplaying , resume_watching };
+export {
+  getClient,
+  createClient,
+  suspendClient,
+  resumeplay,
+  continueplaying,
+  resume_watching,
+};

@@ -16,7 +16,13 @@ import { getSubscription } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
 import { videosViewsIncrement } from "../lesson/lesson.controllers";
 import { tvShowsViewsIncrement } from "../tvshows/tvshow_controller";
-import {add_address,view_address,view_address_id,delete_address,update_address } from "../Address/address_controller";
+import {
+  add_address,
+  view_address,
+  view_address_id,
+  delete_address,
+  update_address,
+} from "../Address/address_controller";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);

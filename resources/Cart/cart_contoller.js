@@ -23,7 +23,7 @@ const update_cart = async (req, res) => {
       },
       { new: true }
     ).populate("products");
-    console.log("////" +cart);
+    console.log("////" + cart);
     res.send(cart);
   } catch (e) {
     res.send(e);
