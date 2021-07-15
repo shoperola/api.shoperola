@@ -6,7 +6,7 @@ const add_address = async (req, res) => {
         const client = await Client.findOne({ sub: req.user.sub });
       //  res.json({ status: "OK", data: client });
 
-        const add = await Address.create({...req.body})
+        const add = await Address.create({...req.body, userID: client._id})
         return res.json({status: "OK", data: add});
     }catch(err){
         res.send(err)

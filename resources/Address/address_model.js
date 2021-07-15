@@ -10,7 +10,8 @@ const AddressSchema = new Schema(
     State:{type:String},
     Country:{type:String},
     Pin_Code:{type:Number},
-    Contact_Number:{type:Number}
+    Contact_Number:{type:Number},
+    userID: { type: SchemaTypes.ObjectId, ref: "clients" }
   },
   { timestamps: true }
 );
