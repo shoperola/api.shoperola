@@ -49,16 +49,16 @@ const createLesson = async (req, res) => {
   if (!title || !language) {
     return res.status(400).json({ message: "Required fields missing" });
   }
-  // console.log(req.files.banner[0]);
-  const { banner, video, thumbnail } = req.files;
-  console.log(banner, video, thumbnail);
+  // // console.log(req.files.banner[0]);
+  // const { banner, video, thumbnail } = req.files;
+  // console.log(banner, video, thumbnail);
   const studio = await Studio.create({});
   const lessonObject = {
     ...req.body,
     madeBy: req.user._id,
-    video: video ? video[0].location : "",
-    banner: banner ? banner[0].location : "",
-    thumbnail: thumbnail ? thumbnail[0].location : "",
+    // video: video ? video[0].location : "",
+    // banner: banner ? banner[0].location : "",
+    // thumbnail: thumbnail ? thumbnail[0].location : "",
     studio_id: studio._id,
   };
 
