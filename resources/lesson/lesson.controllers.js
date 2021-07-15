@@ -59,7 +59,7 @@ const createLesson = async (req, res) => {
   try {
     let doc = await Lesson.create(lessonObject);
     doc = await Lesson.findById(doc).populate({
-      path: "language",
+      path: "languageid",
       select: "name",
     });
     res.json({ status: "OK", data: doc });
@@ -139,6 +139,23 @@ const suspendLesson = async (req, res) => {
       return res.status(400).json({ message: "video Id not provided" });
     }
     const lesson = await Lesson.findByIdAndUpdate(id, { live: false });
+    res.json({ status: "OK", data: lesson });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error Suspending video", e: e.message });
+  }
+};
+
+const makeliveLesson = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "video Id not provided" });
+    }
+    const lesson = await Lesson.findByIdAndUpdate(id, { live: true });
     res.json({ status: "OK", data: lesson });
   } catch (e) {
     console.log(e.message);
@@ -257,4 +274,5 @@ export {
   trending,
   videosViewsIncrement,
   search_movies,
+  makeliveLesson
 };
