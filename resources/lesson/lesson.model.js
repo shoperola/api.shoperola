@@ -109,7 +109,7 @@ const LessonSchema = Schema(
 );
 
 LessonSchema.pre(
-  "findOneAndDelete",
+  "findByIdAndDelete",
   { document: true, query: true },
   async function (next) {
     const studio_id = this.getFilter()["studio_id"];
