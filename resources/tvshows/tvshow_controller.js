@@ -1,6 +1,8 @@
 import { Tvshow } from "./tvshow_model";
 import { Season } from "../season_model";
 import { scheduleJob } from "node-schedule";
+import axios from "axios";
+import { SECRETS } from "../../util/config";
 
 //constant for response
 const defaultResponseObject = {
@@ -294,6 +296,32 @@ const tvShowsViewsIncrement = async (req, res) => {
   }
 };
 
+const searchTvShowImdb = async (req, res) => {
+  //FullActor,Posters,Ratings,
+  try {
+    const id = req.params.id;
+    const season_id = req.params.sid;
+    const resp = await axios.get(
+      `https://imdb-api.com/en/API/SeasonEpisodes/${SECRETS.imDb_key}/${id}/${season_id}`
+    );
+    res.json({ status: "OK", data: resp.data });
+  } catch (e) {
+    res.send(e);
+  }
+};
+
+const searchSeriesImdb = async (req, res) => {
+  try {
+    const name = req.params.name;
+    const resp = await axios.get(
+      `https://imdb-api.com/en/API/SearchSeries/${SECRETS.imDb_key}/${name}`
+    );
+    res.json({ status: "OK", data: resp.data });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
 export {
   addtvshow,
   edit_banner,
@@ -312,4 +340,6 @@ export {
   tvShowLatest,
   tvShowsViewsIncrement,
   tvShowTrending,
+  searchTvShowImdb,
+  searchSeriesImdb,
 };
