@@ -21,8 +21,9 @@ const createClient = async (req, res) => {
   }
   const { sub, username, given_name, family_name, email } = req.user;
   let client;
+  let cart;
   try {
-    const cart = await Cart.create({});
+    cart = await Cart.create({});
     const watchlist = await Watchlist.create({});
     client = await Client.create({
       email: email,
