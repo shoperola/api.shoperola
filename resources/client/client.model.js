@@ -40,6 +40,8 @@ const ClientSchema = new Schema({
   },
   watchhistory: [watchhistory],
   watchlist: { type: SchemaTypes.ObjectId, ref: "Watchlist" },
+
 });
 
 export const Client = model("clients", ClientSchema);
+

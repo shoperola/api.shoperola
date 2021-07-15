@@ -108,4 +108,5 @@ const LessonSchema = Schema(
   { timestamps: true }
 );
 
+LessonSchema.index({title: "text", description: "text"}); 
 export const Lesson = model("lessons", LessonSchema);
