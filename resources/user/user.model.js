@@ -71,7 +71,8 @@ const UserSchema = new Schema(
     },
     bannerImage: {
       type: String,
-      default: "",
+      default:
+        "https://sgp1.digitaloceanspaces.com/storage.tellytell.com/banner-default.png",
     },
     picture: {
       type: String,

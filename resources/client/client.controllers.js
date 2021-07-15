@@ -21,8 +21,9 @@ const createClient = async (req, res) => {
   }
   const { sub, username, given_name, family_name, email } = req.user;
   let client;
+  let cart;
   try {
-    const cart = await Cart.create({});
+    cart = await Cart.create({});
     const watchlist = await Watchlist.create({});
     client = await Client.create({
       email: email,
@@ -39,7 +40,7 @@ const createClient = async (req, res) => {
     if (e.message.includes("E11000 duplicate key error collection")) {
       console.log("client already exists");
       client = await Client.findOne({ sub: sub });
-      cart = await Cart.findByIdAndDelete(cart._id);
+      await Cart.findByIdAndDelete(cart._id);
     } else {
       return res.status(500).json({ message: "Error creating client" });
     }

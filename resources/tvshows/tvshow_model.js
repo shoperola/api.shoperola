@@ -18,9 +18,13 @@ const TvshowSchema = Schema({
   },
   thumbnail: {
     type: String,
+    default:
+      "https://sgp1.digitaloceanspaces.com/storage.tellytell.com/thumbnail-default.png",
   },
   bannerimage: {
     type: String,
+    default:
+      "https://sgp1.digitaloceanspaces.com/storage.tellytell.com/banner-default.png",
   },
   price: {
     type: Number,

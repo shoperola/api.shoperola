@@ -32,7 +32,9 @@ const getSubscription = async (req, res) => {
 const getSubscriptionById = async (req, res) => {
   try {
     const id = req.params.id;
-    const subscriber = Subscription.findById(id).populate("subscriber");
+    console.log(id);
+    const subscriber = await Subscription.findById(id).populate("subscriber");
+
     res.json({ status: "OK", data: subscriber });
   } catch (e) {
     console.log(e.message);

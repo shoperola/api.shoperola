@@ -15,6 +15,8 @@ import {
   view_season_id,
   view_season,
   edit_season_no,
+  searchTvShowImdb,
+  searchSeriesImdb,
 } from "./tvshow_controller";
 const router = Router();
 
@@ -36,5 +38,7 @@ router.patch("/edit_episode/:sid/:eid", upload.array("file"), edit_episode);
 router.get("/viewall_Tvshow", viewall_tvshow);
 router.get("/view_season/:id", view_season_id);
 router.get("/view_season", view_season);
+router.post("/search_tv/:name", searchSeriesImdb);
+router.post("/SearchTv_imdb/:id/:sid", searchTvShowImdb);
 
 export default router;
