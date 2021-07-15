@@ -18,7 +18,10 @@ import {
   search_movies,
   videosViewsIncrement,
 } from "../lesson/lesson.controllers";
-import { tvShowsViewsIncrement } from "../tvshows/tvshow_controller";
+import {
+  tvShowsViewsIncrement,
+  search_tvshow,
+} from "../tvshows/tvshow_controller";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);
