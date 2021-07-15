@@ -30,7 +30,6 @@ router.route("/refreshToken").post(renewToken);
 router.route("/subscription").post(getSubscription);
 
 router.route("/paypal/create-order").post(createOrder);
-router.route("/paypal/capture-order/:id").post(captureOrder);
 router.route("/stripe/create-checkout-session").post(createCheckoutSession);
 router
   .route("/stripe/check-checkout-session")
