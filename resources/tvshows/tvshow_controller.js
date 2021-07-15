@@ -329,6 +329,7 @@ const search_tvshow = async (req, res) => {
         { title: new RegExp(req.params.name, "gi") },
         { description: new RegExp(req.params.name, "gi") },
       ],
+      user: req.user._id,
     });
     res.json({ status: "ok", data: movie });
   } catch (e) {

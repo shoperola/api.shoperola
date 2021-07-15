@@ -259,6 +259,7 @@ const search_movies = async (req, res) => {
         { title: new RegExp(req.params.name, "gi") },
         { plot_show: new RegExp(req.params.name, "gi") },
       ],
+      madeBy: req.user._id,
     });
     res.json({ status: "ok", data: movie });
   } catch (e) {
