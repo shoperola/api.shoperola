@@ -37,6 +37,7 @@ import {
   updatePaymentsInfo,
 } from "../../resources/payments/payments.controllers";
 import { suspendClient } from "../client/client.controllers";
+import { getSubscriptionById } from "../subscription/subscription.controllers";
 
 const router = Router();
 
@@ -72,6 +73,8 @@ router
   .delete(deleteSubject);
 
 router.route("/subscribers").get(getSubscribers);
+
+router.route("/subscriber/:id").get(getSubscriptionById);
 
 router.route("/subscribers/suspend/:id").patch(suspendClient);
 
