@@ -36,10 +36,11 @@ const addProduct = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
+    console.log(req.file, req.body);
     const image = req.file;
     const updateObject = image
       ? { ...req.body, image: image.location, userID: req.user._id }
-      : req.body;
+      : { ...req.body, userID: req.user._id };
     const product = await Ecommerce.create(updateObject);
     res.json({ status: "OK", data: product });
   } catch (e) {
