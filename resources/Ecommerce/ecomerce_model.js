@@ -14,6 +14,7 @@ const EcommerceSchema = new Schema(
     track_quantity: Boolean,
     continue_selling: Boolean,
     category: { type: SchemaTypes.ObjectId, ref: "Category" },
+    status: { type: Boolean, default: true },
     userID: { type: SchemaTypes.ObjectId, ref: "users" },
   },
   { timestamps: true }
