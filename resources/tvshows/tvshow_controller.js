@@ -107,7 +107,7 @@ const edit_video = async (req, res) => {
     if (!check) {
       res.send("no season added");
     }
-    const episode = { ...req.body, tvshow: req.file.location };
+    const episode = { ...req.body, video: req.file.location };
     console.log(check);
     check.episode.push(episode);
     await check.save();
