@@ -5,7 +5,7 @@ var watchlistSchema = new Schema(
   {
     addedby: {
       type: SchemaTypes.ObjectId,
-      ref: "Client",
+      ref: "clients",
     },
     video: [
       {
