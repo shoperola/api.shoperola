@@ -154,6 +154,7 @@ const imdb_searchmovie = async (req, res) => {
     const resp = await axios.get(
       `https://imdb-api.com/en/API/SearchMovie/${api_key}/${name}`
     );
+    console.log(e.message);
     res.send(resp.data);
   } catch (e) {
     res.status(500).send(e);
