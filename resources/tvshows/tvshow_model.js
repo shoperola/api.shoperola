@@ -30,10 +30,6 @@ const TvshowSchema = Schema({
     type: Number,
   },
 
-  tvshow_flag: {
-    type: Boolean,
-    default: false,
-  },
   ////////////////////////////////////////imdb///////////////
   Id: {
     type: String,
