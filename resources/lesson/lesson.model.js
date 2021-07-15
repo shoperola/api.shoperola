@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import { Studio } from "../Studio/studio_model";
 const { Schema, SchemaTypes, model } = mongoose;
 
 const LessonSchema = Schema(
@@ -108,5 +108,17 @@ const LessonSchema = Schema(
   { timestamps: true }
 );
 
+LessonSchema.pre(
+  "findOneAndDelete",
+  { document: true, query: true },
+  async function (next) {
+    const studio_id = this.getFilter()["studio_id"];
+    console.log("DELETING STUDIO", studio_id);
+    await Studio.findByIdAndDelete(studio_id);
+    next();
+  }
+);
+
 LessonSchema.index({ title: "text", description: "text" });
+
 export const Lesson = model("lessons", LessonSchema);
