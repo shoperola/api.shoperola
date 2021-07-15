@@ -59,7 +59,7 @@ const update_address = async (req, res) => {
     const update = await Address.findByIdAndUpdate(
       id,
       { $set: req.body },
-      { $new: true }
+      { new: true }
     );
     res.json({ status: "OK", data: update });
   } catch (e) {

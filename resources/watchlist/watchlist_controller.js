@@ -13,34 +13,19 @@ const add_watchlist = async (req, res) => {
       video: [videoId],
     };
 
-    Watchlist.findOne(
+    const watchlist = await Watchlist.findByIdAndUpdate(
+      client.watchlist,
       {
-        addedby: client._id,
+        $addToSet: {
+          video: videoId,
+        },
       },
-      function (err, favorite) {
-        if (err) throw err;
-        else if (!favorite || favorite.length === 0) {
-          Watchlist.create(watchData, function (err, favores) {
-            if (err) throw err;
-            else {
-              res.json({ added: "Added to watch list!!" });
-            }
-          });
-        } else {
-          if (favorite.video.indexOf(videoId) > -1) {
-            res.json({ already: "This is already in the watch list!" });
-          } else {
-            favorite.video.push(videoId);
-            favorite.save(function (err, favores) {
-              if (err) throw err;
-              else {
-                res.json({ added: "Added to watch list!!" });
-              }
-            });
-          }
-        }
+      {
+        new: true,
       }
     );
+
+    res.json({ status: "OK", data: watchlist });
   } catch (e) {
     res.send(e);
   }
