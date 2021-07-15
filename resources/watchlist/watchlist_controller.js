@@ -39,23 +39,21 @@ const remove_watchlist = async (req, res) => {
     if (!client) {
       return res.status(400).json({ message: "User not Found" });
     }
-    const check = await Watchlist.find({ addedby: client._id });
-    console.log(check);
+    const check = await Watchlist.findAndUpdate(
+      client.watchlist,
+      {
+        $pull: {
+          video: id,
+        },
+      },
+      { new: true }
+    );
+    // console.log(check);
     if (!check) {
       res.send("no videos found");
     }
 
-    const remove = check[0].video.findIndex(
-      (x) => JSON.stringify(x._id) === JSON.stringify(id)
-    );
-    console.log(remove);
-    if (remove === -1) {
-      res.send("eror");
-    }
-    const as = check[0].video.splice(remove, 1);
-    console.log(check[0].video);
-    const show = await check[0].save();
-    res.send("success");
+    res.send("video removes from watchlist ");
   } catch (e) {
     console.log(e);
     res.send(e);

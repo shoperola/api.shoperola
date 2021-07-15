@@ -25,6 +25,7 @@ const createClient = async (req, res) => {
   try {
     cart = await Cart.create({});
 
+    const watchlist = await Watchlist.create({});
     client = await Client.create({
       email: email,
       username: username,
@@ -35,7 +36,6 @@ const createClient = async (req, res) => {
       watchlist: watchlist._id,
       ...req.body,
     });
-    const watchlist = await Watchlist.create({ addedBy: client._id });
   } catch (e) {
     console.log(e.message);
     if (e.message.includes("E11000 duplicate key error collection")) {
