@@ -322,6 +322,15 @@ const searchSeriesImdb = async (req, res) => {
   }
 };
 
+const search_tvshow = async (req, res) => {
+  try {
+    const movie = await Tvshow.find({ $text: { $search: req.params.name } });
+    res.json({ status: "ok", data: movie });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
 export {
   addtvshow,
   edit_banner,
@@ -342,4 +351,5 @@ export {
   tvShowTrending,
   searchTvShowImdb,
   searchSeriesImdb,
+  search_tvshow,
 };

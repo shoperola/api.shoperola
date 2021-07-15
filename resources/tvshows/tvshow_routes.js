@@ -17,6 +17,7 @@ import {
   edit_season_no,
   searchTvShowImdb,
   searchSeriesImdb,
+  search_tvshow,
 } from "./tvshow_controller";
 const router = Router();
 

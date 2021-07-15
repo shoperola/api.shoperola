@@ -18,7 +18,10 @@ import {
   search_movies,
   videosViewsIncrement,
 } from "../lesson/lesson.controllers";
-import { tvShowsViewsIncrement } from "../tvshows/tvshow_controller";
+import {
+  tvShowsViewsIncrement,
+  search_tvshow,
+} from "../tvshows/tvshow_controller";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);
@@ -41,5 +44,6 @@ router.get("/view_continue", resume_watching);
 router.post("/videos/increment/:id", videosViewsIncrement);
 router.post("/tvshow/increment/:id", tvShowsViewsIncrement);
 router.get("/search_name/:name", search_movies);
+router.get("/search_tvshow/:name", search_tvshow);
 
 export default router;
