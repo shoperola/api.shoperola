@@ -18,7 +18,7 @@ const LessonSchema = Schema(
       type: String,
       default: "",
     },
-    language: {
+    languageid: {
       type: SchemaTypes.ObjectId,
       required: true,
       ref: "languages",
@@ -108,5 +108,5 @@ const LessonSchema = Schema(
   { timestamps: true }
 );
 
-LessonSchema.index({title: "text", description: "text"}); 
+LessonSchema.index({ title: "text", description: "text" });
 export const Lesson = model("lessons", LessonSchema);

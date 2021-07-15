@@ -11,8 +11,6 @@ import {
   getVideo,
   suspendLesson,
   trending,
-  search_movies
-
 } from "./lesson.controllers";
 import { upload } from "../../util/s3-spaces";
 
@@ -40,6 +38,5 @@ router.post("/search_metadata/:name", imdb_searchmovie);
 router.post("/search_metadata_id/:id", imdb_searchbyid);
 router.patch("/metadata/:id", metadata);
 router.get("/video/:id", getVideo);
-router.get("/search_name/:name", search_movies);
 
 export default router;

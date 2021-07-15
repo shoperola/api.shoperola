@@ -45,28 +45,23 @@ const createLesson = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
-  const { title, language } = req.body;
-  if (!title || !language) {
+  const { title, languageid } = req.body;
+  if (!title || !languageid) {
     return res.status(400).json({ message: "Required fields missing" });
   }
-  // // console.log(req.files.banner[0]);
-  // const { banner, video, thumbnail } = req.files;
-  // console.log(banner, video, thumbnail);
   const studio = await Studio.create({});
   const lessonObject = {
     ...req.body,
     madeBy: req.user._id,
-    // video: video ? video[0].location : "",
-    // banner: banner ? banner[0].location : "",
-    // thumbnail: thumbnail ? thumbnail[0].location : "",
     studio_id: studio._id,
   };
 
   try {
     let doc = await Lesson.create(lessonObject);
-    doc = await Lesson.findById(doc)
-      .populate({ path: "subject", select: "-addedBy -__v" })
-      .populate({ path: "language", select: "name" });
+    doc = await Lesson.findById(doc).populate({
+      path: "languageid",
+      select: "name",
+    });
     res.json({ status: "OK", data: doc });
   } catch (e) {
     console.log(e.message);
@@ -240,12 +235,11 @@ const videosViewsIncrement = async (req, res) => {
   }
 };
 const search_movies = async (req, res) => {
-  try{
-
-    const movie = await Lesson.find({$text: {$search: req.params.name}})
-    res.json({status: "ok", data: movie});
-  }catch(e){
-    res.status(500).send(e)
+  try {
+    const movie = await Lesson.find({ $text: { $search: req.params.name } });
+    res.json({ status: "ok", data: movie });
+  } catch (e) {
+    res.status(500).send(e);
   }
 };
 export {
@@ -261,5 +255,5 @@ export {
   suspendLesson,
   trending,
   videosViewsIncrement,
-  search_movies
+  search_movies,
 };
