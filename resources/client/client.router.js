@@ -16,6 +16,7 @@ import { getSubscription } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
 import { videosViewsIncrement } from "../lesson/lesson.controllers";
 import { tvShowsViewsIncrement } from "../tvshows/tvshow_controller";
+import {add_address,view_address,view_address_id,delete_address,update_address } from "../Address/address_controller";
 
 const router = Router();
 router.route("/").get(getClient).post(createClient);
@@ -37,4 +38,10 @@ router.get("/get_time/:vid", continueplaying);
 router.get("/view_continue", resume_watching);
 router.post("/videos/increment/:id", videosViewsIncrement);
 router.post("/tvshow/increment/:id", tvShowsViewsIncrement);
+
+router.post("/add_address", add_address);
+router.get("/view_address", view_address);
+router.get("/view_addressID/:id", view_address_id);
+router.delete("/remove_address/:id", delete_address);
+router.patch("/update_address", update_address);
 export default router;
