@@ -19,7 +19,7 @@ const update_cart = async (req, res) => {
       client.cartid,
       {
         $addToSet: { products: id },
-        $inc: { total_price: product.price },
+        $inc: { total_price: product.sale_price },
       },
       { new: true }
     ).populate("products");
@@ -56,7 +56,7 @@ const remove_product = async (req, res) => {
     }
     const remove = await Cart.findByIdAndUpdate(client.cartid, {
       $pull: { products: id },
-      $inc: { total_price: -product.price },
+      $inc: { total_price: -product.sale_price },
     }).populate("products");
     res.send(remove);
   } catch (e) {
