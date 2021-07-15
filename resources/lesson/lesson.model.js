@@ -29,11 +29,13 @@ const LessonSchema = Schema(
     },
     thumbnail: {
       type: String,
-      default: "",
+      default:
+        "https://sgp1.digitaloceanspaces.com/storage.tellytell.com/thumbnail-default.png",
     },
     banner: {
       type: String,
-      default: "",
+      default:
+        "https://sgp1.digitaloceanspaces.com/storage.tellytell.com/banner-default.png",
     },
     launchDate: {
       type: Date,
