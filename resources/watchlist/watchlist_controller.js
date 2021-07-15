@@ -50,7 +50,7 @@ const remove_watchlist = async (req, res) => {
     );
     // console.log(check);
     if (!check) {
-      res.send("no videos found");
+      res.status(400).send("no videos found");
     }
 
     res.send("video removes from watchlist ");
@@ -66,7 +66,7 @@ const viewWatchlist = async (req, res) => {
     if (!client) {
       return res.status(400).json({ message: "User not Found" });
     }
-    const view = await Watchlist.find({}).populate("video");
+    const view = await Watchlist.findById(client.watchlist).populate("video");
     res.send(view);
   } catch (e) {
     res.send(e);
