@@ -39,7 +39,7 @@ const remove_watchlist = async (req, res) => {
     if (!client) {
       return res.status(400).json({ message: "User not Found" });
     }
-    const check = await Watchlist.findAndUpdate(
+    const check = await Watchlist.findByIdAndUpdate(
       client.watchlist,
       {
         $pull: {
@@ -48,7 +48,7 @@ const remove_watchlist = async (req, res) => {
       },
       { new: true }
     );
-    // console.log(check);
+    console.log(check);
     if (!check) {
       res.status(400).send("no videos found");
     }
