@@ -44,6 +44,7 @@ import {
   tvShowLatest,
 } from "./resources/tvshows/tvshow_controller";
 import { firebaseAuthProtect } from "./util/firebase";
+import { view as viewCategories } from "./resources/Category/Category_controller";
 
 config();
 const app = express();
@@ -81,6 +82,7 @@ app.get("/products/:username/", getUserById, getProducts);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
 app.get("/trendingTvShows/:username", getUserById, tvShowTrending);
+app.get("/categories/:username", getUserById, viewCategories);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
