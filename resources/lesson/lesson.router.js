@@ -11,6 +11,7 @@ import {
   getVideo,
   suspendLesson,
   trending,
+  makeliveLesson
 } from "./lesson.controllers";
 import { upload } from "../../util/s3-spaces";
 
@@ -32,6 +33,7 @@ router
   .get(getLesson)
   .put(upload.fields(uploadFields), updateLesson)
   .patch(suspendLesson)
+  .patch(makeliveLesson)
   .delete(deleteLesson);
 
 router.post("/search_metadata/:name", imdb_searchmovie);
