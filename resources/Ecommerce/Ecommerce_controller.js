@@ -38,7 +38,7 @@ const addProduct = async (req, res) => {
     }
     const image = req.file;
     const updateObject = image
-      ? { ...req.body, image: image.location }
+      ? { ...req.body, image: image.location, userID: req.user._id }
       : req.body;
     const product = await Ecommerce.create(updateObject);
     res.json({ status: "OK", data: product });
