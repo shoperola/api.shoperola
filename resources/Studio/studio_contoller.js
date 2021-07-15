@@ -52,7 +52,7 @@ const view_listbyid = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id not found" });
     }
-    const check = await Studio.findById(id);
+    const check = await Studio.findById(id).populate("products");
     res.status(200).send(check);
   } catch (e) {
     res.send(e);

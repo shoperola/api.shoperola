@@ -26,6 +26,7 @@ import { getPublicProfile as ProfileDataController } from "./resources/user/user
 import { connect } from "./util/db";
 import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
 import { SECRETS } from "./util/config";
+import AddressRouter from "./resources/Address/address_routes";
 import { getUserById } from "./util/grabUserbyId";
 import {
   getLessons,
@@ -92,6 +93,7 @@ app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 app.post("/cognito/generateTokens", generateTokensfromCode);
+app.use("/api/address", firebaseAuthProtect, AddressRouter);
 app.use("/api/client", firebaseAuthProtect, ClientRouter);
 // app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
 //   console.log("Recieved");

@@ -11,6 +11,7 @@ const update_cart = async (req, res) => {
     console.log(client);
     const id = req.body.productid;
     const product = await Ecommerce.findById(id);
+    console.log(product);
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
@@ -22,7 +23,7 @@ const update_cart = async (req, res) => {
       },
       { new: true }
     ).populate("products");
-    console.log(cart);
+    console.log("////" +cart);
     res.send(cart);
   } catch (e) {
     res.send(e);
