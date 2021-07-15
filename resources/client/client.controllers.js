@@ -39,6 +39,7 @@ const createClient = async (req, res) => {
     if (e.message.includes("E11000 duplicate key error collection")) {
       console.log("client already exists");
       client = await Client.findOne({ sub: sub });
+      cart = await Cart.findByIdAndDelete(cart._id);
     } else {
       return res.status(500).json({ message: "Error creating client" });
     }
