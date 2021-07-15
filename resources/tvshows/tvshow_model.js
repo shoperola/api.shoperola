@@ -13,7 +13,7 @@ const TvshowSchema = Schema({
   plot_show: {
     type: String,
   },
-  language: {
+  languageid: {
     type: String,
   },
   thumbnail: {
@@ -92,5 +92,7 @@ const TvshowSchema = Schema({
     },
   ],
 });
+
+TvshowSchema.index({ title: "text" });
 
 export const Tvshow = model("Tvshow", TvshowSchema);
