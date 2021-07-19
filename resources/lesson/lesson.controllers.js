@@ -89,9 +89,10 @@ const updateLesson = async (req, res) => {
   if (launchDate) {
     try {
       const job = scheduleJob(launchDate, async () => {
-        const doc = await Lesson.findByIdAndUpdate(id, { live: true });
+        const doc = await Lesson.findByIdAndUpdate(id, { launch_flag: true });
         console.log(`Video:id(${doc._id}) is live`);
       });
+    
     } catch (e) {
       console.log(e.message);
       res
@@ -171,8 +172,11 @@ const imdb_searchmovie = async (req, res) => {
     const resp = await axios.get(
       `https://imdb-api.com/en/API/SearchMovie/${api_key}/${name}`
     );
+    console.log(resp);
     res.send(resp.data);
+    
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 };

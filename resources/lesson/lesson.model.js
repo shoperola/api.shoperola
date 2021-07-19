@@ -41,6 +41,10 @@ const LessonSchema = Schema(
       type: Date,
       default: "",
     },
+    launch_flag:{
+      type: Boolean,
+      default: false
+    },
     video: {
       type: String,
       default: "",
