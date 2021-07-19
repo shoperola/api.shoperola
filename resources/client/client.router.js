@@ -30,7 +30,6 @@ router.route("/refreshToken").post(renewToken);
 router.route("/subscription").post(getSubscription);
 
 router.route("/paypal/create-order").post(createOrder);
-router.route("/paypal/capture-order/:id").post(captureOrder);
 router.route("/stripe/create-checkout-session").post(createCheckoutSession);
 router
   .route("/stripe/check-checkout-session")
@@ -43,7 +42,5 @@ router.get("/get_time/:vid", continueplaying);
 router.get("/view_continue", resume_watching);
 router.post("/videos/increment/:id", videosViewsIncrement);
 router.post("/tvshow/increment/:id", tvShowsViewsIncrement);
-router.get("/search_name/:name", search_movies);
-router.get("/search_tvshow/:name", search_tvshow);
 
 export default router;

@@ -324,7 +324,13 @@ const searchSeriesImdb = async (req, res) => {
 
 const search_tvshow = async (req, res) => {
   try {
-    const movie = await Tvshow.find({ $text: { $search: req.params.name } });
+    const movie = await Tvshow.find({
+      $or: [
+        { title: new RegExp(req.params.name, "gi") },
+        { description: new RegExp(req.params.name, "gi") },
+      ],
+      user: req.user._id,
+    });
     res.json({ status: "ok", data: movie });
   } catch (e) {
     res.status(500).send(e);

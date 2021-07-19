@@ -32,17 +32,17 @@ import {
   getLessons,
   getLesson,
   trending,
+  search_movies,
 } from "./resources/lesson/lesson.controllers";
 import { viewbanner } from "./resources/banners/banner_controller";
 import {
   tvShowTrending,
   viewall_tvshow,
-} from "./resources/tvshows/tvshow_controller";
-import { getProducts } from "./resources/Ecommerce/Ecommerce_controller";
-import {
+  search_tvshow,
   view_tvshow,
   tvShowLatest,
 } from "./resources/tvshows/tvshow_controller";
+import { getProducts } from "./resources/Ecommerce/Ecommerce_controller";
 import { firebaseAuthProtect } from "./util/firebase";
 import { view as viewCategories } from "./resources/Category/Category_controller";
 
@@ -83,6 +83,8 @@ app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
 app.get("/trendingTvShows/:username", getUserById, tvShowTrending);
 app.get("/categories/:username", getUserById, viewCategories);
+app.get("/search_movie/:username/:name", getUserById, search_movies);
+app.get("/search_tvshow/:username/:name", getUserById, search_tvshow);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);

@@ -176,7 +176,7 @@ const imdb_searchmovie = async (req, res) => {
     res.send(resp.data);
     
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
     res.status(500).send(e);
   }
 };
@@ -257,7 +257,13 @@ const videosViewsIncrement = async (req, res) => {
 };
 const search_movies = async (req, res) => {
   try {
-    const movie = await Lesson.find({ $text: { $search: req.params.name } });
+    const movie = await Lesson.find({
+      $or: [
+        { title: new RegExp(req.params.name, "gi") },
+        { plot_show: new RegExp(req.params.name, "gi") },
+      ],
+      madeBy: req.user._id,
+    });
     res.json({ status: "ok", data: movie });
   } catch (e) {
     res.status(500).send(e);
@@ -277,5 +283,5 @@ export {
   trending,
   videosViewsIncrement,
   search_movies,
-  makeliveLesson
+  makeliveLesson,
 };

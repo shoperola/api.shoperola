@@ -18,7 +18,7 @@ const add_product = async (req, res) => {
     const product = await Studio.findByIdAndUpdate(
       id,
       {
-        $addToSet: updateObject,
+        $push: updateObject,
       },
       { new: true }
     ).populate("products");
