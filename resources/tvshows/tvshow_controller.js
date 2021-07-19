@@ -363,7 +363,7 @@ const makelive = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "Tvshow Id not provided" });
     }
-    const show = await Tvshow.findByIdAndUpdate(id, { live: true });
+    const show = await Tvshow.findByIdAndUpdate(id, { status: true });
     res.json({ status: "OK", data: show });
   } catch (e) {
     console.log(e.message);
