@@ -25,7 +25,7 @@ const LessonSchema = Schema(
     },
     live: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     thumbnail: {
       type: String,
