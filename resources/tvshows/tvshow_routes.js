@@ -44,6 +44,6 @@ router.get("/view_season", view_season);
 router.post("/search_tv/:name", searchSeriesImdb);
 router.post("/SearchTv_imdb/:id/:sid", searchTvShowImdb);
 router.patch("/suspendTvshow/:id", suspendTvshow);
-router.patch("/makelive.:id", makelive);
+router.patch("/makelive/:id", makelive);
 
 export default router;
