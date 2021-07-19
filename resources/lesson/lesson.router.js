@@ -33,11 +33,11 @@ router
   .get(getLesson)
   .put(upload.fields(uploadFields), updateLesson)
   .patch(suspendLesson)
-  .patch(makeliveLesson)
   .delete(deleteLesson);
 
 router.post("/search_metadata/:name", imdb_searchmovie);
 router.post("/search_metadata_id/:id", imdb_searchbyid);
+router.patch("/makelive/:id", makeliveLesson);
 router.patch("/metadata/:id", metadata);
 router.get("/video/:id", getVideo);
 
