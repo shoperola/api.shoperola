@@ -108,4 +108,38 @@ const deletebanner = async (req, res) => {
   }
 };
 
-export { addbanner, viewbanner, viewbanner_by_id, editbanner, deletebanner };
+const suspendBanner = async(req,res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "banner Id not provided" });
+    }
+    const banner = await Banner.findByIdAndUpdate(id, { status: false });
+    res.json({ status: "OK", data: banner });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error Suspending banner", e: e.message });
+  }
+};
+
+const makeliveBanner = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "banner Id not provided" });
+    }
+    const banner = await Banner.findByIdAndUpdate(id, { status: true });
+    res.json({ status: "OK", data: banner });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error Suspending banner", e: e.message });
+  }
+}
+
+export { addbanner, viewbanner, viewbanner_by_id, editbanner, deletebanner, suspendBanner, makeliveBanner };

@@ -337,6 +337,40 @@ const search_tvshow = async (req, res) => {
   }
 };
 
+const suspendTvshow = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "tvshow Id not provided" });
+    }
+    const show = await Tvshow.findByIdAndUpdate(id, { status: false });
+    res.json({ status: "OK", data: show });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error Suspending video", e: e.message });
+  }
+};
+
+const makelive = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "Tvshow Id not provided" });
+    }
+    const show = await Tvshow.findByIdAndUpdate(id, { live: true });
+    res.json({ status: "OK", data: show });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error Suspending video", e: e.message });
+  }
+};
+
 export {
   addtvshow,
   edit_banner,
@@ -358,4 +392,6 @@ export {
   searchTvShowImdb,
   searchSeriesImdb,
   search_tvshow,
+  suspendTvshow,
+  makelive
 };
