@@ -12,7 +12,7 @@ import {
   continueplaying,
   resume_watching,
 } from "./client.controllers";
-import { getSubscription } from "../subscription/subscription.controllers";
+import { getSubscription,getSubscriptionById } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
 import {
   search_movies,
@@ -28,9 +28,11 @@ router.route("/").get(getClient).post(createClient);
 router.route("/refreshToken").post(renewToken);
 
 router.route("/subscription").post(getSubscription);
+router.get("/getsubscription/:id", getSubscriptionById);
 
 router.route("/paypal/create-order").post(createOrder);
 router.route("/stripe/create-checkout-session").post(createCheckoutSession);
+router.route("/paypal/capture-order").post(captureOrder);
 router
   .route("/stripe/check-checkout-session")
   .post(checkSessionStatusOnSuccess);

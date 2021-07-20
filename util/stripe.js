@@ -206,8 +206,8 @@ const createCheckoutSession = async (req, res) => {
           application_fee_amount: 0,
         },
         mode: "payment",
-        success_url: `${SECRETS.domain_url}/paymentDetails?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${SECRETS.domain_url}/customer`,
+        success_url: `${SECRETS.user_domain_url}/paymentDetails?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${SECRETS.user_domain_url}/customer`,
       },
       {
         stripeAccount: sellerData.stripe.id,
