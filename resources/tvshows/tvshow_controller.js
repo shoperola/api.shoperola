@@ -3,6 +3,7 @@ import { Season } from "../season_model";
 import { scheduleJob } from "node-schedule";
 import axios from "axios";
 import { SECRETS } from "../../util/config";
+import {Lesson} from "../lesson/lesson.model";
 
 //constant for response
 const defaultResponseObject = {
@@ -324,14 +325,21 @@ const searchSeriesImdb = async (req, res) => {
 
 const search_tvshow = async (req, res) => {
   try {
-    const movie = await Tvshow.find({
+    const tvshow = await Tvshow.find({
       $or: [
         { title: new RegExp(req.params.name, "gi") },
         { description: new RegExp(req.params.name, "gi") },
       ],
       user: req.user._id,
     });
-    res.json({ status: "ok", data: movie });
+    const movie = await Lesson.find({
+      $or: [
+        { title: new RegExp(req.params.name, "gi") },
+        { plot_show: new RegExp(req.params.name, "gi") },
+      ],
+      madeBy: req.user._id,
+    });
+    res.json({ status: "ok", data: [...tvshow,...movie] });
   } catch (e) {
     res.status(500).send(e);
   }

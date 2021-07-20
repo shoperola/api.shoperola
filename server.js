@@ -32,7 +32,7 @@ import {
   getLessons,
   getLesson,
   trending,
-  search_movies,
+  //search_movies,
 } from "./resources/lesson/lesson.controllers";
 import { viewbanner } from "./resources/banners/banner_controller";
 import {
@@ -84,7 +84,7 @@ app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
 app.get("/trendingTvShows/:username", getUserById, tvShowTrending);
 app.get("/categories/:username", getUserById, viewCategories);
-app.get("/search_movie/:username/:name", getUserById, search_movies);
+//app.get("/search_movie/:username/:name", getUserById, search_movies);
 app.get("/search_tvshow/:username/:name", getUserById, search_tvshow);
 app.use("/api/request", clientModel, protect, RequestRouter);
 app.use("/api/transaction", TransactionRouter);

@@ -255,20 +255,20 @@ const videosViewsIncrement = async (req, res) => {
     res.status(500).json({ message: "Error updating " });
   }
 };
-const search_movies = async (req, res) => {
-  try {
-    const movie = await Lesson.find({
-      $or: [
-        { title: new RegExp(req.params.name, "gi") },
-        { plot_show: new RegExp(req.params.name, "gi") },
-      ],
-      madeBy: req.user._id,
-    });
-    res.json({ status: "ok", data: movie });
-  } catch (e) {
-    res.status(500).send(e);
-  }
-};
+// const search_movies = async (req, res) => {
+//   try {
+//     const movie = await Lesson.find({
+//       $or: [
+//         { title: new RegExp(req.params.name, "gi") },
+//         { plot_show: new RegExp(req.params.name, "gi") },
+//       ],
+//       madeBy: req.user._id,
+//     });
+//     res.json({ status: "ok", data: movie });
+//   } catch (e) {
+//     res.status(500).send(e);
+//   }
+// };
 export {
   getLesson,
   getLessons,
@@ -282,6 +282,6 @@ export {
   suspendLesson,
   trending,
   videosViewsIncrement,
-  search_movies,
+  //search_movies,
   makeliveLesson,
 };

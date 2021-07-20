@@ -15,7 +15,7 @@ import {
 import { getSubscription,getSubscriptionById } from "../subscription/subscription.controllers";
 import { view_list, view_listbyid } from "../Studio/studio_contoller";
 import {
-  search_movies,
+  //search_movies,
   videosViewsIncrement,
 } from "../lesson/lesson.controllers";
 import {
