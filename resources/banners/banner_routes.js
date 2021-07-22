@@ -6,7 +6,8 @@ import {
   viewbanner_by_id,
   editbanner,
   deletebanner,
-  suspendBanner, makeliveBanner
+  suspendBanner, 
+  makeliveBanner
 } from "./banner_controller";
 const router = Router();
 
