@@ -68,9 +68,23 @@ const delete_product = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id not found" });
     }
-    const check = await Studio.findByIdAndDelete(id);
-    res.status(200).send(check);
+    const productid = req.query.productid;
+
+    const studio = await Studio.findById(id);
+    console.log(studio);
+    const index = studio.products.findIndex(x => x == productid)
+    console.log(index);
+    studio.products.splice(index,1)
+    studio.duration.splice(index,1)
+    studio.current_time.splice(index,1)
+    studio.url.splice(index,1)
+    studio.CTA.splice(index,1)
+  
+   const saved = await studio.save();
+   //console.log(saved);
+    console.log(studio);
   } catch (e) {
+    console.log(e);
     res.send(e);
   }
 };

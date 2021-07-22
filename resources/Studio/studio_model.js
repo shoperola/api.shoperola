@@ -14,6 +14,8 @@ const StudiSchema = Schema({
   videoId: { type: SchemaTypes.ObjectId, ref: "lessons" },
   CTA: [String],
   userID: { type: SchemaTypes.ObjectId, ref: "users" },
+  
+
 });
 
 export const Studio = model("Studio", StudiSchema);
