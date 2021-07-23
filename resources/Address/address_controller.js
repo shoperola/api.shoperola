@@ -18,7 +18,7 @@ const view_address = async (req, res) => {
     const client = await Client.findOne({ sub: req.user.sub });
     //  res.json({ status: "OK", data: client });
 
-    const view = await Address.find({});
+    const view = await Address.find({userID: client._id});
     res.json({ status: "OK", data: view });
   } catch (e) {
     res.send(e);
