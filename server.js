@@ -8,6 +8,7 @@ import expressListRoutes from "express-list-routes";
 import { signup, signin, protect } from "./util/auth";
 import { User } from "./resources/user/user.model";
 import { Client } from "./resources/client/client.model";
+import {Admin} from "./resources/Admin website/admin-model";
 import UserRouter from "./resources/user/user.router";
 import RequestRouter from "./resources/requests/requests.router";
 import ClientRouter from "./resources/client/client.router";
@@ -19,6 +20,7 @@ import CategoryRouter from "./resources/Category/Category_routes";
 import StudioRouter from "./resources/Studio/studio_routes";
 import CartRouter from "./resources/Cart/cart_routes";
 import ProductRouter from "./resources/Ecommerce/ecommerce.router";
+import AdminRouter from "./resources/Admin website/Admin-router";
 import LanguageRouter from "./resources/language/language.router";
 import WatchlistRouter from "./resources/watchlist/watchlist_routes";
 // import TvwatchlistRouter from "./resources/watchlist_tv/watchTv_routes";
@@ -58,6 +60,11 @@ const clientModel = (req, res, next) => {
   req.model = Client;
   next();
 };
+
+const adminModel = (req, res, next) => {
+  req.model = Admin;
+  next();
+};
 const cognitoAuthMiddleware = await getVerifyMiddleware();
 app.use(json());
 app.use(urlencoded({ extended: true }));
@@ -65,6 +72,8 @@ app.use(cors());
 app.use(morgan("dev"));
 app.post("/signup", userModel, signup);
 app.post("/signin", userModel, signin);
+app.post("/signup_admin", adminModel, signup);
+app.post("/sigin_admin", adminModel, signin);
 app.post("/signupClient", clientModel, signup);
 app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
@@ -74,6 +83,7 @@ app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.get("/tvshow/:username", getUserById, viewall_tvshow);
+app.use("/api/admin", adminModel, protect, AdminRouter);
 app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 app.get("/movies/:username", getUserById, getLessons);
 app.get("/movie/:username/:id", getUserById, getLesson);

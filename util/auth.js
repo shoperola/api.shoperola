@@ -16,7 +16,7 @@ const signup = async (req, res) => {
   try {
     const user = await Model.create(req.body);
     const collectionName = Model.collection.collectionName;
-    if (collectionName === "users") {
+    if (collectionName === "users" || collectionName === "Admin") {
       await Payment.create({ userID: user._id });
     }
     const token = newToken(user);

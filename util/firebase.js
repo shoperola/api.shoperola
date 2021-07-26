@@ -1,5 +1,7 @@
 import admin from "firebase-admin";
 import serviceAccount from "../tellytell-236a3-firebase-adminsdk-5j5og-9217d9f856.json";
+// import { Client } from "../resources/client/client.model";
+// import { Subscription } from "../subscription/subscription.model";
 
 // console.log(serviceAccount);
 admin.initializeApp({
@@ -22,6 +24,7 @@ export const firebaseAuthProtect = async (req, res, next) => {
     const decoded = await admin.auth().verifyIdToken(token);
     console.log(decoded);
     req.user = decoded;
+    console.log(req.user);
     next();
   } catch (e) {
     console.log(e.message);
