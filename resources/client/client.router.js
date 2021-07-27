@@ -3,6 +3,7 @@ import { createOrder, captureOrder } from "../../util/paypal";
 import {
   checkSessionStatusOnSuccess,
   createCheckoutSession,
+  paymentintend
 } from "../../util/stripe";
 import { renewToken } from "../../util/cognito";
 import {
@@ -36,6 +37,7 @@ router.route("/paypal/capture-order").post(captureOrder);
 router
   .route("/stripe/check-checkout-session")
   .post(checkSessionStatusOnSuccess);
+router.post("/stripe/paymentintend", paymentintend);
 
 router.post("/studio/", view_list);
 router.get("/studio/:id", view_listbyid);

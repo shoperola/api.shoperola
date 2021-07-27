@@ -52,6 +52,7 @@ import {
 import { getProducts,getProductById } from "./resources/Ecommerce/Ecommerce_controller";
 import { firebaseAuthProtect } from "./util/firebase";
 import { view as viewCategories } from "./resources/Category/Category_controller";
+import {paymentintend} from "./util/stripe";
 
 config();
 const app = express();
@@ -89,6 +90,7 @@ app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.get("/tvshow/:username", getUserById, viewall_tvshow);
 app.use("/api/admin", adminModel, protect, AdminRouter);
+app.post("/stripe", paymentintend);
 app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 app.get("/movies/:username", getUserById, getLessons);
 app.get("/movie/:username/:id", getUserById, getLesson);

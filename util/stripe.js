@@ -6,6 +6,7 @@ import { Client } from "../resources/client/client.model";
 import { PaymentLog } from "../resources/paymentLog/paymentLog.model";
 import zeroDecimalCurrencies from "./ZRC";
 import { Payment } from "../resources/payments/payments.model";
+import {Transaction} from "../resources/transaction/transactions.model";
 
 const createAccount = async (user) =>
   await stripe.accounts.create({
@@ -264,10 +265,32 @@ const checkSessionStatusOnSuccess = async (req, res) => {
   }
 };
 
+const paymentintend = async(req,res) => {
+  try{
+    if (!req.user) {
+      return res.status(400).json({ message: "Client Not Found" });
+    }
+    const {user,amount} = req.body;
+    const transaction = await Transaction.find({user})
+    if(!transaction){
+      res.send("no user with transaction found");
+    }
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: 'usd',
+      payment_method_types: ['card'],
+    });
+    res.send(paymentIntent);
+  }catch(e){
+    console.log(e);
+  }
+};
+
 export {
   onBoardUser,
   refreshAccountUrl,
   createCheckoutSession,
   checkAccountStatus,
   checkSessionStatusOnSuccess,
+  paymentintend
 };
