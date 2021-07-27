@@ -20,6 +20,7 @@ const createAccount = async (user) =>
     },
   });
 
+
 const onBoardUser = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
@@ -277,8 +278,9 @@ const paymentintend = async(req,res) => {
     }
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
-      currency: 'usd',
+      currency: 'inr',
       payment_method_types: ['card'],
+      description: "possibiliion"
     });
     res.send(paymentIntent);
   }catch(e){
