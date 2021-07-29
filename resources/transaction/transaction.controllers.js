@@ -15,7 +15,7 @@ const sessionCompleteEventListener = async (req, res) => {
     data.resource !== undefined
       ? data.resource.custom_id
       : data.data.object.metadata.custom_id;
-
+  const payment_type =  data.data.object.metadata.payment_type;
   console.log(paymentLogId);
   if (!paymentLogId) {
     return res.status(400).json({ message: "custom_id Not found" });
@@ -81,6 +81,8 @@ const sessionCompleteEventListener = async (req, res) => {
   console.log(transactionPayload);
   // insert into transaction collection
   let transaction;
+  console.log(payment_type);
+  if(payment_type === "subscription"){
   try {
     transaction = await Transaction.create(transactionPayload);
   } catch (e) {
@@ -89,6 +91,7 @@ const sessionCompleteEventListener = async (req, res) => {
       .status(400)
       .json({ message: "Error inserting transaction data", error: e.message });
   }
+
 
   //subscription as active
 
@@ -122,6 +125,11 @@ const sessionCompleteEventListener = async (req, res) => {
     console.log(e.message);
     return res.status(500).json({ message: "Error updating subscription" });
   }
+}
+
+else{
+
+}
 };
 
 const getTransactions = async (req, res) => {
