@@ -204,6 +204,7 @@ const createCheckoutSession = async (req, res) => {
         line_items: [item],
         metadata: {
           custom_id: paymentDetails._id.toString(),
+          payment_type: "subscription"
         },
         payment_intent_data: {
           application_fee_amount: 0,
@@ -370,6 +371,7 @@ const cartCheckoutSession = async (req, res) => {
         line_items: item,
         metadata: {
           custom_id: paymentDetails._id.toString(),
+          payment_type: "Ecommerce"
         },
         payment_intent_data: {
           application_fee_amount: 0,
