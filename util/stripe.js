@@ -216,15 +216,32 @@ const createCheckoutSession = async (req, res) => {
       }
     );
     console.log(session);
+    return res.json({ id: session.id });
+
     // console.log(await stripe.checkout.sessions.retrieve(session.id));
-    res.json({ id: session.id });
   } catch (e) {
     console.log(e.message);
     res.status(400).json({
       message: "Error occurred while creating checkout session",
       error: e.message,
     });
+
   }
+  try{
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: item.amount,
+    currency: 'inr',
+    payment_method_types: ['card'],
+    description: "possibiliion"
+  });
+  return res.json({paymentIntent});
+} catch (e) {
+  console.log(e.message);
+  res.status(400).json({
+    message: "Error occurred while generating paymentIntend",
+    error: e.message,
+  });
+}
 };
 
 const checkSessionStatusOnSuccess = async (req, res) => {
@@ -266,27 +283,27 @@ const checkSessionStatusOnSuccess = async (req, res) => {
   }
 };
 
-const paymentintend = async(req,res) => {
-  try{
-    if (!req.user) {
-      return res.status(400).json({ message: "Client Not Found" });
-    }
-    const {user,amount} = req.body;
-    const transaction = await Transaction.find({user})
-    if(!transaction){
-      res.send("no user with transaction found");
-    }
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: 'inr',
-      payment_method_types: ['card'],
-      description: "possibiliion"
-    });
-    res.send(paymentIntent);
-  }catch(e){
-    console.log(e);
-  }
-};
+// const paymentintend = async(req,res) => {
+//   try{
+//     if (!req.user) {
+//       return res.status(400).json({ message: "Client Not Found" });
+//     }
+//     const {user,amount} = req.body;
+//     const transaction = await Transaction.find({user})
+//     if(!transaction){
+//       res.send("no user with transaction found");
+//     }
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: amount,
+//       currency: 'inr',
+//       payment_method_types: ['card'],
+//       description: "possibiliion"
+//     });
+//     res.send(paymentIntent);
+//   }catch(e){
+//     console.log(e);
+//   }
+// };
 
 export {
   onBoardUser,
