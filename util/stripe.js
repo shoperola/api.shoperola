@@ -311,5 +311,5 @@ export {
   createCheckoutSession,
   checkAccountStatus,
   checkSessionStatusOnSuccess,
-  paymentintend
+  //paymentintend
 };
