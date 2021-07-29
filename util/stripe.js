@@ -336,7 +336,17 @@ const cartCheckoutSession = async (req, res) => {
     });
   }
   console.log(sellerData);
-
+  const item = cart.products.map(({title,description,image,sale_price}) => {
+    return {
+      
+      name: title,description,
+      images: [image],
+      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
+      quantity:1,
+      currency: "inr"
+      }
+  })
+  console.log(item);
   try {
     paymentDetails = await PaymentLog.create({
       client: clientID,
@@ -344,6 +354,7 @@ const cartCheckoutSession = async (req, res) => {
       ip: req.ip,
       processed_by: "stripe",
       paymentType: "Ecommerce",
+      products: item
     });
   } catch (e) {
     console.log(e.message);
@@ -356,17 +367,6 @@ const cartCheckoutSession = async (req, res) => {
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
   }
-  const item = cart.products.map(({title,description,image,sale_price}) => {
-    return {
-      
-      name: title,description,
-      images: [image],
-      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
-      quantity:1,
-      currency: "inr"
-      }
-  })
-  console.log(item);
   try {
     const session = await stripe.checkout.sessions.create(
       {

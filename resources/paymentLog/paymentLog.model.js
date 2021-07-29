@@ -29,6 +29,9 @@ const PaymentLogSchema = Schema(
       type: String,
       enum: ["monthly", "yearly", "Ecommerce"],
     },
+    products: {
+      type:Array
+    }
   },
   {
     timestamps: true,

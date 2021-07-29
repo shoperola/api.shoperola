@@ -2,6 +2,7 @@ import { PaymentLog } from "../paymentLog/paymentLog.model";
 import { Transaction } from "./transactions.model";
 import { Subscription } from "../subscription/subscription.model";
 import zeroDecimalCurrencies from "../../util/ZRC";
+import {Orders} from "../orders/order_model";
 import { Client } from "../client/client.model";
 
 const processedByStripe = (logData) => {
@@ -59,7 +60,7 @@ const sessionCompleteEventListener = async (req, res) => {
   console.log(logData);
 
   //create Transaction Payload to be inserted
-  const transactionPayload = (() => {
+  const Orderpayload = (() => {
     const currency = processedByStripe(logData)
       ? data.data.object.currency
       : data.resource.amount.currency_code;
@@ -78,13 +79,13 @@ const sessionCompleteEventListener = async (req, res) => {
       status: "SUCCESS",
     };
   })();
-  console.log(transactionPayload);
+  console.log(Orderpayload);
   // insert into transaction collection
   let transaction;
   console.log(payment_type);
   if(payment_type === "subscription"){
   try {
-    transaction = await Transaction.create(transactionPayload);
+    transaction = await Transaction.create(Orderpayload);
   } catch (e) {
     console.log(e.message);
     return res
@@ -128,7 +129,27 @@ const sessionCompleteEventListener = async (req, res) => {
 }
 
 else{
+  const Orderpayload = (() => {
+    const currency = data.resource.amount.currency_code;
 
+    return {
+      ...logData,
+      confirmationID: processedByStripe(logData)
+        ? data.data.object.id
+        : data.resource.id,
+      currency: currency,
+      amount: processedByStripe(logData)
+        ? currency.toUpperCase() in zeroDecimalCurrencies
+          ? data.data.object.amount_total
+          : data.data.object.amount_total / 100
+        : data.resource.amount.value,
+      status: "SUCCESS",
+    };
+  })();
+  console.log(Orderpayload);
+  const order = await Order.create(Orderpayload)
+  console.log(order);
+  res.json({order});
 }
 };
 
