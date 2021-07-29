@@ -27,7 +27,7 @@ const PaymentLogSchema = Schema(
     },
     paymentType: {
       type: String,
-      enum: ["monthly", "yearly"],
+      enum: ["monthly", "yearly", "Ecommerce"],
     },
   },
   {

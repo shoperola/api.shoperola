@@ -8,6 +8,7 @@ import zeroDecimalCurrencies from "./ZRC";
 import { Payment } from "../resources/payments/payments.model";
 import {Cart} from "../resources/Cart/cart_model"
 import {Transaction} from "../resources/transaction/transactions.model";
+import { Ecommerce } from "../resources/Ecommerce/ecomerce_model";
 
 const createAccount = async (user) =>
   await stripe.accounts.create({
@@ -308,7 +309,7 @@ const cartCheckoutSession = async (req, res) => {
     return res.status(400).json({ message: "Unable to find client" });
   }
   const clientID = client._id.toString();
-  const { userID, paymentType } = req.body;
+  const { userID} = req.body;
   if (!userID) {
     return res.status(400).json({
       data: { userID },
@@ -342,7 +343,7 @@ const cartCheckoutSession = async (req, res) => {
       user: userID,
       ip: req.ip,
       processed_by: "stripe",
-      paymentType: paymentType,
+      paymentType: "Ecommerce",
     });
   } catch (e) {
     console.log(e.message);
@@ -350,17 +351,19 @@ const cartCheckoutSession = async (req, res) => {
       .status(400)
       .json({ message: "Error creating paymentDetails", error: e.message });
   }
-  const cart = await Cart.find(client.cartid).populate("products");
-  console.log(cart);
+  const cart = await Cart.findById(client.cartid).populate("products");
+  console.log(JSON.stringify(cart, null, 4));
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
   }
   const item = cart.products.map(({title,description,image,sale_price}) => {
     return {
+      
       name: title,description,
       images: [image],
-      amount: sale_price,
-      quantity:1
+      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
+      quantity:1,
+      currency: "inr"
       }
   })
   console.log(item);
