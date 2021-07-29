@@ -144,7 +144,7 @@ else{
     };
   })();
   console.log(Orderpayload);
-  const order = await Order.create(Orderpayload)
+  const order = await Orders.create(Orderpayload)
   console.log(order);
   res.json({order});
 }
