@@ -60,7 +60,7 @@ const sessionCompleteEventListener = async (req, res) => {
   console.log(logData);
 
   //create Transaction Payload to be inserted
-  const Orderpayload = (() => {
+  const TransactionPayload = (() => {
     const currency = processedByStripe(logData)
       ? data.data.object.currency
       : data.resource.amount.currency_code;
@@ -79,13 +79,13 @@ const sessionCompleteEventListener = async (req, res) => {
       status: "SUCCESS",
     };
   })();
-  console.log(Orderpayload);
+  console.log(TransactionPayload);
   // insert into transaction collection
   let transaction;
   console.log(payment_type);
   if(payment_type === "subscription"){
   try {
-    transaction = await Transaction.create(Orderpayload);
+    transaction = await Transaction.create(TransactionPayload);
   } catch (e) {
     console.log(e.message);
     return res
@@ -130,19 +130,16 @@ const sessionCompleteEventListener = async (req, res) => {
 
 else{
   const Orderpayload = (() => {
-    const currency = data.resource.amount.currency_code;
-
+    const currency = data.data.object.currency;
     return {
       ...logData,
       confirmationID: processedByStripe(logData)
         ? data.data.object.id
         : data.resource.id,
       currency: currency,
-      amount: processedByStripe(logData)
-        ? currency.toUpperCase() in zeroDecimalCurrencies
+      amount: currency.toUpperCase() in zeroDecimalCurrencies
           ? data.data.object.amount_total
-          : data.data.object.amount_total / 100
-        : data.resource.amount.value,
+          : data.data.object.amount_total / 100,
       status: "SUCCESS",
     };
   })();
