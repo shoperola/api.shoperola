@@ -336,6 +336,11 @@ const cartCheckoutSession = async (req, res) => {
     });
   }
   console.log(sellerData);
+  const cart = await Cart.findById(client.cartid).populate("products");
+  console.log(JSON.stringify(cart, null, 4));
+  if(!cart || !cart.products.length) {
+    return res.json({ message: "no cart available"});
+  }
   const item = cart.products.map(({title,description,image,sale_price}) => {
     return {
       
@@ -361,11 +366,6 @@ const cartCheckoutSession = async (req, res) => {
     return res
       .status(400)
       .json({ message: "Error creating paymentDetails", error: e.message });
-  }
-  const cart = await Cart.findById(client.cartid).populate("products");
-  console.log(JSON.stringify(cart, null, 4));
-  if(!cart || !cart.products.length) {
-    return res.json({ message: "no cart available"});
   }
   try {
     const session = await stripe.checkout.sessions.create(
