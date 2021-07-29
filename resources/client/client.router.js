@@ -3,6 +3,8 @@ import { createOrder, captureOrder } from "../../util/paypal";
 import {
   checkSessionStatusOnSuccess,
   createCheckoutSession,
+  checkCartSessionStatusOnSuccess,
+  cartCheckoutSession
  // paymentintend
 } from "../../util/stripe";
 import { renewToken } from "../../util/cognito";
@@ -38,6 +40,10 @@ router
   .route("/stripe/check-checkout-session")
   .post(checkSessionStatusOnSuccess);
 //router.post("/stripe/paymentintend", paymentintend);
+router.route("/stripe/create-cart-checkout-session").post(cartCheckoutSession);
+router.route("/stripe/check-cart-checkout-session").post(cartCheckoutSession);
+
+
 
 router.post("/studio/", view_list);
 router.get("/studio/:id", view_listbyid);
