@@ -216,7 +216,7 @@ const createCheckoutSession = async (req, res) => {
       }
     );
     console.log(session);
-    return res.json({ id: session.id });
+   // return res.json({ id: session.id });
 
     // console.log(await stripe.checkout.sessions.retrieve(session.id));
   } catch (e) {
@@ -234,7 +234,7 @@ const createCheckoutSession = async (req, res) => {
     payment_method_types: ['card'],
     description: "possibiliion"
   });
-  return res.json({paymentIntent});
+  return res.json({paymentIntent, id: session.id});
 } catch (e) {
   console.log(e.message);
   res.status(400).json({
