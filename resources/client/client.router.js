@@ -41,7 +41,7 @@ router
   .post(checkSessionStatusOnSuccess);
 //router.post("/stripe/paymentintend", paymentintend);
 router.route("/stripe/create-cart-checkout-session").post(cartCheckoutSession);
-router.route("/stripe/check-cart-checkout-session").post(cartCheckoutSession);
+router.route("/stripe/check-cart-checkout-session").post(checkCartSessionStatusOnSuccess);
 
 
 
