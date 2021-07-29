@@ -216,7 +216,14 @@ const createCheckoutSession = async (req, res) => {
       }
     );
     console.log(session);
-   // return res.json({ id: session.id });
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: item.amount,
+      currency: 'inr',
+      payment_method_types: ['card'],
+      description: "possibiliion"
+    });
+    return res.json({ id: session.id , paymentIntent});
 
     // console.log(await stripe.checkout.sessions.retrieve(session.id));
   } catch (e) {
@@ -227,21 +234,21 @@ const createCheckoutSession = async (req, res) => {
     });
 
   }
-  try{
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: item.amount,
-    currency: 'inr',
-    payment_method_types: ['card'],
-    description: "possibiliion"
-  });
-  return res.json({paymentIntent, id: session.id});
-} catch (e) {
-  console.log(e.message);
-  res.status(400).json({
-    message: "Error occurred while generating paymentIntend",
-    error: e.message,
-  });
-}
+//   try{
+//   const paymentIntent = await stripe.paymentIntents.create({
+//     amount: item.amount,
+//     currency: 'inr',
+//     payment_method_types: ['card'],
+//     description: "possibiliion"
+//   });
+//   return res.json({paymentIntent, id: session.id});
+// } catch (e) {
+//   console.log(e.message);
+//   res.status(400).json({
+//     message: "Error occurred while generating paymentIntend",
+//     error: e.message,
+//   });
+// }
 };
 
 const checkSessionStatusOnSuccess = async (req, res) => {
