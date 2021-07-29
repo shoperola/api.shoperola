@@ -5,12 +5,15 @@ const add_home_setting = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "Admin Not Found" });
           }
-          const {image_title,image_description_1,image_description_2,image_description_3,image_description_4} = req.files;
-          const add_data = await HomePage.create({
-              ...req.body,
-                image_title,image_description_1,image_description_2,image_description_3,image_description_4
-            
-            });
+          const { image_title,image_description_1,image_description_2,image_description_3,image_description_4 } = req.files;
+          const home = req.body;
+          image_title ? (home.image_title = image_title[0].location) : null;
+          image_description_1 ? (home.image_description_1 = image_description_1[0].location) : null;
+         image_description_2 ? (home.image_description_2 = image_description_2[0].location) : null;
+         image_description_3 ? (home.image_description_3 = image_description_3[0].location) : null;
+         image_description_4 ? (home.image_description_4 = image_description_4[0].location) : null;
+
+          const add_data = await HomePage.create(home);
             console.log(add_data);
             res.status(201).json({status: "OK", data: add_data});
     }catch(e){
@@ -57,8 +60,15 @@ const update_home_setting = async(req,res) => {
           if(!check) {
               res.status(400).json({ message: "no setting found"});
           }
-          const {image_title,image_description_1,image_description_2,image_description_3,image_description_4} = req.files;
-          const update = await HomePage.findByIdAndUpdate(id,{$set:req.body, image_title,image_description_1,image_description_2,image_description_3,image_description_4}, {new:true});
+          const { image_title,image_description_1,image_description_2,image_description_3,image_description_4 } = req.files;
+          const home = req.body;
+          image_title ? (home.image_title = image_title[0].location) : null;
+          image_description_1 ? (home.image_description_1 = image_description_1[0].location) : null;
+         image_description_2 ? (home.image_description_2 = image_description_2[0].location) : null;
+         image_description_3 ? (home.image_description_3 = image_description_3[0].location) : null;
+         image_description_4 ? (home.image_description_4 = image_description_4[0].location) : null;
+
+          const update = await HomePage.findByIdAndUpdate(id,{$set:home}, {new:true});
           console.log(update);
           res.status(200).json({status:"ok", data:update});
     }catch(e){
