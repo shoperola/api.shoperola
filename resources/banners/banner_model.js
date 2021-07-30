@@ -26,8 +26,7 @@ const BannerSchema = Schema({
     type: Boolean,
     default: true,
   },
-  category: { type: SchemaTypes.ObjectId,
-    ref: "Categories"}
+  category: { type: String},
 });
 
 export const Banner = model("Banner", BannerSchema);
