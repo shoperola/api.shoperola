@@ -19,14 +19,14 @@ const router = Router();
 
 const uploadFields = [
   { name: "video" },
-  { name: "banner" },
-  { name: "thumbnail" },
+  //{ name: "banner" },
+  { name: "thumbnail" }
 ];
 
 router
   .route("/")
   .get(getLessons)
-  .post(upload.fields(uploadFields), createLesson);
+  .post(upload.single("thumbnail"), createLesson);
 
 router
   .route("/:id")

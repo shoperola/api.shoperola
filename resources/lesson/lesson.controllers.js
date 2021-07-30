@@ -45,6 +45,7 @@ const createLesson = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User Not Found" });
   }
+  const thumbnail = req.file;
   const { title, languageid } = req.body;
   if (!title || !languageid) {
     return res.status(400).json({ message: "Required fields missing" });
@@ -52,6 +53,7 @@ const createLesson = async (req, res) => {
   const studio = await Studio.create({});
   const lessonObject = {
     ...req.body,
+    thumbnail: thumbnail.location,
     madeBy: req.user._id,
     studio_id: studio._id,
   };
@@ -77,29 +79,29 @@ const updateLesson = async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: "Lesson id not provided" });
   }
-  const { banner, video, thumbnail } = req.files;
-  const { launchDate } = req.body;
-  console.log(banner, video, thumbnail);
+  const { video, thumbnail } = req.files;
+ // const { launchDate } = req.body;
+ // console.log(banner, video, thumbnail);
   const lessonObject = req.body;
   video ? (lessonObject.video = video[0].location) : null;
-  banner ? (lessonObject.banner = banner[0].location) : null;
+  //banner ? (lessonObject.banner = banner[0].location) : null;
   thumbnail ? (lessonObject.thumbnail = thumbnail[0].location) : null;
 
   // schedule a job for the given launchDate if launchdate is provided
-  if (launchDate) {
-    try {
-      const job = scheduleJob(launchDate, async () => {
-        const doc = await Lesson.findByIdAndUpdate(id, { launch_flag: true });
-        console.log(`Video:id(${doc._id}) is live`);
-      });
+  // if (launchDate) {
+  //   try {
+  //     const job = scheduleJob(launchDate, async () => {
+  //       const doc = await Lesson.findByIdAndUpdate(id, { launch_flag: true });
+  //       console.log(`Video:id(${doc._id}) is live`);
+  //     });
     
-    } catch (e) {
-      console.log(e.message);
-      res
-        .status(500)
-        .json({ message: "Error scheduling job", error: e.message });
-    }
-  }
+  //   } catch (e) {
+  //     console.log(e.message);
+  //     res
+  //       .status(500)
+  //       .json({ message: "Error scheduling job", error: e.message });
+  //   }
+  // }
 
   try {
     const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {
