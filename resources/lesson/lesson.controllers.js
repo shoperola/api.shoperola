@@ -79,12 +79,12 @@ const updateLesson = async (req, res) => {
   if (!id) {
     return res.status(400).json({ message: "Lesson id not provided" });
   }
-  const { video, thumbnail } = req.files;
- // const { launchDate } = req.body;
+  const {banner,video, thumbnail } = req.files;
+  //const { launchDate } = req.body;
  // console.log(banner, video, thumbnail);
   const lessonObject = req.body;
   video ? (lessonObject.video = video[0].location) : null;
-  //banner ? (lessonObject.banner = banner[0].location) : null;
+  banner ? (lessonObject.banner = banner[0].location) : null;
   thumbnail ? (lessonObject.thumbnail = thumbnail[0].location) : null;
 
   // schedule a job for the given launchDate if launchdate is provided
