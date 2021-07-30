@@ -45,6 +45,7 @@ const LessonSchema = Schema(
       type: Boolean,
       default: false
     },
+  
     video: {
       type: String,
       default: "",
