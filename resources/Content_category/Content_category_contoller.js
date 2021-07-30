@@ -1,26 +1,26 @@
-import { Categories } from "./Content_category_model";
+import { ContentCategories } from "./Content_category_model";
 
-const add_Categories = async (req, res) => {
+const add_ContentCategories = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-      const category = await Categories.create({ ...req.body});
+      const category = await ContentCategories.create({ ...req.body});
       res.status(201).json({category});
     } catch (e) {
       res.send(e.message);
     }
   };
   
-  const view_Categories = async (req, res) => {
+  const view_ContentCategories = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
       const id = req.params.id;
-      const check = await Categories.findById(id);
+      const check = await ContentCategories.findById(id);
       if (!check) {
-        res.send("no Categories found!!");
+        res.send("no ContentCategories found!!");
       }
       res.send(check);
     } catch (e) {
@@ -33,24 +33,24 @@ const add_Categories = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-      const view_Categories = await Categories.find({userID: req.user._id})
-      res.send(view_Categories);
+      const view_ContentCategories = await ContentCategories.find({userID: req.user._id})
+      res.send(view_ContentCategories);
     } catch (e) {
       res.send(e.message);
     }
   };
   
-  const update_Categories = async (req, res) => {
+  const update_ContentCategories = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
       const id = req.params.id;
-      const check = await Categories.findById(id);
+      const check = await ContentCategories.findById(id);
       if (!check) {
-        res.send("no Categories found!!");
+        res.send("no ContentCategories found!!");
       }
-      const update = await Categories.findByIdAndUpdate(id, req.body, {
+      const update = await ContentCategories.findByIdAndUpdate(id, req.body, {
         new: true,
       });
       res.send(update);
@@ -59,22 +59,22 @@ const add_Categories = async (req, res) => {
     }
   };
   
-  const delete_Categories = async (req, res) => {
+  const delete_ContentCategories = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
       const id = req.params.id;
-      const check = await Categories.findById(id);
+      const check = await ContentCategories.findById(id);
       if (!check) {
-        res.send("no Categories found!!");
+        res.send("no ContentCategories found!!");
       }
-      const deletee = await Categories.findByIdAndDelete(id);
+      const deletee = await ContentCategories.findByIdAndDelete(id);
       res.send(deletee);
     } catch (e) {
       res.send(e.message);
     }
   };
   
-  export { add_Categories, view_Categories, view, update_Categories, delete_Categories };
+  export { add_ContentCategories, view_ContentCategories, view, update_ContentCategories, delete_ContentCategories };
   
