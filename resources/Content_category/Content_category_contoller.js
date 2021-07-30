@@ -5,7 +5,7 @@ const add_ContentCategories = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-      const category = await ContentCategories.create({ ...req.body});
+      const category = await ContentCategories.create({ ...req.body, userID: req.user._id});
       res.status(201).json({category});
     } catch (e) {
       res.send(e.message);
