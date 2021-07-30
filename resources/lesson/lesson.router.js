@@ -19,7 +19,7 @@ const router = Router();
 
 const uploadFields = [
   { name: "video" },
-  //{ name: "banner" },
+  { name: "banner" },
   { name: "thumbnail" }
 ];
 

@@ -29,6 +29,10 @@ const SeasonSchema = Schema({
     type: Boolean,
     default: false,
   },
+  launchDate:{
+    type: Date,
+    default: ""
+  }
 });
 
 export const Season = model("Season", SeasonSchema);

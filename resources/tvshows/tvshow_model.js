@@ -29,6 +29,7 @@ const TvshowSchema = Schema({
   price: {
     type: Number,
   },
+  
 
   ////////////////////////////////////////imdb///////////////
   Id: {

@@ -81,7 +81,7 @@ const updateLesson = async (req, res) => {
   }
   const {banner,video, thumbnail } = req.files;
   const { launchDate } = req.body;
- // console.log(banner, video, thumbnail);
+  console.log(banner, video, thumbnail);
   const lessonObject = req.body;
   video ? (lessonObject.video = video[0].location) : null;
   banner ? (lessonObject.banner = banner[0].location) : null;
