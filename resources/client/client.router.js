@@ -8,6 +8,7 @@ import {
  // paymentintend
 } from "../../util/stripe";
 import { renewToken } from "../../util/cognito";
+import {  show_order, order_by_id } from "../paymentLog/order_controller";
 import {
   createClient,
   getClient,
@@ -27,6 +28,8 @@ import {
 } from "../tvshows/tvshow_controller";
 
 const router = Router();
+router.get("/view_order/:id",order_by_id);
+router.get("/view_orders", show_order);
 router.route("/").get(getClient).post(createClient);
 router.route("/refreshToken").post(renewToken);
 
@@ -42,8 +45,6 @@ router
 //router.post("/stripe/paymentintend", paymentintend);
 router.route("/stripe/create-cart-checkout-session").post(cartCheckoutSession);
 router.route("/stripe/check-cart-checkout-session").post(checkCartSessionStatusOnSuccess);
-
-
 
 router.post("/studio/", view_list);
 router.get("/studio/:id", view_listbyid);
