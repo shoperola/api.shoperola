@@ -140,7 +140,7 @@ else{
       amount: currency.toUpperCase() in zeroDecimalCurrencies
           ? data.data.object.amount_total
           : data.data.object.amount_total / 100,
-      status: "SUCCESS",
+      status: "SUCCESS"
     };
   })();
   console.log(Orderpayload);

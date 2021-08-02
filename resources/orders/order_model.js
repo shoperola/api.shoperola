@@ -26,8 +26,7 @@ const OrdersSchema = Schema(
       default: false,
     },
     products: [{ type: SchemaTypes.ObjectId, ref: "Ecommerce" }],
-    amount: { type: Number, default: 0 },
-    address: { type: SchemaTypes.ObjectId, ref: "Address"}
+    amount: { type: Number, default: 0 }
   },
   {
     timestamps: true,

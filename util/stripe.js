@@ -9,6 +9,7 @@ import { Payment } from "../resources/payments/payments.model";
 import {Cart} from "../resources/Cart/cart_model"
 import {Transaction} from "../resources/transaction/transactions.model";
 import { Ecommerce } from "../resources/Ecommerce/ecomerce_model";
+import {Address} from "../resources/Address/address_model";
 
 const createAccount = async (user) =>
   await stripe.accounts.create({
@@ -352,6 +353,8 @@ const cartCheckoutSession = async (req, res) => {
       }
   })
   console.log(item);
+  const address = await Address.findById(req.body.id);
+  console.log(address);
   try {
     paymentDetails = await PaymentLog.create({
       client: clientID,
@@ -359,7 +362,8 @@ const cartCheckoutSession = async (req, res) => {
       ip: req.ip,
       processed_by: "stripe",
       paymentType: "Ecommerce",
-      products: cart.products
+      products: cart.products,
+      address: address
     });
   } catch (e) {
     console.log(e.message);

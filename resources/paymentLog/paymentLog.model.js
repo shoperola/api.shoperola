@@ -34,7 +34,8 @@ const PaymentLogSchema = Schema(
       required: true,
       ref: "Ecommerce"
       
-    }]
+    }],
+    address: { type: SchemaTypes.ObjectId, ref: "Address"}
   },
   {
     timestamps: true,
