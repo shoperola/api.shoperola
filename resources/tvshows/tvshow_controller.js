@@ -37,9 +37,9 @@ const edit_banner = async (req, res) => {
     console.log(req.files);
 
     const updateObject = {};
-    req.files && req.files.thumbnail
-      ? (updateObject.thumbnail = req.files.thumbnail[0].location)
-      : null;
+    // req.files && req.files.thumbnail
+    //   ? (updateObject.thumbnail = req.files.thumbnail[0].location)
+    //   : null;
 
     req.files && req.files.bannerImage
       ? (updateObject.bannerimage = req.files.bannerImage[0].location)
@@ -80,17 +80,24 @@ const edit_season = async (req, res) => {
     if (!check) {
       res.send("no meta found");
     }
-    const date = new Date(req.body.date);
+    const { launchDate } = req.body
     const season = await Season.create({ ...req.body });
-    const job = scheduleJob(date, async () => {
-      const edit = await Season.findByIdAndUpdate(
-        season._id,
-        { launch: true },
-        { new: true }
-      );
-      console.log(edit);
-      job.cancel();
-    });
+    if (launchDate) {
+      try {
+        const edit = await Season.findByIdAndUpdate(
+          season._id,
+          { launch: true },
+          { new: true }
+        );
+        console.log(edit);
+      
+      } catch (e) {
+        console.log(e.message);
+        res
+          .status(500)
+          .json({ message: "Error scheduling job", error: e.message });
+      }
+    }
     check.season.push(season._id);
     check.save();
     res.send(season);
