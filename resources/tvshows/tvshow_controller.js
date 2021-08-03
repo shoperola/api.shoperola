@@ -82,6 +82,7 @@ const edit_season = async (req, res) => {
     }
     const { launchDate } = req.body
     const season = await Season.create({ ...req.body });
+    console.log(launchDate);
     if (launchDate) {
       try {
         const edit = await Season.findByIdAndUpdate(
