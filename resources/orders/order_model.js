@@ -21,10 +21,10 @@ const OrdersSchema = Schema(
       type: String,
       required: true,
     },
-    success: {
-      type: String,
-      enum: ["SUCCESS", "FAILED"]
-    },
+    // success: {
+    //   type: String,
+    //   enum: ["SUCCESS", "FAILED"]
+    // },
     products: [{ type: SchemaTypes.ObjectId, ref: "Ecommerce" }],
     amount: { type: Number, default: 0 },
     address: { type: SchemaTypes.ObjectId, ref: "Address"}
