@@ -22,8 +22,7 @@ const OrdersSchema = Schema(
       required: true,
     },
     success: {
-      type: Boolean,
-      default: false,
+      type: Boolean
     },
     products: [{ type: SchemaTypes.ObjectId, ref: "Ecommerce" }],
     amount: { type: Number, default: 0 },
