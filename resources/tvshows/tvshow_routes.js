@@ -26,7 +26,7 @@ const router = Router();
 router.post("/addtvshow", addtvshow);
 router.patch(
   "/edit_banner/:id",
-  upload.fields({name: "bannerImage" }),
+  upload.single("bannerImage"),
   edit_banner
 );
 router.patch("/metadata/:id", metadata);

@@ -34,15 +34,15 @@ const edit_banner = async (req, res) => {
     if (!check) {
       res.send("add a title and plot");
     }
-    console.log(req.files);
+    console.log(req.file);
 
     const updateObject = {};
     // req.files && req.files.thumbnail
     //   ? (updateObject.thumbnail = req.files.thumbnail[0].location)
     //   : null;
 
-    req.files && req.files.bannerImage
-      ? (updateObject.bannerimage = req.files.bannerImage[0].location)
+    req.file
+      ? (updateObject.bannerimage = req.file.location)
       : null;
 
     const show = await Tvshow.findByIdAndUpdate(id, updateObject);
