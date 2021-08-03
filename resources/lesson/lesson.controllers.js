@@ -80,7 +80,7 @@ const updateLesson = async (req, res) => {
     return res.status(400).json({ message: "Lesson id not provided" });
   }
   const {banner,video, thumbnail } = req.files;
-  const { launchDate } = req.body;
+  const { launchDate,category } = req.body;
   console.log(banner, video, thumbnail);
   const lessonObject = req.body;
   video ? (lessonObject.video = video[0].location) : null;

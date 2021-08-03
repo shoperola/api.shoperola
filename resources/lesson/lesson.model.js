@@ -52,6 +52,7 @@ const LessonSchema = Schema(
     },
     views: { type: Number, default: 0 },
     studio_id: { type: SchemaTypes.ObjectId, ref: "studios" },
+    category:{ type: SchemaTypes.ObjectId, ref: "ContentCategories"},
     ////////////////////////////////////////IMDB - METADATA///////////////////////////////////////////
     Id: {
       type: String,
