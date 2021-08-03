@@ -13,6 +13,7 @@ const StudiSchema = Schema({
   ],
   videoId: { type: SchemaTypes.ObjectId, ref: "lessons" },
   CTA: [String],
+  qr_code:{ type: String},
   userID: { type: SchemaTypes.ObjectId, ref: "users" },
   
 

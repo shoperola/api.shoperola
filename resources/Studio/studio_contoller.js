@@ -8,7 +8,7 @@ const add_product = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const id = req.params.id;
-
+    console.log(req.file);
     const updateObject = {
       ...req.body,
       userID: req.user._id,
