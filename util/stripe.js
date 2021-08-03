@@ -363,6 +363,7 @@ const cartCheckoutSession = async (req, res) => {
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: cart.products,
+      amount: item.amount,
       address: address
     });
   } catch (e) {

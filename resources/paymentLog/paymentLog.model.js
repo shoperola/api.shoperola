@@ -29,6 +29,7 @@ const PaymentLogSchema = Schema(
       type: String,
       enum: ["monthly", "yearly", "Ecommerce"],
     },
+    amount:{type: Number, required: true},
     products: [{
       type: SchemaTypes.ObjectId,
       required: true,
