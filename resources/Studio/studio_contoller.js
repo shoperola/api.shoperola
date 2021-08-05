@@ -70,7 +70,7 @@ const delete_product = async (req, res) => {
     }
     const productid = req.query.productid;
 
-    const studio = await Studio.findById(id);
+    const studio = await Studio.findById(id).populate("products");
     console.log(studio);
     const index = studio.products.findIndex(x => x == productid)
     console.log(index);
@@ -82,7 +82,7 @@ const delete_product = async (req, res) => {
   
    const saved = await studio.save();
    //console.log(saved);
-    res.status(200).json({saved}).populate("products");
+    res.status(200).json({saved})
   } catch (e) {
     console.log(e);
     res.send(e);
