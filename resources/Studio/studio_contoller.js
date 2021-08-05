@@ -82,7 +82,7 @@ const delete_product = async (req, res) => {
   
    const saved = await studio.save();
    //console.log(saved);
-    console.log(studio);
+    res.status(200).json({saved});
   } catch (e) {
     console.log(e);
     res.send(e);

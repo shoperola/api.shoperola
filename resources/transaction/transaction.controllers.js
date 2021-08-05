@@ -4,6 +4,7 @@ import { Subscription } from "../subscription/subscription.model";
 import zeroDecimalCurrencies from "../../util/ZRC";
 import {Orders} from "../orders/order_model";
 import { Client } from "../client/client.model";
+import { Cart } from "../Cart/cart_model";
 
 const processedByStripe = (logData) => {
   return logData.processed_by === "stripe";
@@ -146,7 +147,9 @@ else{
   console.log(Orderpayload);
   const order = await Orders.create(Orderpayload)
   console.log(order);
+
   res.json({order});
+
 }
 };
 
