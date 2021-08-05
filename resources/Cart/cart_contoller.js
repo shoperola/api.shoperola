@@ -15,16 +15,24 @@ const update_cart = async (req, res) => {
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
+    const quantity = await product.quantity
+    console.log(quantity);
+    const req_quantity = req.body.quantity
+    if(req_quantity < quantity) {
     const cart = await Cart.findByIdAndUpdate(
       client.cartid,
       {
-        $addToSet: { products: id },
+        $addToSet: { products: id},
         $inc: { total_price: product.sale_price },
       },
       { new: true }
     ).populate("products");
     console.log("////" + cart);
     res.send(cart);
+    }
+    else if(req_quantity >= quantity) {
+      console.log("Out of stock");
+    }
   } catch (e) {
     res.send(e);
   }
