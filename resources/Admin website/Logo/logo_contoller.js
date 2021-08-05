@@ -23,7 +23,8 @@ const update_logo = async (req, res) => {
         if(!check){
             res.status(400).json({ message: "no logo found"});
         }
-        const update = await Logo.findByIdAndUpdate(id,{$set: req.file.location},{new: true});
+        console.log(req.file.location);
+        const update = await Logo.findByIdAndUpdate(id,{logo: req.file.location},{new: true});
         console.log(update);
         res.status(200).json({status:"ok", data: update});
     }catch(err){
