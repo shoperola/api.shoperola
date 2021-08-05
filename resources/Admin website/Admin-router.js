@@ -25,9 +25,9 @@ router.route("/password").post(changeUserPassword);
 
 router.get("/details", getDashboardDetails);
 router.post("/add_social", social_add);
-router.patch("/update_social", social_update);
+router.patch("/update_social/:id", social_update);
 router.get("/view_social", view_social);
-router.delete("/delete_social", social_delete);
+router.delete("/delete_social/:id", social_delete);
 
 
 router.post("/add_logo", upload.single("file"), add_logo);
