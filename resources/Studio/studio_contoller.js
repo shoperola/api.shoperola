@@ -82,7 +82,7 @@ const delete_product = async (req, res) => {
   
    const saved = await studio.save();
    //console.log(saved);
-    res.status(200).json({saved});
+    res.status(200).json({saved}).populate("products");
   } catch (e) {
     console.log(e);
     res.send(e);
