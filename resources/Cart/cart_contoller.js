@@ -15,27 +15,32 @@ const update_cart = async (req, res) => {
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
-    // const quantity = await product.quantity
-    // console.log(quantity);
-    // const req_quantity = req.body.req_quantity
-    // console.log(req_quantity);
-    //if(req_quantity < quantity){
+    const quantity = await product.quantity
+    console.log(quantity);
+    const req_quantity = req.body.req_quantity
+    console.log(req_quantity);
+    if(req_quantity < quantity){
        const cart = await Cart.findByIdAndUpdate(
       client.cartid,
       {
         $addToSet: { products: id},
-        //$set: {quantity: req_quantity},
+        $push: {quantity: req_quantity},
         $inc: { total_price: product.sale_price },  
       },
       { new: true }
     )
+    const remaining_quantity = await quantity - req_quantity;
+    console.log(remaining_quantity);
+    const a = await product.update({$set: {quantity: remaining_quantity}});
+    console.log(a);
+    
     console.log("////" + cart);
     res.send(cart);
 
-  //  }
-    // else if (req_quantity >= quantity){
-    //   console.log("out of stock!!!");
-    // }
+   }
+    else if (req_quantity >= quantity){
+      console.log("out of stock!!!");
+    }
   } catch (e) {
     res.send(e);
   }
@@ -66,7 +71,7 @@ const remove_product = async (req, res) => {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
     const remove = await Cart.findByIdAndUpdate(client.cartid, {
-      $pull: { products: id },
+      $pull: { products: id},
       $inc: { total_price: -product.sale_price },
     }).populate("products");
     res.send(remove);
