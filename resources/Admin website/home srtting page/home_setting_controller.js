@@ -23,9 +23,6 @@ const add_home_setting = async (req, res) => {
 };
 const view_home_setting = async (req, res) => {
     try{
-        if (!req.user) {
-            return res.status(400).json({ message: "admin Not Found" });
-          }
           const view_all = await HomePage.find({});
           res.status(201).json({status: "OK", data: view_all});
     }catch(e){
@@ -36,9 +33,6 @@ const view_home_setting = async (req, res) => {
 
 const view_id_home_setting = async(req,res) => {
     try{
-        if (!req.user) {
-            return res.status(400).json({ message: "User Not Found" });
-          }
           const id = req.params.id;
           const view_by_id = await HomePage.findById(id);
           if(!view_by_id) {

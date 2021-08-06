@@ -52,7 +52,7 @@ import { view as viewCategories } from "./resources/Category/Category_controller
 
 config();
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 const userModel = (req, res, next) => {
   req.model = User;
