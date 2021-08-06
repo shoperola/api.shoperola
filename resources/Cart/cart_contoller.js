@@ -25,7 +25,7 @@ const update_cart = async (req, res) => {
       {
         $addToSet: { products: id},
         $push: {quantity: req_quantity},
-        $inc: { total_price: product.sale_price },  
+        $inc: { total_price: (product.sale_price)*req_quantity },  
       },
       { new: true }
     )
