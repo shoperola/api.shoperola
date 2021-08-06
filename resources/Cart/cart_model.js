@@ -16,15 +16,13 @@ const CartSchema = new Schema(
   { timestamps: true }
 );
 
-CartSchema.post("findOneAndUpdate", async function (next) {
+CartSchema.post("findOneAndUpdate", async function(next) {
 try{
   const docToUpdate = await this.model.findOne(this.getQuery()).populate({path:"products",populate: {
     path:'pid'}});
     let total_price = 0;
    docToUpdate.products.map(x => {total_price += x.pid.sale_price* x.quantity});
-  await docToUpdate.updateOne({$set:{total_price:total_price}})
-   
-    
+   await docToUpdate.updateOne({$set:{total_price:total_price}})
    next();
 }catch(e){
   console.log(e);
