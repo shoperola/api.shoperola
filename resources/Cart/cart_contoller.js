@@ -8,17 +8,17 @@ const update_cart = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const client = await Client.findOne({ sub: req.user.sub });
-    console.log(client);
+  //  console.log(client);
     const id = req.body.productid;
     const product = await Ecommerce.findById(id);
-    console.log(product);
+   // console.log(product);
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
     const quantity = await product.quantity
-    console.log(quantity);
+    //console.log(quantity);
     const req_quantity = req.body.req_quantity
-    console.log(req_quantity);
+    //console.log(req_quantity);
     if(req_quantity < quantity){
        const cart = await Cart.findOneAndUpdate(
       {_id:client.cartid},
@@ -31,11 +31,11 @@ const update_cart = async (req, res) => {
     ).populate({path:"products",populate: {
       path: 'pid'}});
     const remaining_quantity = await quantity - req_quantity;
-    console.log(remaining_quantity);
+    //console.log(remaining_quantity);
     const a = await product.updateOne({$set: {quantity: remaining_quantity}});
-    console.log(a);
+    //console.log(a);
     
-    console.log("////" + cart)
+    //console.log("////" + cart)
     res.send(cart);
 
    }
@@ -52,17 +52,17 @@ const update_quantity = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const client = await Client.findOne({ sub: req.user.sub });
-    console.log(client);
+    //console.log(client);
     const id = req.body.id;
     const req_quantity = req.body.req_quantity
-    console.log(req_quantity);
+    //console.log(req_quantity);
     const product = await Ecommerce.findById(req.params.pid);
-    console.log(product);
+    //console.log(product);
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
     const quantity = await product.quantity
-    console.log(quantity);
+    //console.log(quantity);
     //if(req_quantity < quantity){
        const cart = await Cart.findOneAndUpdate(
       {"products._id": id},
