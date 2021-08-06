@@ -27,7 +27,7 @@ import WatchlistRouter from "./resources/watchlist/watchlist_routes";
 // import TvwatchlistRouter from "./resources/watchlist_tv/watchTv_routes";
 import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers";
 import { connect } from "./util/db";
-import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
+//import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
 import { SECRETS } from "./util/config";
 import AddressRouter from "./resources/Address/address_routes";
 import { getUserById } from "./util/grabUserbyId";
@@ -52,7 +52,7 @@ import { view as viewCategories } from "./resources/Category/Category_controller
 
 config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const userModel = (req, res, next) => {
   req.model = User;
@@ -67,7 +67,7 @@ const adminModel = (req, res, next) => {
   req.model = Admin;
   next();
 };
-const cognitoAuthMiddleware = await getVerifyMiddleware();
+//const cognitoAuthMiddleware = await getVerifyMiddleware();
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cors());
@@ -115,7 +115,7 @@ app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
-app.post("/cognito/generateTokens", generateTokensfromCode);
+//app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/address", firebaseAuthProtect, AddressRouter);
 app.use("/api/client", firebaseAuthProtect, ClientRouter);
 // app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {

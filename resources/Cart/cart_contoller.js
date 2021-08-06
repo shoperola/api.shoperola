@@ -20,21 +20,22 @@ const update_cart = async (req, res) => {
     const req_quantity = req.body.req_quantity
     console.log(req_quantity);
     if(req_quantity < quantity){
-       const cart = await Cart.findByIdAndUpdate(
-      client.cartid,
+       const cart = await Cart.findOneAndUpdate(
+      {_id:client.cartid},
       {
-        $addToSet: { products: id},
-        $push: {quantity: req_quantity},
-        $inc: { total_price: (product.sale_price)*req_quantity },  
+        $addToSet: { products: {pid: id, quantity: req_quantity}},
+       // $push: {quantity: req_quantity},
+        //$inc: { total_price: (product.sale_price)*req_quantity },  
       },
       { new: true }
-    )
+    ).populate({path:"products",populate: {
+      path: 'pid'}});
     const remaining_quantity = await quantity - req_quantity;
     console.log(remaining_quantity);
-    const a = await product.update({$set: {quantity: remaining_quantity}});
+    const a = await product.updateOne({$set: {quantity: remaining_quantity}});
     console.log(a);
     
-    console.log("////" + cart);
+    console.log("////" + cart)
     res.send(cart);
 
    }
@@ -45,6 +46,48 @@ const update_cart = async (req, res) => {
     res.send(e);
   }
 };
+const update_quantity = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const client = await Client.findOne({ sub: req.user.sub });
+    console.log(client);
+    const id = req.body.id;
+    const req_quantity = req.body.req_quantity
+    console.log(req_quantity);
+    const product = await Ecommerce.findById(req.params.pid);
+    console.log(product);
+    if (!product) {
+      return res.status(400).json({ message: "Invalid Product Id" });
+    }
+    const quantity = await product.quantity
+    console.log(quantity);
+    //if(req_quantity < quantity){
+       const cart = await Cart.findOneAndUpdate(
+      {"products._id": id},
+      {
+        "products.$.quantity": req_quantity,
+        //$inc: { total_price: (product.sale_price)*req_quantity },  
+      },
+      { new: true }
+    ).populate({path:"products",populate: {
+      path: 'pid'}});
+    res.send(cart)
+    
+    // const remaining_quantity = await quantity - req_quantity;
+    // console.log(remaining_quantity);
+    // const a = await product.updateOne({$set: {quantity: remaining_quantity}});
+    // console.log(a);
+    // } 
+    // else if (req_quantity >= quantity){
+    //   console.log("out of stock!!!");
+    // }
+  }catch (e) {
+    console.log(e);
+    res.status(400).json({ error: e.message});
+  };
+}
 
 const view_cart = async (req, res) => {
   try {
@@ -80,4 +123,4 @@ const remove_product = async (req, res) => {
   }
 };
 
-export { update_cart, view_cart, remove_product };
+export { update_cart, view_cart, remove_product , update_quantity};
