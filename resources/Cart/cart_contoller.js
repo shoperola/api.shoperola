@@ -95,7 +95,8 @@ const view_cart = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     const client = await Client.findOne({ sub: req.user.sub });
-    const check = await Cart.findById(client.cartid).populate("products");
+    const check = await Cart.findById(client.cartid).populate({path:"products",populate: {
+      path: 'pid'}});
     res.status(200).send(check);
   } catch (e) {
     res.send(e);
@@ -116,7 +117,8 @@ const remove_product = async (req, res) => {
     const remove = await Cart.findByIdAndUpdate(client.cartid, {
       $pull: { products: id},
       $inc: { total_price: -product.sale_price },
-    }).populate("products");
+    }).populate({path:"products",populate: {
+      path: 'pid'}});
     res.send(remove);
   } catch (e) {
     res.send(e);
