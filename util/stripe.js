@@ -342,15 +342,19 @@ const cartCheckoutSession = async (req, res) => {
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
   }
-  const item = cart.products.map(({title,description,image,sale_price}) => {
-    return {
+  //const item = cart.products.map(({title,description,image,sale_price}) => {
+    // return {
       
-      name: title,description,
-      images: [image],
-      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
-      quantity:1,
-      currency: "inr"
-      }
+    //   name: title,description,
+    //   images: [image],
+    //   amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
+    //   quantity:1,
+    //   currency: "inr"
+    //   }
+  //})
+  const item = await cart.products.map(x => {x.pid
+  
+  console.log(x.pid);
   })
   console.log(item);
   const address = await Address.findById(req.body.id);
