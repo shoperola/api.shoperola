@@ -33,9 +33,7 @@ const update_logo = async (req, res) => {
 };
 const view_logo = async(req,res)=> {
     try{
-        if(!req.user){
-            res.status(400).json({ message: "User not found" });
-        }
+       
         const view = await Logo.find({})
         res.status(200).json({status:"ok", data: view});
     }catch(err){

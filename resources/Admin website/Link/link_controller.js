@@ -36,10 +36,6 @@ const update_link = async(req, res) => {
 
 const view_link = async (req, res) => {
     try {
-        if(!req.user){
-            return res.status(400).json({ message: "User not found"});
-
-        }
         const view_link = await Link.find({})
         console.log(view_link);
         res.status(200).json({status:"ok",data: view_link});

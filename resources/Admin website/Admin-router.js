@@ -12,6 +12,8 @@ import {add_logo,update_logo,delete_logo} from "./Logo/logo_contoller";
 import  {add_link, update_link,delete_link} from "./Link/link_controller";
 import  {add_home_setting,view_id_home_setting, update_home_setting, delete_home_setting} from "./home srtting page/home_setting_controller";
 import {add_AdminAddress, update_AdminAddress,delete_AdminAddress} from "./Address_footer/address_controller";
+import {add_contact, update_contact, delete_contact} from "./contact_us/contact_us_controller";
+import {add_demo,update_Demo, delete_Demo} from "./demo/demo_controller";
 const router = Router();
 
 router
@@ -56,4 +58,12 @@ router.delete("/delete_home_setting/:id", delete_home_setting);
 router.post("/add_address", add_AdminAddress);
 router.patch("/update_address/:id", update_AdminAddress);
 router.delete("/remove_address/:id", delete_AdminAddress);
+
+router.post("/add_contact", add_contact);
+router.patch("/update_contact/:id", update_contact);
+router.delete("/delete_contact/:id", delete_contact);
+
+router.post("/add_demo", add_demo);
+router.post("/update_demo/:id",update_Demo);
+router.delete("/delete_demo/:id",delete_Demo);
 export default router;
