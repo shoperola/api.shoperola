@@ -24,13 +24,18 @@ import ProductRouter from "./resources/Ecommerce/ecommerce.router";
 import AdminRouter from "./resources/Admin website/Admin-router";
 import LanguageRouter from "./resources/language/language.router";
 import WatchlistRouter from "./resources/watchlist/watchlist_routes";
+import {view_social} from "./resources/Admin website/Social_footer/social_controller";
+import {view_logo} from "./resources/Admin website/Logo/logo_contoller";
+import {view_link} from "./resources/Admin website/Link/link_controller";
+import {view_home_setting} from "./resources/Admin website/home srtting page/home_setting_controller";
+import {view_AdminAddress} from "./resources/Admin website/Address_footer/address_controller";
 // import TvwatchlistRouter from "./resources/watchlist_tv/watchTv_routes";
 import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers";
 import { connect } from "./util/db";
 //import { generateTokensfromCode, getVerifyMiddleware } from "./util/cognito";
 import { SECRETS } from "./util/config";
 import AddressRouter from "./resources/Address/address_routes";
-import { getUserById } from "./util/grabUserbyId";
+import { getUserById, getAdminById} from "./util/grabUserbyId";
 import {
   getLessons,
   getLesson,
@@ -91,11 +96,11 @@ app.get("/movies/:username", getUserById, getLessons);
 app.get("/movie/:username/:id", getUserById, getLesson);
 app.get("/banners/:username/", getUserById, viewbanner);
 app.get("/products/:username/", getUserById, getProducts);
-// app.get("/admin/social", adminModel, protect, SocialRouter);
-// app.use("/admin/home_setting",adminModel,protect,HomePageRouter);
-// app.use("/admin/link", adminModel,protect,LinkRouter);
-// app.use("/admin/admin_address", adminModel,protect,AdminaddressRouter);
-// app.use("/admin/admin_logo", adminModel,protect,LogoRouter);
+app.get("/view_social/:username",getAdminById,view_social);
+app.get("/view_home_setting/:username",getAdminById,view_home_setting);
+app.get("/view_link/:username",getAdminById,view_link);
+app.get("/view_admin_address/:username",getAdminById,view_AdminAddress);
+app.get("/view_admin_logo/:username",getAdminById,view_logo);
 app.get("/products/:username/:id", getUserById, getProductById);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
