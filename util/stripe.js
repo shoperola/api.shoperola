@@ -325,7 +325,7 @@ const cartCheckoutSession = async (req, res) => {
     console.log(e.message);
     return res.json({ message: "Error finding seller", error: e.message });
   }
-  console.log(user);
+  //console.log(user);
 
   try {
     sellerData = await Payment.findOne({ userID });
@@ -336,9 +336,9 @@ const cartCheckoutSession = async (req, res) => {
       error: e.message,
     });
   }
-  console.log(sellerData);
+ // console.log(sellerData);
   const cart = await Cart.findById(client.cartid).populate("products");
-  console.log(JSON.stringify(cart, null, 4));
+  //console.log(JSON.stringify(cart, null, 4));
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
   }
@@ -353,12 +353,11 @@ const cartCheckoutSession = async (req, res) => {
     //   }
   //})
   const item = await cart.products.map(x => {x.pid
-  
   console.log(x.pid);
   })
   console.log(item);
   const address = await Address.findById(req.body.id);
-  console.log(address);
+  //console.log(address);
   try {
     paymentDetails = await PaymentLog.create({
       client: clientID,
@@ -380,7 +379,7 @@ const cartCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: item,
+        line_items: "pllp",
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
