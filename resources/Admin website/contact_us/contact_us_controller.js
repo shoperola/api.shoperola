@@ -11,7 +11,7 @@ const add_contact = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "Admin Not Found" });
           }
-          const add_contact = await Contact.create(...req.body);
+          const add_contact = await Contact.create({...req.body});
           let response = defaultResponseObject;
           response.data = add_contact;
           res.status(201).send(response);

@@ -115,7 +115,7 @@ const remove_product = async (req, res) => {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
     const remove = await Cart.findByIdAndUpdate(client.cartid, {
-      $pull: { products: id},
+      $pull: {products: id},
       $inc: { total_price: -product.sale_price },
     }).populate({path:"products",populate: {
       path: 'pid'}});
