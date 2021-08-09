@@ -342,18 +342,25 @@ const cartCheckoutSession = async (req, res) => {
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
   }
-  //const item = cart.products.map(({title,description,image,sale_price}) => {
-    // return {
+  // const item = cart.products.map(({title,description,image,sale_price}) => {
+  //   return {
       
-    //   name: title,description,
-    //   images: [image],
-    //   amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
-    //   quantity:1,
-    //   currency: "inr"
-    //   }
-  //})
-  const item = await cart.products.map(x => {x.pid
-  console.log(x.pid);
+  //     name: title,description,
+  //     images: [image],
+  //     amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
+  //     quantity:1,
+  //     currency: "inr"
+  //     }
+  // })
+  const item = await cart.products.map(x => {
+    return { 
+      name: x.pid.title,
+      images:[x.image],
+      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:x.pid.sale_price* 100,
+      quantity: x.quantity,
+      currency: "inr"
+
+    }
   })
   console.log(item);
   const address = await Address.findById(req.body.id);
@@ -379,7 +386,7 @@ const cartCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: "pllp",
+        line_items: item,
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
