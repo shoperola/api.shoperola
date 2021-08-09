@@ -31,19 +31,19 @@ try{
 });
 
 
-CartSchema.post("findIndex", async function(next) {
-  try{
-    const docToUpdate = await this.model.findOne(this.getQuery()).populate({path:"products",populate: {
-      path:'pid'}});
-      let total_price = 0;
-     docToUpdate.products.map(x => {total_price -= x.pid.sale_price* x.quantity});
-     await docToUpdate.updateOne({$set:{total_price:total_price}})
-     next();
-  }catch(e){
-    console.log(e);
-    //res.send(e);
-  }
-  });
+// CartSchema.post("find", async function(next) {
+//   try{
+//     const docToUpdate = await this.model.findOne(this.getQuery()).populate({path:"products",populate: {
+//       path:'pid'}});
+//       let total_price = 0;
+//      docToUpdate.products.map(x => {total_price -= x.pid.sale_price* x.quantity});
+//      await docToUpdate.updateOne({$set:{total_price:total_price}})
+//      next();
+//   }catch(e){
+//     console.log(e);
+//     //res.send(e);
+//   }
+//   });
 
 
 export const Cart = model("Cart", CartSchema);
