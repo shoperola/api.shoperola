@@ -298,10 +298,9 @@ const cartCheckoutSession = async (req, res) => {
   if (!req.user) {
     res.status(400).json({ message: "Client Not Found" });
   }
-
   let client;
   try {
-    client = await Client.findOne({ sub: req.user.sub });
+   client = await Client.findOne({ sub: req.user.sub });
     if (!client) {
       throw new Error("Unable to find client");
     }
@@ -336,8 +335,9 @@ const cartCheckoutSession = async (req, res) => {
       error: e.message,
     });
   }
- // console.log(sellerData);
-  const cart = await Cart.findById(client.cartid).populate("products");
+ console.log(sellerData);
+  const cart = await Cart.findById(client.cartid).populate({path:"products",populate: {
+    path: 'pid'}});
   //console.log(JSON.stringify(cart, null, 4));
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
@@ -353,14 +353,13 @@ const cartCheckoutSession = async (req, res) => {
   //     }
   // })
   const item = await cart.products.map(x => {
-    return { 
+    return {
       name: x.pid.title,
-      images:[x.image],
-      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:x.pid.sale_price* 100,
-      quantity: x.quantity,
+      images: [x.pid.image],
+      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:x.pid.sale_price*100,
+      quantity:x.quantity,
       currency: "inr"
-
-    }
+     }
   })
   console.log(item);
   const address = await Address.findById(req.body.id);
