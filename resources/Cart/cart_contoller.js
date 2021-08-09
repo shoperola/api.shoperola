@@ -114,12 +114,13 @@ const remove_product = async (req, res) => {
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
-    const remove = await Cart.findByIdAndUpdate(client.cartid, {
-      $pull: {products: id},
-      $inc: { total_price: -product.sale_price },
-    }).populate({path:"products",populate: {
-      path: 'pid'}});
-    res.send(remove);
+    const check = await Cart.findById(client.cartid);
+   //console.log(check.products);
+    const index = check.products.findIndex(x => x.pid == id);
+    console.log(index);
+    check.products.splice(index, 1);
+    await check.save();
+    console.log("sucess");
   } catch (e) {
     res.send(e);
   }

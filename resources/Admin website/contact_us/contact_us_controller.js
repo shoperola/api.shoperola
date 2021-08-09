@@ -8,9 +8,6 @@ const defaultResponseObject = {
 
 const add_contact = async (req, res) => {
     try{
-        if (!req.user) {
-            return res.status(400).json({ message: "Admin Not Found" });
-          }
           const add_contact = await Contact.create({...req.body});
           let response = defaultResponseObject;
           response.data = add_contact;

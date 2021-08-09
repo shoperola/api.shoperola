@@ -9,9 +9,6 @@ const defaultResponseObject = {
 
 const add_demo = async (req, res) => {
     try{
-        if (!req.user) {
-            return res.status(400).json({ message: "Admin Not Found" });
-          }
           const add_demo = await Demo.create({...req.body});
           let response = defaultResponseObject;
           response.data = add_demo;
