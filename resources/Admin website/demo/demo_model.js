@@ -6,6 +6,8 @@ const DemoSchema = new Schema(
     name: {type: String, default:''},
     email: {type: String, default:''},
     message: {type: String, default:''},
+    contact_number: {type: Number, default:''},
+    country: {type: String, default:''},
     time_slot:{type:Date, default: Date.now()},
   },
   { timestamps: true }
