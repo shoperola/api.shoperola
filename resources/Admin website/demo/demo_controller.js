@@ -40,7 +40,7 @@ const view_Demo = async (req, res) => {
 const view_Demo_id = async (req, res) => {
     try {
         const id = req.params.id;
-        const view_Demo_id = await Demo.findbyid(id);
+        const view_Demo_id = await Demo.findById(id);
         if(!view_Demo_id) {
             res.status(404).send("no demo found!!")
         }

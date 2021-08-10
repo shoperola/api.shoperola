@@ -41,7 +41,7 @@ const view_contact = async (req, res) => {
 const view_contact_id = async (req, res) => {
     try {
         const id = req.params.id;
-        const view_contact_id = await Contact.findbyid(id);
+        const view_contact_id = await Contact.findById(id);
         if(!view_contact_id) {
             res.status(404).send("no demo found!!")
         }
