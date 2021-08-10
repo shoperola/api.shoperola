@@ -339,19 +339,15 @@ const cartCheckoutSession = async (req, res) => {
   const cart = await Cart.findById(client.cartid).populate({path:"products",populate: {
     path: 'pid'}});
   //console.log(JSON.stringify(cart, null, 4));
+  let products_id = [];
+  for(var i of cart.products){
+    products_id.push(i.pid._id);
+    //console.log(products);
+  }
+  //console.log(products_id);
   if(!cart || !cart.products.length) {
     return res.json({ message: "no cart available"});
   }
-  // const item = cart.products.map(({title,description,image,sale_price}) => {
-  //   return {
-      
-  //     name: title,description,
-  //     images: [image],
-  //     amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:sale_price*100,
-  //     quantity:1,
-  //     currency: "inr"
-  //     }
-  // })
   const item = await cart.products.map(x => {
     return {
       name: x.pid.title,
@@ -363,7 +359,7 @@ const cartCheckoutSession = async (req, res) => {
   })
   console.log(item);
   const address = await Address.findById(req.body.id);
-  //console.log(address);
+  console.log(address);
   try {
     paymentDetails = await PaymentLog.create({
       client: clientID,
@@ -371,7 +367,7 @@ const cartCheckoutSession = async (req, res) => {
       ip: req.ip,
       processed_by: "stripe",
       paymentType: "Ecommerce",
-      products: cart.products.pid,
+      products: products_id,
       amount: item.amount,
       address: address
     });
