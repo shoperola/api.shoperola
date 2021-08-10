@@ -37,6 +37,25 @@ const view_Demo = async (req, res) => {
         
     }
 };
+const view_Demo_id = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const view_Demo_id = await Demo.findbyid(id);
+        if(!view_Demo_id) {
+            res.status(404).send("no demo found!!")
+        }
+        let response = defaultResponseObject;
+          response.data = view_Demo_id;
+          res.status(201).send(response);
+    } catch (e) {
+        console.log(e);
+        let response = defaultResponseObject;
+        response.success = false;
+        response.error = e;
+        res.status(400).send(response);
+        
+    }
+};
 
 const update_Demo = async (req, res) => {
     try {
@@ -77,4 +96,4 @@ const delete_Demo = async (req, res) => {
         
     }
 }
-export {add_demo, view_Demo, update_Demo, delete_Demo};
+export {add_demo, view_Demo, view_Demo_id,update_Demo, delete_Demo};

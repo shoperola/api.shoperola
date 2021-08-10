@@ -38,6 +38,26 @@ const view_contact = async (req, res) => {
     }
 };
 
+const view_contact_id = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const view_contact_id = await Contact.findbyid(id);
+        if(!view_contact_id) {
+            res.status(404).send("no demo found!!")
+        }
+        let response = defaultResponseObject;
+          response.data = view_contact_id;
+          res.status(201).send(response);
+    } catch (e) {
+        console.log(e);
+        let response = defaultResponseObject;
+        response.success = false;
+        response.error = e;
+        res.status(400).send(response);
+        
+    }
+};
+
 const update_contact = async (req, res) => {
     try {
         if(!req.user){
@@ -77,4 +97,4 @@ const delete_contact = async (req, res) => {
         
     }
 }
-export {add_contact, view_contact, update_contact, delete_contact};
+export {add_contact, view_contact,view_contact_id ,update_contact, delete_contact};
