@@ -9,7 +9,7 @@ const defaultResponseObject = {
 
 const add_demo = async (req, res) => {
     try{
-          const add_demo = await Demo.create({...req.body});
+          const add_demo = await Demo.create({ip_address:req.ip,...req.body});
           let response = defaultResponseObject;
           response.data = add_demo;
           res.status(201).send(response);

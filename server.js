@@ -55,6 +55,7 @@ import {
 import { getProducts,getProductById } from "./resources/Ecommerce/Ecommerce_controller";
 import { firebaseAuthProtect } from "./util/firebase";
 import { view as viewCategories } from "./resources/Category/Category_controller";
+import {add_news,view_news} from "./resources/Admin website/newsletter/newsletter_contoller";
 
 
 config();
@@ -107,6 +108,8 @@ app.get("/view_contact",view_contact);
 app.post("/add_contact", add_contact);
 app.post("/add_demo", add_demo);
 app.get("/view_demo",view_Demo);
+app.post("/add_news", add_news);
+app.get("/view_news",view_news);
 app.get("/products/:username/:id", getUserById, getProductById);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);

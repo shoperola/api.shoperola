@@ -5,7 +5,9 @@ const ContactSchema = new Schema(
   {
     name: {type: String, default:''},
     email: {type: String, default:''},
-    message: {type: String, default:''}
+    message: {type: String, default:''},
+    status: {type: String, enum: ['read','unread'], default:'read'},
+    ip_address: {type: String, default:''}
   },
   { timestamps: true }
 );

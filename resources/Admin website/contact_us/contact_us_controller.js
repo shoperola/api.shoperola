@@ -8,7 +8,8 @@ const defaultResponseObject = {
 
 const add_contact = async (req, res) => {
     try{
-          const add_contact = await Contact.create({...req.body});
+
+          const add_contact = await Contact.create({ip_address:req.ip,...req.body});
           let response = defaultResponseObject;
           response.data = add_contact;
           res.status(201).send(response);
@@ -63,7 +64,7 @@ const delete_contact = async (req, res) => {
             res.status(400).send("no admin found!!!");
         }
         const id = req.params.id;
-        const update_contact = await Contact.findByIdAndDelete(id);
+        const delete_contact = await Contact.findByIdAndDelete(id);
          let response = defaultResponseObject;
           response.data = delete_contact;
           res.status(201).send(response);

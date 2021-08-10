@@ -9,6 +9,8 @@ const DemoSchema = new Schema(
     contact_number: {type: Number, default:''},
     country: {type: String, default:''},
     time_slot:{type:Date, default: Date.now()},
+    status: {type: String, enum: ['read','unread'], default:'read'},
+    ip_address: {type: String, default:''}
   },
   { timestamps: true }
 );

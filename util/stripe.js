@@ -371,7 +371,7 @@ const cartCheckoutSession = async (req, res) => {
       ip: req.ip,
       processed_by: "stripe",
       paymentType: "Ecommerce",
-      products: cart.products,
+      products: cart.products.pid,
       amount: item.amount,
       address: address
     });
