@@ -96,6 +96,33 @@ const delete_feature_product = async (req, res) => {
         res.status(400).json({message: 'something went wrong!!!'});
         
     }
+};
+
+const change_status = async(req,res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+          const id = req.params.id;
+          const check = await Featured.findById(id);
+          if(!check){
+              res.status(404).json({ message: "no featured_product found!!"});
+          }
+          if(check.status === 'active'){
+              check.status = 'inactive'
+              await check.save();
+
+          }
+         else if(check.status === 'inactive'){
+            check.status = 'active'
+            await check.save();
+         }
+         res.status(200).json({success:true, data:check});
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message: 'something went wrong!!!'});
+    }
 }
 
-export {add_feautred_product,view_featured_products, view_featured_product,update_featured_product,delete_feature_product}
+export {add_feautred_product,view_featured_products, view_featured_product,update_featured_product,delete_feature_product, change_status}

@@ -21,6 +21,7 @@ const OrdersSchema = Schema(
       type: String,
       required: true,
     },
+    is_completed: { type: Boolean, default: false},
     // success: {
     //   type: String,
     //   enum: ["SUCCESS", "FAILED"]
