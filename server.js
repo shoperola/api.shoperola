@@ -56,6 +56,7 @@ import { getProducts,getProductById } from "./resources/Ecommerce/Ecommerce_cont
 import { firebaseAuthProtect } from "./util/firebase";
 import { view as viewCategories } from "./resources/Category/Category_controller";
 import {add_news,view_news} from "./resources/Admin website/newsletter/newsletter_contoller";
+import feautreRouter from "./resources/featured_products/featured_routes";
 
 
 config();
@@ -130,6 +131,7 @@ app.use("/api/category", userModel, protect, CategoryRouter);
 app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
+app.use("/api/feature_product", userModel, protect, feautreRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 //app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/address", firebaseAuthProtect, AddressRouter);
