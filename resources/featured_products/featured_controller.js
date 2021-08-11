@@ -29,8 +29,21 @@ const view_featured_products = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-          const view_products = await Featured.find({userID: req.user._id}).populate("feautred_product");
-          res.status(200).json({success: true, data: view_products});
+          let { page, size, sort } = req.query;
+  
+          if (!page) {
+
+              page = 1;
+          }
+    
+          if (!size) {
+              size = 10;
+          }
+    
+          const limit = parseInt(size);
+
+          const view_products = await Featured.find({userID: req.user._id}).sort({_id:1}).limit(limit).populate("feautred_product");
+          res.status(200).json({success: true, data: page,size,view_products});
     } catch (e) {
         console.log(e);
         res.status(400).json({message: 'something went wrong!!!'});
@@ -44,12 +57,12 @@ const view_featured_product = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-          const id = req.params.id;
-          const check = await Featured.findById(id).populate("feautred_product");
+          
+          const check = await Featured.findById(id).populate("feautred_product")
           if(!check){
               res.status(404).json({ message: "no featured_product found!!"});
           }
-          res.status(200).json({success: true, data: check});
+          res.status(200).json({success: true,data:check});
     } catch (e) {
         console.log(e);
         res.status(400).json({message: 'something went wrong!!!'});
