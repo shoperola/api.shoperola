@@ -43,7 +43,7 @@ const view_featured_products = async (req, res) => {
           const limit = parseInt(size);
 
           const view_products = await Featured.find({userID: req.user._id}).sort({_id:1}).limit(limit).populate("feautred_product");
-          res.status(200).json({success: true, data: page,size,view_products});
+          res.status(200).json({success: true, data: view_products, page:page, size: size});
     } catch (e) {
         console.log(e);
         res.status(400).json({message: 'something went wrong!!!'});
