@@ -145,15 +145,17 @@ else{
     };
   })();
   console.log(Orderpayload);
+  const client = await Client.findOne({ sub: req.user.sub });
   const order = await Orders.create(Orderpayload)
   console.log(Orderpayload.status);
-  // if(Orderpayload.status == 'SUCCESS'){
-  //   order.is_completed = true;
-  //   const cart = await Cart.findById(client.cartid);
-  //   cart.splice(0,cart.length);
-  //   const remove_cart = await cart.save();
-  //   console.log(remove_cart);
-  // }
+  if(Orderpayload.status == 'SUCCESS'){
+    order.is_completed = true;
+    const cart = await Cart.findById(client.cartid);
+    cart.products = [];
+    cart.total_price = 0;
+    const remove_cart = await cart.save();
+    console.log(remove_cart);
+  }
   console.log(order);
 
   res.json({order});
