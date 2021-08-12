@@ -57,6 +57,7 @@ import { firebaseAuthProtect } from "./util/firebase";
 import { view as viewCategories } from "./resources/Category/Category_controller";
 import {add_news,view_news} from "./resources/Admin website/newsletter/newsletter_contoller";
 import feautreRouter from "./resources/featured_products/featured_routes";
+import {view_featured_products} from "./resources/featured_products/featured_controller";
 
 
 config();
@@ -118,6 +119,7 @@ app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
 app.get("/trendingTvShows/:username", getUserById, tvShowTrending);
 app.get("/categories/:username", getUserById, viewCategories);
+app.get("/view_featured/:username", getUserById, view_featured_products);
 //app.get("/search_movie/:username/:name", getUserById, search_movies);
 app.get("/search_tvshow/:username/:name", getUserById, search_tvshow);
 app.use("/api/request", clientModel, protect, RequestRouter);
