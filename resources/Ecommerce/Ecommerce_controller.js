@@ -31,6 +31,21 @@ const getProductById = async (req, res) => {
   }
 };
 
+const getproducy_by_category = async(req,res) => {
+  try{
+  const id = req.params.id;
+  if (!id) {
+    return res.status(400).json({ message: "id is required" });
+  }
+  const product = await Ecommerce.find({category: id})
+  console.log(product);
+  res.json({ status: "OK", data: product });
+} catch (e) {
+  console.log(e.message);
+  res.status(400).json({ message: "Error getting product" });
+}
+}
+
 const addProduct = async (req, res) => {
   try {
     if (!req.user) {
@@ -92,4 +107,5 @@ export {
   addProduct,
   updateProduct,
   deleteProduct,
+  getproducy_by_category
 };

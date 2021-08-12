@@ -52,7 +52,7 @@ import {
   view_tvshow,
   tvShowLatest,
 } from "./resources/tvshows/tvshow_controller";
-import { getProducts,getProductById } from "./resources/Ecommerce/Ecommerce_controller";
+import { getProducts,getProductById,getproducy_by_category } from "./resources/Ecommerce/Ecommerce_controller";
 import { firebaseAuthProtect } from "./util/firebase";
 import { view as viewCategories } from "./resources/Category/Category_controller";
 import {add_news,view_news} from "./resources/Admin website/newsletter/newsletter_contoller";
@@ -101,6 +101,7 @@ app.get("/movies/:username", getUserById, getLessons);
 app.get("/movie/:username/:id", getUserById, getLesson);
 app.get("/banners/:username/", getUserById, viewbanner);
 app.get("/products/:username/", getUserById, getProducts);
+app.get('/category_products/:username/:id', getUserById, getproducy_by_category);
 app.get("/view_social",view_social);
 app.get("/view_home_setting",view_home_setting);
 app.get("/view_link",view_link);
