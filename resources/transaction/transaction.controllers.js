@@ -146,13 +146,14 @@ else{
   })();
   console.log(Orderpayload);
   const order = await Orders.create(Orderpayload)
-  if(Orderpayload.status == 'SUCCESS'){
-    order.is_completed = true;
-    const cart = await Cart.findById(client.cartid);
-    cart.splice(0,cart.length);
-    const remove_cart = await cart.save();
-    console.log(remove_cart);
-  }
+  console.log(Orderpayload.status);
+  // if(Orderpayload.status == 'SUCCESS'){
+  //   order.is_completed = true;
+  //   const cart = await Cart.findById(client.cartid);
+  //   cart.splice(0,cart.length);
+  //   const remove_cart = await cart.save();
+  //   console.log(remove_cart);
+  // }
   console.log(order);
 
   res.json({order});
