@@ -17,6 +17,7 @@ import TvshowRouter from "./resources/tvshows/tvshow_routes";
 import BannerRouter from "./resources/banners/banner_routes";
 import LessonRouter from "./resources/lesson/lesson.router";
 import CategoryRouter from "./resources/Category/Category_routes";
+import TaxRouter from './resources/tax_rates/tax_route';
 import StudioRouter from "./resources/Studio/studio_routes";
 import CartRouter from "./resources/Cart/cart_routes";
 import CategoriesRouter from "./resources/Content_category/Content_category_routes";
@@ -58,6 +59,7 @@ import { view as viewCategories } from "./resources/Category/Category_controller
 import {add_news,view_news} from "./resources/Admin website/newsletter/newsletter_contoller";
 import feautreRouter from "./resources/featured_products/featured_routes";
 import {view_featured_products} from "./resources/featured_products/featured_controller";
+
 
 
 config();
@@ -135,6 +137,7 @@ app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/feature_product", userModel, protect, feautreRouter);
+app.use("/api/tax_rates", userModel, protect, TaxRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 //app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/address", firebaseAuthProtect, AddressRouter);
