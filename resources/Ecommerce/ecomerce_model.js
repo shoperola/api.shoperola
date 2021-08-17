@@ -9,6 +9,7 @@ const EcommerceSchema = new Schema(
     image: String,
     price: Number,
     sale_price: Number,
+    total_price: { type:Number, default: 0 },
     sku: String,
     quantity: Number,
     track_quantity: Boolean,
@@ -16,6 +17,7 @@ const EcommerceSchema = new Schema(
     category: { type: SchemaTypes.ObjectId, ref: "Category" },
     status: { type: Boolean, default: true },
     userID: { type: SchemaTypes.ObjectId, ref: "users" },
+    tax: { type: SchemaTypes.ObjectId, ref: "Tax" }
   },
   { timestamps: true }
 );

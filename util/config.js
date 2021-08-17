@@ -22,7 +22,8 @@ const SECRETS = {
   node_env: process.env.NODE_ENV,
   imDb_key: process.env.IMDB_API_KEY,
   domain_url: process.env.DOMAIN_URL,
-  user_domain_url:process.env.USER_DOMAIN_URL
+  user_domain_url:process.env.USER_DOMAIN_URL,
+  zero_tax_id : process.env.Zero_tax_id
 };
 
 let PAYPAL_TOKEN = "";

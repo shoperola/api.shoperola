@@ -1,4 +1,6 @@
 import { Ecommerce } from "./ecomerce_model";
+import {Tax} from '../tax_rates/tax_model';
+import { SECRETS } from "../../util/config";
 
 const getProducts = async (req, res) => {
   try {
@@ -57,6 +59,12 @@ const addProduct = async (req, res) => {
       ? { ...req.body, image: image.location, userID: req.user._id }
       : { ...req.body, userID: req.user._id };
     const product = await Ecommerce.create(updateObject);
+    const view = await product.populate("tax", async(err,res) => {
+      const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+      const total_price = Math.trunc(res.sale_price + tax_amount);
+      const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+      console.log(saved);
+    });
     res.json({ status: "OK", data: product });
   } catch (e) {
     console.log(e);
@@ -77,9 +85,8 @@ const updateProduct = async (req, res) => {
     const updateObject = image
       ? { ...req.body, image: image.location }
       : req.body;
-    const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
-      new: true,
-    });
+    const product = await Ecommerce.findById(id).populate("category").populate("tax");
+    //console.log(product);
     res.json({ status: "OK", data: product });
   } catch (e) {
     console.log(e.message);
@@ -101,11 +108,36 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const  count_product = async (req, res) => {
+  try {
+    const tax_id = req.params.id;
+    // const s = JSON.stringify(tax_id);
+     const tax_flag = req.body.flag;
+    const count = await Ecommerce.find({tax: tax_id}).populate("tax");
+    // res.send(count.length);
+    //console.log(count.length);
+    if(tax_flag) {
+      for(var i of count) {
+        i.tax = SECRETS.zero_tax_id;
+        const saved = await i.save();
+        console.log(saved);
+      }
+      await Tax.findByIdAndDelete(tax_id);
+    }
+    res.status(200).json({message: 'success', data: count.length});
+    
+  } catch (e) { 
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+
 export {
   getProducts,
   getProductById,
   addProduct,
   updateProduct,
   deleteProduct,
-  getproducy_by_category
+  getproducy_by_category,
+  count_product
 };

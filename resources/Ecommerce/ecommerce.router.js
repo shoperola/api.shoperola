@@ -5,7 +5,9 @@ import {
   addProduct,
   updateProduct,
   deleteProduct,
+  count_product
 } from "./Ecommerce_controller";
+import {add_tax} from "../zero_tax/zero_controller";
 import { upload } from "../../util/s3-spaces";
 
 const router = Router();
@@ -17,5 +19,6 @@ router
   .get(getProductById)
   .put(upload.single("image"), updateProduct)
   .delete(deleteProduct);
-
+router.get('/count_delete_tax/:id', count_product);
+router.post('/add_tax', add_tax);
 export default router;
