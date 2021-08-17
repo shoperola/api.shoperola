@@ -1,6 +1,6 @@
 import { Ecommerce } from "./ecomerce_model";
 import {Tax} from '../tax_rates/tax_model';
-import { SECRETS } from "../../util/config";
+
 
 const getProducts = async (req, res) => {
   try {
@@ -55,31 +55,22 @@ const addProduct = async (req, res) => {
     }
     console.log(req.file, req.body);
     const image = req.file;
+    const name = await Tax.find({tax_name: 'ZERO_TAX'});
     const updateObject = image
       ? { ...req.body, image: image.location, userID: req.user._id }
       : { ...req.body, userID: req.user._id };
     const product = await Ecommerce.create(updateObject);
-    const sa = await product.populate("zero_tax", async(err,res) => {
-      console.log(res);
-    }).execPopulate();
-    
-    // if(product.tax == SECRETS.zero_tax_id){
-    //   const view = await product.populate("zero_tax");
-    //    console.log(view)
-
-    // }
-    // const view = await product.populate("tax");
-    //   console.log(view);
-      // if(res.tax._id == SECRETS.zero_tax_id){
-      //   const total_price_zero = res.sale_price;
-      //   const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
-      //  console.log(saved);
-      // }
-      // const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
-      // const total_price = Math.trunc(res.sale_price + tax_amount);
-      // const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
-      // console.log(saved);
-    //});
+    const view = await product.populate("tax", async(err,res) => {
+      if(res.tax._id == name[0]._id){
+        const total_price_zero = res.sale_price;
+        const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
+       console.log(`zero % - ${saved}`);
+      }
+      const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+      const total_price = Math.trunc(res.sale_price + tax_amount);
+      const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+      console.log(`with tax % - ${saved}`);
+    });
     res.json({ status: "OK", data: product });
   } catch (e) {
     console.log(e);
