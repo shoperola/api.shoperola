@@ -28,8 +28,9 @@ const view_taxs = async(req,res) => {
         if(!req.user){
             res.status(400),send("no user found!!");    
         }
+        const name = await Tax.find({tax_name: 'ZERO_TAX'});
         const view_taxs = await Tax.find({userID: req.user._id});
-        res.status(200).json({success: true, data: view_taxs});
+        res.status(200).json({success: true, data: [...name,...view_taxs]});
     } catch (e) {
         console.log(e);
         res.status(400).json({message: 'something went wrong!!!'});

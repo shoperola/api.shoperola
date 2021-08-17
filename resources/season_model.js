@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+const { Schema, SchemaTypes,model } = mongoose;
 
 const SeasonSchema = Schema({
   number: {
     type: Number,
     default: 1,
+  },
+  user: {
+    type: SchemaTypes.ObjectId,
+    ref: "users",
+    required: true,
   },
   episode: [
     {

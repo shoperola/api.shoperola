@@ -269,7 +269,10 @@ const view_season_id = async (req, res) => {
 
 const view_season = async (req, res) => {
   try {
-    const check = await Season.find({});
+    if(!req.user){
+      res.status(400).json({message: "no user found!!"})
+    }
+    const check = await Season.find({user: req.user._id});
     res.send(check);
   } catch (e) {
     res.send(e.message);
