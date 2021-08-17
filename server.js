@@ -59,6 +59,7 @@ import { view as viewCategories } from "./resources/Category/Category_controller
 import {add_news,view_news} from "./resources/Admin website/newsletter/newsletter_contoller";
 import feautreRouter from "./resources/featured_products/featured_routes";
 import {view_featured_products} from "./resources/featured_products/featured_controller";
+import {add_tax_zero} from "./resources/tax_rates/tax_controller";
 
 
 
@@ -117,6 +118,7 @@ app.get("/view_demo",view_Demo);
 app.get("/view_demo_id/:id", view_Demo_id);
 app.post("/add_news", add_news);
 app.get("/view_news",view_news);
+app.post("/add_zero", add_tax_zero);
 app.get("/products/:username/:id", getUserById, getProductById);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);

@@ -14,6 +14,15 @@ const add_tax = async(req,res) => {
         
     }
 };
+const add_tax_zero = async(req,res) => {
+    try {
+        const add_taxZero = await Tax.create({...req.body});
+        res.status(201).json({success: true, data: add_taxZero});
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message: 'something went wrong!!!'});
+    }
+}
 const view_taxs = async(req,res) => {
     try {
         if(!req.user){
@@ -76,4 +85,4 @@ const delete_tax = async(req,res) => {
     }
 };
 
-export {add_tax, view_tax, update_tax, delete_tax, view_taxs};
+export {add_tax, view_tax, update_tax, delete_tax, view_taxs,add_tax_zero};

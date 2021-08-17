@@ -244,7 +244,10 @@ const edit_season_no = async (req, res) => {
 
 const viewall_tvshow = async (req, res) => {
   try {
-    const show = await Tvshow.find({}).populate("season");
+    if(!req.user){
+      res.status(400).json({message: "no user found!!"})
+    }
+    const show = await Tvshow.find({user: req.user._id}).populate("season");
     res.json({ show });
   } catch (e) {
     res.status(500).send("something went wrong" + e);

@@ -59,12 +59,27 @@ const addProduct = async (req, res) => {
       ? { ...req.body, image: image.location, userID: req.user._id }
       : { ...req.body, userID: req.user._id };
     const product = await Ecommerce.create(updateObject);
-    const view = await product.populate("tax", async(err,res) => {
-      const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
-      const total_price = Math.trunc(res.sale_price + tax_amount);
-      const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
-      console.log(saved);
-    });
+    const sa = await product.populate("zero_tax", async(err,res) => {
+      console.log(res);
+    }).execPopulate();
+    
+    // if(product.tax == SECRETS.zero_tax_id){
+    //   const view = await product.populate("zero_tax");
+    //    console.log(view)
+
+    // }
+    // const view = await product.populate("tax");
+    //   console.log(view);
+      // if(res.tax._id == SECRETS.zero_tax_id){
+      //   const total_price_zero = res.sale_price;
+      //   const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
+      //  console.log(saved);
+      // }
+      // const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+      // const total_price = Math.trunc(res.sale_price + tax_amount);
+      // const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+      // console.log(saved);
+    //});
     res.json({ status: "OK", data: product });
   } catch (e) {
     console.log(e);
@@ -111,14 +126,15 @@ const deleteProduct = async (req, res) => {
 const  count_product = async (req, res) => {
   try {
     const tax_id = req.params.id;
-    // const s = JSON.stringify(tax_id);
+    const s = JSON.stringify(tax_id);
      const tax_flag = req.body.flag;
     const count = await Ecommerce.find({tax: tax_id}).populate("tax");
-    // res.send(count.length);
-    //console.log(count.length);
+
+    const name = await Tax.find({tax_name: 'ZERO_TAX'});
+    //console.log(name[0]._id);
     if(tax_flag) {
       for(var i of count) {
-        i.tax = SECRETS.zero_tax_id;
+        i.tax = name[0]._id;
         const saved = await i.save();
         console.log(saved);
       }
