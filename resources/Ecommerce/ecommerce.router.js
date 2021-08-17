@@ -19,6 +19,6 @@ router
   .get(getProductById)
   .put(upload.single("image"), updateProduct)
   .delete(deleteProduct);
-router.get('/count_delete_tax/:id', count_product);
+router.post('/count_delete_tax/:id', count_product);
 router.post('/add_tax', add_tax);
 export default router;
