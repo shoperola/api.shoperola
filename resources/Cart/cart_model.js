@@ -11,7 +11,7 @@ const products = new Schema({
 const CartSchema = new Schema(
   {
     products: [products],
-    total_price: { type: Number, default: 0 }
+    cart_total_price: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
@@ -21,8 +21,8 @@ try{
   const docToUpdate = await this.model.findOne(this.getQuery()).populate({path:"products",populate: {
     path:'pid'}});
     let total_price = 0;
-   docToUpdate.products.map(x => {total_price += x.pid.sale_price* x.quantity});
-   await docToUpdate.updateOne({$set:{total_price:total_price}})
+   docToUpdate.products.map(x => {total_price += x.pid.total_price* x.quantity});
+   await docToUpdate.updateOne({$set:{cart_total_price:total_price}})
    next();
 }catch(e){
   console.log(e);

@@ -120,7 +120,7 @@ const remove_product = async (req, res) => {
     console.log(index);
     const quantity = await check.products[index].quantity;
     check.products.splice(index, 1);
-    check.total_price -= product.sale_price* quantity;
+    check.cart_total_price -= product.sale_price* quantity;
      await check.save();
     res.status(200).json({success: "sucess",data: check});
   } catch (e) {
