@@ -352,7 +352,7 @@ const cartCheckoutSession = async (req, res) => {
     return {
       name: x.pid.title,
       images: [x.pid.image],
-      amount: "inr".toUpperCase() in zeroDecimalCurrencies?sale_price:x.pid.sale_price*100,
+      amount: "inr".toUpperCase() in zeroDecimalCurrencies?total_price:x.pid.total_price*100,
       quantity:x.quantity,
       currency: "inr"
      }
@@ -400,7 +400,7 @@ const cartCheckoutSession = async (req, res) => {
     console.log(session);
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: cart.total_price,
+      amount: cart.cart_total_price,
       currency: 'inr',
       payment_method_types: ['card'],
       description: "possibiliion"
