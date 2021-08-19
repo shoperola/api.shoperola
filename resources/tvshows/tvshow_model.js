@@ -29,7 +29,7 @@ const TvshowSchema = Schema({
   price: {
     type: Number,
   },
-  
+  category:{ type: SchemaTypes.ObjectId, ref: "ContentCategories"},
 
   ////////////////////////////////////////imdb///////////////
   Id: {

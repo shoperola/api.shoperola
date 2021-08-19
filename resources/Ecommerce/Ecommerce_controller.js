@@ -91,7 +91,8 @@ const updateProduct = async (req, res) => {
     const updateObject = image
       ? { ...req.body, image: image.location }
       : req.body;
-    const product = await Ecommerce.findById(id).populate("category").populate("tax");
+    const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
+      new: true}).populate("category").populate("tax");
     //console.log(product);
     res.json({ status: "OK", data: product });
   } catch (e) {
