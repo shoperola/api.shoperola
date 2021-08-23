@@ -60,7 +60,7 @@ import {add_news,view_news} from "./resources/Admin website/newsletter/newslette
 import feautreRouter from "./resources/featured_products/featured_routes";
 import {view_featured_products} from "./resources/featured_products/featured_controller";
 import {add_tax_zero} from "./resources/tax_rates/tax_controller";
-
+import ShippmentRouter from "./resources/shipping_method/shipping_route";
 
 
 config();
@@ -140,6 +140,7 @@ app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/feature_product", userModel, protect, feautreRouter);
 app.use("/api/tax_rates", userModel, protect, TaxRouter);
+app.use("/api/shipment", userModel, protect,ShippmentRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 //app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/address", firebaseAuthProtect, AddressRouter);

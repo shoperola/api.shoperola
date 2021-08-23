@@ -5,7 +5,7 @@ import { upload } from "../../util/s3-spaces";
 const router = Router();
 
 router.post('/add_feautred_product/:id', upload.single('image'),add_feautred_product);
-router.get('/view_featured_products', view_featured_products);
+//router.get('/view_featured_products', view_featured_products);
 router.get('/view_featured_product/:id', view_featured_product);
 router.patch('/update_featured_product/:id', upload.single('image') ,update_featured_product);
 router.delete('/delete_feature_product/:id', delete_feature_product);

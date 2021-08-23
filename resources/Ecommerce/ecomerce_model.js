@@ -18,7 +18,7 @@ const EcommerceSchema = new Schema(
     status: { type: Boolean, default: true },
     userID: { type: SchemaTypes.ObjectId, ref: "users" },
     tax: { type: SchemaTypes.ObjectId, ref: "Tax" },
-    zero_tax: { type: SchemaTypes.ObjectId, ref: "ZeroTax" }
+    //zero_tax: { type: SchemaTypes.ObjectId, ref: "ZeroTax" }
   },
   { timestamps: true }
 );

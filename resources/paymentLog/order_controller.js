@@ -9,6 +9,7 @@ const show_order = async(req,res) => {
         if(!client){
             res.status(404).json({message: "no client found!!!"})
         }
+        console.log(client._id);
           const view_order = await Orders.find({client: client._id}).populate("products").populate("address");
           console.log(view_order);
         // const see_order = await view_order.filter(x => x.success === true);
