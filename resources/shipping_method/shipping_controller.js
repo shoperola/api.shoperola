@@ -105,5 +105,15 @@ const change_status = async(req,res) => {
      res.status(400).json({message: "something went wrong"});
  }
     
+};
+
+const zero_shipping_rate = async(req, res) => {
+    try {
+        const add_shipping_zero_tax = await Shipping.create({...req.body});
+        res.status(201).json({success: true, data: add_shipping_zero_tax});
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message: "something went wrong"});
+    }
 }
-export{add_shipment, view_shipments, view_shipment, update_shipment, delete_shipment, change_status};
+export{add_shipment, view_shipments, view_shipment, update_shipment, delete_shipment, change_status,zero_shipping_rate};

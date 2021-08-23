@@ -61,7 +61,7 @@ import feautreRouter from "./resources/featured_products/featured_routes";
 import {view_featured_products} from "./resources/featured_products/featured_controller";
 import {add_tax_zero} from "./resources/tax_rates/tax_controller";
 import ShippmentRouter from "./resources/shipping_method/shipping_route";
-
+import {zero_shipping_rate} from "./resources/shipping_method/shipping_controller";
 
 config();
 const app = express();
@@ -119,6 +119,7 @@ app.get("/view_demo_id/:id", view_Demo_id);
 app.post("/add_news", add_news);
 app.get("/view_news",view_news);
 app.post("/add_zero", add_tax_zero);
+app.post("/add_zero_shippingRate", zero_shipping_rate);
 app.get("/products/:username/:id", getUserById, getProductById);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
