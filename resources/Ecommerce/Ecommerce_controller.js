@@ -88,14 +88,27 @@ const updateProduct = async (req, res) => {
       return res.status(400).json({ message: "id is required" });
     }
     const image = req.file;
+    const name = await Tax.find({tax_name: 'ZERO_TAX'});
     const updateObject = image
       ? { ...req.body, image: image.location }
       : req.body;
     const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
-      new: true}).populate("category").populate("tax");
+      new: true}).populate("category").populate("tax",async(err,res)=>{
+        if(res.tax._id == name[0]._id){
+          const total_price_zero = res.sale_price;
+          const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
+          console.log(`zero % - ${saved}`);
+          }
+    const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+    const total_price = Math.trunc(res.sale_price + tax_amount);
+    const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+    console.log(`with tax % - ${saved}`); 
+   });
     //console.log(product);
+    
+    
     res.json({ status: "OK", data: product });
-  } catch (e) {
+} catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error updating product" });
   }

@@ -25,6 +25,7 @@ const update_cart = async (req, res) => {
     //console.log(quantity);
     const req_quantity = req.body.req_quantity
     //console.log(req_quantity);
+    const userID=req.body.userID;
     if(req_quantity < quantity){
        const cart = await Cart.findOneAndUpdate(
       {_id:client.cartid},
@@ -47,7 +48,8 @@ const update_cart = async (req, res) => {
 
    }
     else if (req_quantity >= quantity){
-      console.log("out of stock!!!");
+      return console.log("out of stock!!!");
+      
     }
   } catch (e) {
     res.send(e);
@@ -61,6 +63,7 @@ const update_quantity = async (req, res) => {
     const client = await Client.findOne({ sub: req.user.sub });
     //console.log(client);
     const id = req.body.id;
+    
     const req_quantity = req.body.req_quantity
     //console.log(req_quantity);
     const product = await Ecommerce.findById(req.params.pid);
