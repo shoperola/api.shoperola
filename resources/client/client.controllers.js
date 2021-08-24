@@ -23,7 +23,7 @@ const createClient = async (req, res) => {
   let client;
   let cart;
   try {
-    cart = await Cart.create({userID: req.user._id});
+    cart = await Cart.create({});
 
     const watchlist = await Watchlist.create({});
     client = await Client.create({
@@ -34,6 +34,7 @@ const createClient = async (req, res) => {
       sub: sub,
       cartid: cart._id,
       watchlist: watchlist._id,
+      userID: req.user._id,
       ...req.body,
     });
   } catch (e) {

@@ -40,6 +40,7 @@ const ClientSchema = new Schema({
   },
   watchhistory: [watchhistory],
   watchlist: { type: SchemaTypes.ObjectId, ref: "Watchlist" },
+  userID: { type: SchemaTypes.ObjectId, ref: "users" }
 
 });
 
