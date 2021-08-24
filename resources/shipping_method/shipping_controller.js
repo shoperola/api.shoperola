@@ -19,7 +19,7 @@ const view_shipments = async(req, res) => {
         if(!req.user){
             res.status(400).json({message: "no user found!!"});
         }
-        const view_shipments = await Shipping.find({user: req.user._id});
+        const view_shipments = await Shipping.find({userID: req.user._id});
         res.status(200).json({success: "success", data: view_shipments});
         
     } catch (e) {

@@ -1,6 +1,7 @@
 import { Cart } from "./cart_model";
 import { Client } from "../client/client.model";
 import { Ecommerce } from "../Ecommerce/ecomerce_model";
+import {User} from "../user/user.model";
 
 const update_cart = async (req, res) => {
   try {
@@ -10,6 +11,11 @@ const update_cart = async (req, res) => {
     const client = await Client.findOne({ sub: req.user.sub });
   //  console.log(client);
     const id = req.body.productid;
+    const userID = req.body.userid;
+    const adminId = await User.findById(userID);
+    if(!adminId){
+      return res.status(400).json({message: "no admin found!!"});
+    }
     const product = await Ecommerce.findById(id);
    // console.log(product);
     if (!product) {
@@ -24,7 +30,7 @@ const update_cart = async (req, res) => {
        const cart = await Cart.findOneAndUpdate(
       {_id:client.cartid},
       {
-        $addToSet: { products: {pid: id, quantity: req_quantity,userID:userID}},
+        $addToSet: { products: {pid: id, quantity: req_quantity}, userID: userID},
        // $push: {quantity: req_quantity},
         //$inc: { total_price: (product.sale_price)*req_quantity },  
       },
