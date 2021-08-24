@@ -34,7 +34,6 @@ const createClient = async (req, res) => {
       sub: sub,
       cartid: cart._id,
       watchlist: watchlist._id,
-      userID: req.user._id,
       ...req.body,
     });
   } catch (e) {
