@@ -148,7 +148,7 @@ else{
   // const client = await Client.findOne({ sub: req.user.sub });
   console.log("enterr");
   const order = await Orders.create(Orderpayload);
-  const x = await order.populate("client");
+  const x = await order.populate('client').execPopulate();
   console.log(x);
   console.log(`asdfggh ${x.client.cartid}`);
   console.log(`statussssss ${Orderpayload?.status}`);
