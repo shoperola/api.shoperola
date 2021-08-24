@@ -149,16 +149,16 @@ else{
   const order = await Orders.create(Orderpayload)
   console.log(`asdfggh ${order.client}`);
   console.log(`statussssss ${Orderpayload.status}`);
-  // if(Orderpayload.status == 'SUCCESS'){
-  //   console.log("iuoluoilul");
-  //   order.is_completed = true;
-  //   const cart = await Cart.findById(client.cartid);
-  //   cart.products = [];
-  //   cart.total_price = 0;
-  //   const remove_cart = await cart.save();
-  //   console.log(remove_cart);
-  // }
-  // console.log(`remove successs!!!! ${order}`);
+  if(Orderpayload.status == 'SUCCESS'){
+    console.log("iuoluoilul");
+    order.is_completed = true;
+    const cart = await Cart.findById(order.client.cartid);
+    cart.products = [];
+    cart.total_price = 0;
+    const remove_cart = await cart.save();
+    console.log(remove_cart);
+  }
+  console.log(`remove successs!!!! ${order}`);
 
   res.json({order});
 
