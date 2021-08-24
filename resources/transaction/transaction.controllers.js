@@ -147,14 +147,15 @@ else{
  // console.log(Orderpayload);
   // const client = await Client.findOne({ sub: req.user.sub });
   console.log("enterr");
-  const order = await Orders.create(Orderpayload).populate("client");
-  console.log("loop");
-  console.log(`asdfggh ${order.client}`);
+  const order = await Orders.create(Orderpayload);
+  const x = await order.populate("client");
+  console.log(x);
+  console.log(`asdfggh ${x.client}`);
   console.log(`statussssss ${Orderpayload?.status}`);
   if(Orderpayload.status == 'SUCCESS'){
     console.log("iuoluoilul");
     order.is_completed = true;
-    const cart = await Cart.findByIdAndUpdate(order.client.cartid,{$set:{products: [],total_price :0}},{new: true});
+    const cart = await Cart.findByIdAndUpdate(x.client.cartid,{$set:{products: [],total_price :0}},{new: true});
     console.log(cart);
   }
   console.log(`remove successs!!!! ${order}`);
