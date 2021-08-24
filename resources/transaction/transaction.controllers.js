@@ -150,11 +150,12 @@ else{
   console.log(Orderpayload.status);
   if(Orderpayload.status == 'SUCCESS'){
     order.is_completed = true;
-    const cart = await Cart.findById(client.cartid);
-    cart.products = [];
-    cart.cart_total_price = 0;
-    const remove_cart = await cart.save();
-    console.log(remove_cart);
+    const cart = await Cart.findByIdAndUpdate(client.cartid,{$set:{products:[],cart_total_price:0}});
+    // cart.products = [];
+    // cart.cart_total_price = 0;
+    // const remove_cart = await cart.save();
+    console.log("CART DELETED");
+
   }
   console.log(order);
 

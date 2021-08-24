@@ -19,11 +19,12 @@ const update_cart = async (req, res) => {
     //console.log(quantity);
     const req_quantity = req.body.req_quantity
     //console.log(req_quantity);
+    const userID=req.body.userID;
     if(req_quantity < quantity){
        const cart = await Cart.findOneAndUpdate(
       {_id:client.cartid},
       {
-        $addToSet: { products: {pid: id, quantity: req_quantity}},
+        $addToSet: { products: {pid: id, quantity: req_quantity,userID:userID}},
        // $push: {quantity: req_quantity},
         //$inc: { total_price: (product.sale_price)*req_quantity },  
       },
@@ -54,6 +55,7 @@ const update_quantity = async (req, res) => {
     const client = await Client.findOne({ sub: req.user.sub });
     //console.log(client);
     const id = req.body.id;
+    
     const req_quantity = req.body.req_quantity
     //console.log(req_quantity);
     const product = await Ecommerce.findById(req.params.pid);
