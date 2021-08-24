@@ -147,9 +147,9 @@ else{
  // console.log(Orderpayload);
   // const client = await Client.findOne({ sub: req.user.sub });
   console.log("enterr");
-  const order = await Orders.create(Orderpayload)
+  const order = await Orders.create(Orderpayload).populate("client");
   console.log("loop");
-  console.log(`asdfggh ${order?.client.cartid}`);
+  console.log(`asdfggh ${order.client}`);
   console.log(`statussssss ${Orderpayload?.status}`);
   if(Orderpayload.status == 'SUCCESS'){
     console.log("iuoluoilul");
