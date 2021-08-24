@@ -146,16 +146,18 @@ else{
   })();
  // console.log(Orderpayload);
   // const client = await Client.findOne({ sub: req.user.sub });
+  console.log("enterr");
   const order = await Orders.create(Orderpayload)
-  // console.log(`asdfggh ${order.client}`);
-  // console.log(`statussssss ${Orderpayload.status}`);
-  // if(Orderpayload.status == 'SUCCESS'){
-  //   console.log("iuoluoilul");
-  //   order.is_completed = true;
-  //   const cart = await Cart.findByIdAndUpdate(order.client.cartid,{$set:{products : [],total_price :0}});
-
-  // }
-  // console.log(`remove successs!!!! ${order}`);
+  console.log("loop");
+  console.log(`asdfggh ${order?.client.cartid}`);
+  console.log(`statussssss ${Orderpayload?.status}`);
+  if(Orderpayload.status == 'SUCCESS'){
+    console.log("iuoluoilul");
+    order.is_completed = true;
+    const cart = await Cart.findByIdAndUpdate(order.client.cartid,{$set:{products: [],total_price :0}},{new: true});
+    console.log(cart);
+  }
+  console.log(`remove successs!!!! ${order}`);
 
   res.json({order});
 
