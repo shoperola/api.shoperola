@@ -144,21 +144,18 @@ else{
       status: "SUCCESS"
     };
   })();
-  console.log(Orderpayload);
+ // console.log(Orderpayload);
   // const client = await Client.findOne({ sub: req.user.sub });
   const order = await Orders.create(Orderpayload)
-  console.log(`asdfggh ${order.client}`);
-  console.log(`statussssss ${Orderpayload.status}`);
-  if(Orderpayload.status == 'SUCCESS'){
-    console.log("iuoluoilul");
-    order.is_completed = true;
-    const cart = await Cart.findByIdAndUpdate(order.client.cartid,{$set:{products : [],total_price :0}});
-    // cart.products.
-    // cart.total_price = 0;
-    // const remove_cart = await cart.save();
-    // console.log(remove_cart);
-  }
-  console.log(`remove successs!!!! ${order}`);
+  // console.log(`asdfggh ${order.client}`);
+  // console.log(`statussssss ${Orderpayload.status}`);
+  // if(Orderpayload.status == 'SUCCESS'){
+  //   console.log("iuoluoilul");
+  //   order.is_completed = true;
+  //   const cart = await Cart.findByIdAndUpdate(order.client.cartid,{$set:{products : [],total_price :0}});
+
+  // }
+  // console.log(`remove successs!!!! ${order}`);
 
   res.json({order});
 
