@@ -41,7 +41,8 @@ const update_cart = async (req, res) => {
 
    }
     else if (req_quantity >= quantity){
-      console.log("out of stock!!!");
+      return console.log("out of stock!!!");
+      
     }
   } catch (e) {
     res.send(e);

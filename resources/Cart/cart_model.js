@@ -5,7 +5,10 @@ const products = new Schema({
   pid:{
     type: SchemaTypes.ObjectId, ref: "Ecommerce"
   },
-  quantity: { type: Number, default: 0}
+  quantity: { type: Number, default: 0},
+  userID:{
+    type: SchemaTypes.ObjectId
+  }
 })
 
 const CartSchema = new Schema(
@@ -22,7 +25,7 @@ try{
     path:'pid'}});
     let total_price = 0;
    docToUpdate.products.map(x => {total_price += x.pid.total_price* x.quantity});
-   await docToUpdate.updateOne({$set:{cart_total_price:total_price}})
+   await docToUpdate.updateOne({$set:{cart_total_price:total_price}});
    next();
 }catch(e){
   console.log(e);
