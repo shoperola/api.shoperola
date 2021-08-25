@@ -36,8 +36,8 @@ const update_cart = async (req, res) => {
         //$inc: { total_price: (product.sale_price)*req_quantity },  
       },
       { new: true }
-    ).populate({path:"products",populate: [{
-      path: 'pid'},{path:'userID'}]});
+    ).populate({path:"products",populate: {
+      path: 'pid'}});
     const remaining_quantity = await quantity - req_quantity;
     //console.log(remaining_quantity);
     const a = await product.updateOne({$set: {quantity: remaining_quantity}});
@@ -81,8 +81,8 @@ const update_quantity = async (req, res) => {
         //$inc: { total_price: (product.sale_price)*req_quantity },  
       },
       { new: true }
-    ).populate({path:"products",populate: [{
-      path: 'pid'},{path:'userID'}]});
+    ).populate({path:"products",populate: {
+      path: 'pid'}});
     res.send(cart)
     
     // const remaining_quantity = await quantity - req_quantity;
