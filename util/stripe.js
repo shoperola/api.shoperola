@@ -358,7 +358,7 @@ const cartCheckoutSession = async (req, res) => {
       currency: "inr"
      }
   })
-  console.log(item);
+  console.log(item.amount);
   const address = await Address.findById(req.body.id);
   console.log(address);
 
