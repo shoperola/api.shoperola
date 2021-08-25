@@ -376,7 +376,7 @@ console.log(`shipment rate${shipment[0].shipping_rate} + ${item[0].amount}`);
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item.amount,
+      amount: item[0].amount + shipment[0].shipping_rate,
       address: address,
       shipment_rate: shipment[0].shipping_rate
     });
