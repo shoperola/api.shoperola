@@ -1,5 +1,6 @@
 import { Address } from "./address_model";
 import { Client } from "../client/client.model";
+import {Shipping} from "../shipping_method/shipping_model";
 
 const add_address = async (req, res) => {
   try {
@@ -68,10 +69,23 @@ const update_address = async (req, res) => {
   }
 };
 
+const name_filter = async (req, res) => {
+  try {
+    const client = await Client.findOne({ sub: req.user.sub });
+    console.log(client._id);
+     const address = await Address.find({userID: client._id});
+    console.log(address.Country);
+
+  } catch (e) {
+  console.log(e);
+  res.status(404).json({ message: e.message });    
+  }
+}
 export {
   add_address,
   view_address,
   view_address_id,
   delete_address,
   update_address,
+  name_filter
 };
