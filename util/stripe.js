@@ -366,7 +366,7 @@ const cartCheckoutSession = async (req, res) => {
     {shipping_country:address.Country},
     {shipping_state:address.State}]});
 
-console.log(shipment[0].shipping_rate);
+console.log(`////////////////////////////////${shipment[0].shipping_rate} + ${item.amount}`);
 
   try {
     paymentDetails = await PaymentLog.create({
@@ -376,7 +376,7 @@ console.log(shipment[0].shipping_rate);
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item.amount + shipment[0].shipping_rate,
+      amount: item.amount,
       address: address,
       shipment_rate: shipment[0].shipping_rate
     });
