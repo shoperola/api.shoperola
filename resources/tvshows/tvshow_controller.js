@@ -18,7 +18,8 @@ const addtvshow = async (req, res) => {
     if (!req.user) {
       return res.send("User Not Found");
     }
-    const show = await Tvshow.create({ ...req.body, user: req.user._id });
+    const show = await Tvshow.create({ ...req.body, user: req.user._id })
+                    .populate({ path:"ContentCategories"});
     const response = { ...defaultResponseObject, data: show };
     res.status(201).send(response);
   } catch (e) {
