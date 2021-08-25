@@ -77,12 +77,12 @@ const update_quantity = async (req, res) => {
        const cart = await Cart.findOneAndUpdate(
       {"products._id": id},
       {
-        "products.$.quantity": req_quantity,
+        "products.$.quantity": req_quantity
         //$inc: { total_price: (product.sale_price)*req_quantity },  
       },
       { new: true }
-    ).populate({path:"products",populate: {
-      path: 'pid'}});
+    ).populate({path:"products",populate: [{
+      path: 'pid'},{path:'userID'}]});
     res.send(cart)
     
     // const remaining_quantity = await quantity - req_quantity;
