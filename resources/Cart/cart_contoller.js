@@ -30,7 +30,7 @@ const update_cart = async (req, res) => {
        const cart = await Cart.findOneAndUpdate(
       {_id:client.cartid},
       {
-        $addToSet: { products: {pid: id, quantity: req_quantity}},
+        $addToSet: { products: {pid: id, quantity: req_quantity,userID:userID}},
         
        // $push: {quantity: req_quantity},
         //$inc: { total_price: (product.sale_price)*req_quantity },  

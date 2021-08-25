@@ -7,7 +7,7 @@ const products = new Schema({
   },
   quantity: { type: Number, default: 0},
   userID:{
-    type: SchemaTypes.ObjectId
+    type: SchemaTypes.ObjectId,ref: "users"
   }
 })
 
