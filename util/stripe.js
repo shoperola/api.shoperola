@@ -358,7 +358,7 @@ const cartCheckoutSession = async (req, res) => {
       currency: "inr"
      }
   })
-  console.log(item);
+  console.log(`////////////////ssss///${item.amount}`);
   const address = await Address.findById(req.body.id);
   console.log(address);
 
@@ -366,7 +366,7 @@ const cartCheckoutSession = async (req, res) => {
     {shipping_country:address.Country},
     {shipping_state:address.State}]});
 
-console.log(`////////////////////////////////${parseInt(shipment[0].shipping_rate)} + ${parseInt(item.amount)}`);
+console.log(`////////////////////////////////${shipment[0].shipping_rate}`);
 
   try {
     paymentDetails = await PaymentLog.create({
