@@ -72,10 +72,14 @@ const update_address = async (req, res) => {
 const name_filter = async (req, res) => {
   try {
     const client = await Client.findOne({ sub: req.user.sub });
-    console.log(client._id);
-     const address = await Address.find({userID: client._id});
-    console.log(address.Country);
+    //console.log(client._id);
+     const address = await Address.findById(req.params.id);
+   // console.log(address);
+    const shipment = await Shipping.find({$and:[
+      {shipping_country:address.Country},
+      {shipping_state:address.State}]});
 
+    console.log(shipment[0].shipping_rate);
   } catch (e) {
   console.log(e);
   res.status(404).json({ message: e.message });    
