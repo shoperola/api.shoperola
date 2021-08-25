@@ -366,7 +366,7 @@ const cartCheckoutSession = async (req, res) => {
     {shipping_country:address.Country},
     {shipping_state:address.State}]});
 
-//console.log(`//++//${shipment[0].shipping_rate}`);
+console.log(`shipment rate${shipment[0].shipping_rate} + ${item[0].amount}`);
 
   try {
     paymentDetails = await PaymentLog.create({
