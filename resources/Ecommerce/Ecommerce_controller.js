@@ -104,7 +104,7 @@ const updateProduct = async (req, res) => {
     const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
     console.log(`with tax % - ${saved}`); 
    });
-   
+   console.log('Product updated');
     console.log(product);
     res.json({ status: "OK", data: product });
 } catch (e) {
