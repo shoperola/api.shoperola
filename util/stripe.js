@@ -377,8 +377,8 @@ console.log(shipment[0].shipping_rate);
       paymentType: "Ecommerce",
       products: products_id,
       amount: item.amount,
-      address: address,
-      shipment_rate: shipment[0].shipping_rate
+      address: address
+      //shipment_rate: shipment[0].shipping_rate
     });
   } catch (e) {
     console.log(e.message);
