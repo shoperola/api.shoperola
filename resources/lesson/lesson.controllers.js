@@ -104,8 +104,7 @@ const updateLesson = async (req, res) => {
   }
 
   try {
-    const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {
-      new: true,
+    const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {new: true,
     }).populate({ path: "language", select: "name" })
       .populate({ path:"ContentCategories"});
     res.json({ status: "OK", data: doc });
