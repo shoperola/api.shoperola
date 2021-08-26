@@ -37,10 +37,12 @@ const update_cart = async (req, res) => {
       },
       { new: true }
     ).populate({path:"products",populate: {
-      path: 'pid'}});
+      path: 'pid',populate:{path:'tax'}}});
+
     const remaining_quantity = await quantity - req_quantity;
     //console.log(remaining_quantity);
     const a = await product.updateOne({$set: {quantity: remaining_quantity}});
+    
     //console.log(a);
     
     //console.log("////" + cart)
@@ -108,7 +110,7 @@ const view_cart = async (req, res) => {
     }
     const client = await Client.findOne({ sub: req.user.sub });
     const check = await Cart.findById(client.cartid).populate({path:"products",populate: {
-      path: 'pid'}});
+      path: 'pid',populate:{path:'tax'}}});
     res.status(200).send(check);
   } catch (e) {
     res.send(e);

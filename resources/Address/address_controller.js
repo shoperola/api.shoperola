@@ -79,6 +79,13 @@ const name_filter = async (req, res) => {
       {shipping_country:address.Country},
       {shipping_state:address.State}]});
 
+      if(!shipment){
+        const zeroShipment = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
+        res.json({ status: "OK", data: zeroShipment });
+      }
+      res.json({ status: "OK", data: shipment });
+
+    console.log(shipment[0].shipping_rate);
   } catch (e) {
   console.log(e);
   res.status(404).json({ message: e.message });    
