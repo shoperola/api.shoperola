@@ -353,7 +353,7 @@ const cartCheckoutSession = async (req, res) => {
     return {
       name: x.pid.title,
       images: [x.pid.image],
-      amount: "inr".toUpperCase() in zeroDecimalCurrencies?total_price:x.pid.total_price*100,
+      amount: "inr".toUpperCase() in zeroDecimalCurrencies?total_price:x.pid.total_price,
       quantity:x.quantity,
       currency: "inr"
      }
