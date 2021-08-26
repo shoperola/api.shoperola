@@ -358,15 +358,22 @@ const cartCheckoutSession = async (req, res) => {
       currency: "inr"
      }
   })
-  console.log(item[0].amount);
+  //console.log(item[0].amount);
   const address = await Address.findById(req.body.id);
-  console.log(address);
-
+  //console.log(address);
+  let zero_shipping;
   const shipment = await Shipping.find({$and:[
     {shipping_country:address.Country},
     {shipping_state:address.State}]});
+//console.log(shipment.length);
+    if(!shipment.length){
+      zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
+     console.log(zero_shipping.shipping_rate)
+     
+    }
 
-console.log(`shipment rate${shipment[0].shipping_rate} + ${item[0].amount}`);
+
+//console.log(`${shipment[0].shipping_rate}`);
 
   try {
     paymentDetails = await PaymentLog.create({
@@ -376,9 +383,9 @@ console.log(`shipment rate${shipment[0].shipping_rate} + ${item[0].amount}`);
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item[0].amount + shipment[0].shipping_rate,
+      amount: item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
       address: address,
-      shipment_rate: shipment[0].shipping_rate
+      shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
     });
   } catch (e) {
     console.log(e.message);
