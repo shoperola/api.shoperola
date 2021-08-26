@@ -77,11 +77,15 @@ const update_quantity = async (req, res) => {
     //console.log(product);
     //console.log(quantity);
      if(req_quantity < quantity){
-       const cart = await Cart.findById(client.cartid);
+       const cart = await Cart.findById(client.cartid).populate({path:"products",populate: {
+        path:'pid'}});
        const index = await cart.products.filter(x => x._id == id);
       index[0].quantity = req_quantity;
        const saved = await cart.save();
-       console.log(saved);
+       let total_price = 0;
+       cart.products.map(x => {total_price += x.pid.total_price* x.quantity});
+      await cart.updateOne({$set:{cart_total_price:total_price}});
+      //  console.log(cart);
     //   {_id: cartId},
     //   {
     //     // "products.$.quantity": req_quantity,
