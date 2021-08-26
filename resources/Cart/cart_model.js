@@ -6,7 +6,8 @@ const products = new Schema({
     type: SchemaTypes.ObjectId, ref: "Ecommerce"
   },
   quantity: { type: Number, default: 0},
-  userID:{type: SchemaTypes.ObjectId,ref: "users"}
+  userID:{type: SchemaTypes.ObjectId,ref: "users"},
+  tax: { type: SchemaTypes.ObjectId, ref: "Tax"}
 })
 
 const CartSchema = new Schema(
