@@ -110,7 +110,7 @@ const view_cart = async (req, res) => {
     }
     const client = await Client.findOne({ sub: req.user.sub });
     const check = await Cart.findById(client.cartid).populate({path:"products",populate: {
-      path: 'pid'}});
+      path: 'pid',populate:{path:'tax'}}});
     res.status(200).send(check);
   } catch (e) {
     res.send(e);
