@@ -79,7 +79,6 @@ const name_filter = async (req, res) => {
       {shipping_country:address.Country},
       {shipping_state:address.State}]});
 
-    console.log(shipment[0].shipping_rate);
   } catch (e) {
   console.log(e);
   res.status(404).json({ message: e.message });    
