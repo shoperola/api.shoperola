@@ -37,12 +37,10 @@ const update_cart = async (req, res) => {
       },
       { new: true }
     ).populate({path:"products",populate: {
-      path: 'pid',populate:{path:'tax'}}});
-
+      path: 'pid'}});
     const remaining_quantity = await quantity - req_quantity;
     //console.log(remaining_quantity);
     const a = await product.updateOne({$set: {quantity: remaining_quantity}});
-    
     //console.log(a);
     
     //console.log("////" + cart)
@@ -64,39 +62,50 @@ const update_quantity = async (req, res) => {
     }
     const client = await Client.findOne({ sub: req.user.sub });
     //console.log(client);
-    const cartId = req.body.id;
-    const userID = req.body.userID;
+    //const cartId = req.body.id;
+    //const userID = req.body.userID;
+    const id = req.body.oid;
     const req_quantity = req.body.req_quantity
+    //const id = req.params.id;
     //console.log(req_quantity);
     const product = await Ecommerce.findById(req.params.pid);
     //console.log(product);
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
-    const quantity = await product.quantity
+    const quantity = await product.quantity;
+    //console.log(product);
     //console.log(quantity);
-    //if(req_quantity < quantity){
-       const cart = await Cart.findOneAndUpdate(
-      {"products._id": cartId},
-      {
-        // "products.$.quantity": req_quantity,
-        $addToSet: { products: {quantity: req_quantity,userID:userID}},
+     if(req_quantity < quantity){
+       const cart = await Cart.findById(client.cartid);
+       const index = await cart.products.filter(x => x._id == id);
+      index[0].quantity = req_quantity;
+       const saved = await cart.save();
+       console.log(saved);
+    //   {_id: cartId},
+    //   {
+    //     // "products.$.quantity": req_quantity,
+    //     $addToSet: { products: {quantity: req_quantity,userID:userID}},
 
-        //$inc: { total_price: (product.sale_price)*req_quantity },  
-      },
-      { new: true }
-    ).populate({path:"products",populate: {
-      path: 'pid'}});
-    res.send(cart)
+    //     //$inc: { total_price: (product.sale_price)*req_quantity },  
+    //   }
+    // ).populate({path:"products",populate: {
+    //   path: 'pid'}});
+    //   console.log(cart);
+    //res.send(cart)
     
-    // const remaining_quantity = await quantity - req_quantity;
-    // console.log(remaining_quantity);
-    // const a = await product.updateOne({$set: {quantity: remaining_quantity}});
-    // console.log(a);
-    // } 
-    // else if (req_quantity >= quantity){
-    //   console.log("out of stock!!!");
-    // }
+    const remaining_quantity = await quantity - req_quantity;
+    console.log(remaining_quantity);
+    const a = await product.updateOne({$set: {quantity: remaining_quantity}});
+    console.log(a);
+
+    res.status(200).json({success: true, message: "quantity updated successfully"});
+    } 
+    else if(req_quantity >= quantity){
+      console.log("out of stock!!!");
+    }
+
+  
   }catch (e) {
     console.log(e);
     res.status(400).json({ error: e.message});
@@ -110,7 +119,7 @@ const view_cart = async (req, res) => {
     }
     const client = await Client.findOne({ sub: req.user.sub });
     const check = await Cart.findById(client.cartid).populate({path:"products",populate: {
-      path: 'pid',populate:{path:'tax'}}});
+      path: 'pid'}});
     res.status(200).send(check);
   } catch (e) {
     res.send(e);
