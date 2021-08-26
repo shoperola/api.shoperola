@@ -36,7 +36,8 @@ const PaymentLogSchema = Schema(
       ref: "Ecommerce"
       
     }],
-    address: { type: SchemaTypes.ObjectId, ref: "Address"}
+    address: { type: SchemaTypes.ObjectId, ref: "Address"},
+    shipment_rate: {type: Number, default: 0 }
   },
   {
     timestamps: true,

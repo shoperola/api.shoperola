@@ -15,6 +15,6 @@ router.get("/view_address", view_address);
 router.get("/view_addressID/:id", view_address_id);
 router.delete("/remove_address/:id", delete_address);
 router.patch("/update_address/:id", update_address);
-router.get("/get_shipment", name_filter);
+router.get("/get_shipment/:id", name_filter);
 
 export default router;

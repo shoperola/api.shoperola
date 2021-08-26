@@ -10,6 +10,7 @@ import {Cart} from "../resources/Cart/cart_model"
 import {Transaction} from "../resources/transaction/transactions.model";
 import { Ecommerce } from "../resources/Ecommerce/ecomerce_model";
 import {Address} from "../resources/Address/address_model";
+import {Shipping} from "../resources/shipping_method/shipping_model";
 
 const createAccount = async (user) =>
   await stripe.accounts.create({
@@ -357,9 +358,16 @@ const cartCheckoutSession = async (req, res) => {
       currency: "inr"
      }
   })
-  console.log(item);
+  console.log(item[0].amount);
   const address = await Address.findById(req.body.id);
   console.log(address);
+
+  const shipment = await Shipping.find({$and:[
+    {shipping_country:address.Country},
+    {shipping_state:address.State}]});
+
+console.log(`shipment rate${shipment[0].shipping_rate} + ${item[0].amount}`);
+
   try {
     paymentDetails = await PaymentLog.create({
       client: clientID,
@@ -368,8 +376,9 @@ const cartCheckoutSession = async (req, res) => {
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item.amount,
-      address: address
+      amount: item[0].amount + shipment[0].shipping_rate,
+      address: address,
+      shipment_rate: shipment[0].shipping_rate
     });
   } catch (e) {
     console.log(e.message);
