@@ -373,7 +373,7 @@ const cartCheckoutSession = async (req, res) => {
     }
 
 
-//console.log(`${shipment[0].shipping_rate}`);
+console.log(`${shipment[0].shipping_rate}`);
 
   try {
     paymentDetails = await PaymentLog.create({
