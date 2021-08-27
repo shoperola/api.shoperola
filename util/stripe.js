@@ -372,7 +372,7 @@ const cartCheckoutSession = async (req, res) => {
     }
       //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
 
-console.log(`${shipment[0].shipping_rate}`);
+//console.log(`${shipment[0].shipping_rate}`);
 
   try {
     paymentDetails = await PaymentLog.create({
@@ -382,7 +382,7 @@ console.log(`${shipment[0].shipping_rate}`);
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+      amount: item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
       address: address,
       shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
     });
@@ -396,7 +396,7 @@ console.log(`${shipment[0].shipping_rate}`);
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: item,
+        line_items: [item, paymentDetails.amount],
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
@@ -415,9 +415,7 @@ console.log(`${shipment[0].shipping_rate}`);
     console.log(session);
 
     const paymentIntent = await stripe.paymentIntents.create({
-      //shipping added extra amount: cart.cart_total_price
-      // amount: parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
-      amount: paymentDetails.amount,
+      amount: cart.cart_total_price,
       currency: 'inr',
       payment_method_types: ['card'],
       description: "possibiliion"
