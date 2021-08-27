@@ -398,11 +398,12 @@ const cartCheckoutSession = async (req, res) => {
       {
         payment_method_types: ["card"],
         line_items: [{
-          amount:parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+          amount:parseInt(item[0].amount) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
           currency: 'inr',
           name: "prateek",
           images:["xyz"],
-          quantity:1
+          quantity:1,
+          shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
         }],
         metadata: {
           custom_id: paymentDetails._id.toString(),
