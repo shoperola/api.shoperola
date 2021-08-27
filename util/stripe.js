@@ -366,17 +366,17 @@ const cartCheckoutSession = async (req, res) => {
     {shipping_country:address.Country},
     {shipping_state:address.State}]});
 //console.log(shipment.length);
-    if(!shipment.length){
-      zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
-     console.log(zero_shipping.shipping_rate)
+if(!shipment.length){
+  zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
+  console.log(zero_shipping.shipping_rate)
      
-    }
+}
 
 
 console.log(`${shipment[0].shipping_rate}`);
 
-  try {
-    paymentDetails = await PaymentLog.create({
+try {
+  paymentDetails = await PaymentLog.create({
       client: clientID,
       user: userID,
       ip: req.ip,
@@ -392,14 +392,18 @@ console.log(`${shipment[0].shipping_rate}`);
     return res
       .status(400)
       .json({ message: "Error creating paymentDetails", error: e.message });
-  }
-  try {
-    const session = await stripe.checkout.sessions.create(
-      {
-        payment_method_types: ["card"],
-        line_items: item,
-        metadata: {
-          custom_id: paymentDetails._id.toString(),
+    }
+    try {
+      //item amount changed
+      console.log("Item amount dekho yaha "+ item[0].amount);
+      item[0].amount+=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
+      console.log("Item amount after adding shipment "+ item[0].amount);
+      const session = await stripe.checkout.sessions.create(
+        {
+          payment_method_types: ["card"],
+          line_items: item,
+          metadata: {
+            custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
         },
         payment_intent_data: {
