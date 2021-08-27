@@ -383,7 +383,7 @@ const cartCheckoutSession = async (req, res) => {
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+      amount: parseInt(item[0].amount) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
       address: address,
       shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
     });
