@@ -416,8 +416,8 @@ console.log(`${shipment[0].shipping_rate}`);
     console.log(session);
 
     const paymentIntent = await stripe.paymentIntents.create({
-      //shipping added extra
-      amount: parseInt(cart.cart_total_price) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+      //shipping added extra amount: cart.cart_total_price
+      amount: parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
       currency: 'inr',
       payment_method_types: ['card'],
       description: "possibiliion"
