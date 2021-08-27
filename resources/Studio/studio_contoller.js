@@ -10,20 +10,21 @@ const add_product = async (req, res) => {
     const id = req.params.id;
     console.log(req.file);
     const updateObject = {
-      ...req.body,
-      userID: req.user._id,
+      ...req.body
     };
+    console.log(updateObject);
 
     // console.log(id, productid, current_time, updateObject);
     const product = await Studio.findByIdAndUpdate(
       id,
       {
-        $push: updateObject,
+      $push:{updateObject}
+        
       },
       { new: true }
     ).populate("products");
     // const product = await Studio.findById(Types.ObjectId(id));
-    console.log(product);
+    // console.log(product);
     res.status(201).send(product);
   } catch (e) {
     console.log(e.message);
