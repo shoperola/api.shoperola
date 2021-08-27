@@ -401,6 +401,7 @@ const cartCheckoutSession = async (req, res) => {
           amount:parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
           currency: 'inr',
           name: "prateek",
+          images:["xyz"],
           quantity:1
         }],
         metadata: {
