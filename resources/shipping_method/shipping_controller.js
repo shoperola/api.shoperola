@@ -114,6 +114,6 @@ const zero_shipping_rate = async(req, res) => {
     } catch (e) {
         console.log(e);
         res.status(400).json({message: "something went wrong"});
-    }
+    } 
 }
 export{add_shipment, view_shipments, view_shipment, update_shipment, delete_shipment, change_status,zero_shipping_rate};

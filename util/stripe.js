@@ -372,7 +372,7 @@ const cartCheckoutSession = async (req, res) => {
     }
       //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
 
-//console.log(`${shipment[0].shipping_rate}`);
+console.log(`${shipment[0].shipping_rate}`);
 
   try {
     paymentDetails = await PaymentLog.create({
@@ -382,7 +382,7 @@ const cartCheckoutSession = async (req, res) => {
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+      amount: parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
       address: address,
       shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
     });
@@ -415,7 +415,9 @@ const cartCheckoutSession = async (req, res) => {
     console.log(session);
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: cart.cart_total_price,
+      //shipping added extra amount: cart.cart_total_price
+      // amount: parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+      amount:500,
       currency: 'inr',
       payment_method_types: ['card'],
       description: "possibiliion"
