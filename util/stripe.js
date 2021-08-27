@@ -383,7 +383,7 @@ const cartCheckoutSession = async (req, res) => {
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+      amount: `"inr" ${item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate)}`,
       address: address,
       shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
     });
@@ -397,7 +397,7 @@ const cartCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: [{item},{paymentDetails}],
+        line_items: paymentDetails,
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
