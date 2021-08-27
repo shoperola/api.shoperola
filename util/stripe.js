@@ -370,6 +370,7 @@ const cartCheckoutSession = async (req, res) => {
       zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
      console.log(zero_shipping.shipping_rate)
     }
+
       //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
 
 //console.log(`${shipment[0].shipping_rate}`);
@@ -396,7 +397,7 @@ const cartCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: paymentDetails.amount,
+        line_items: [{item},{paymentDetails}],
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
