@@ -396,7 +396,7 @@ const cartCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: [item, paymentDetails.amount],
+        line_items: [paymentDetails.amount],
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
