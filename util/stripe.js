@@ -397,7 +397,9 @@ const cartCheckoutSession = async (req, res) => {
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ["card"],
-        line_items: item,
+        line_items: [{amount:parseInt((item[0].amount)/100) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
+          currency: 'inr'
+        }],
         metadata: {
           custom_id: paymentDetails._id.toString(),
           payment_type: "Ecommerce"
