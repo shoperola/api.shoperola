@@ -416,7 +416,8 @@ const cartCheckoutSession = async (req, res) => {
     console.log(session);
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: cart.cart_total_price,
+      //shipping added extra
+      amount: parseInt(cart.cart_total_price) + parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate),
       currency: 'inr',
       payment_method_types: ['card'],
       description: "possibiliion"
