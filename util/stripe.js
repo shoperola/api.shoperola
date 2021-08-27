@@ -369,9 +369,8 @@ const cartCheckoutSession = async (req, res) => {
     if(!shipment.length){
       zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
      console.log(zero_shipping.shipping_rate)
-     
     }
-
+      //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
 
 //console.log(`${shipment[0].shipping_rate}`);
 
@@ -391,7 +390,7 @@ const cartCheckoutSession = async (req, res) => {
     console.log(e.message);
     return res
       .status(400)
-      .json({ message: "Error creating paymentDetails", error: e.message });
+      .json({ message: "Error creating paymentDetails", error: e.message });  
   }
   try {
     const session = await stripe.checkout.sessions.create(
