@@ -403,7 +403,7 @@ const cartCheckoutSession = async (req, res) => {
           name: "prateek",
           images:["xyz"],
           quantity:1,
-          shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
+          // shipment_rate: shipment[0]?.shipping_rate || zero_shipping.shipping_rate
         }],
         metadata: {
           custom_id: paymentDetails._id.toString(),
