@@ -44,7 +44,7 @@ const deleteText= async (req, res) => {
         return res.status(400).json({ message: "User not Found" });
     }
     try{
-    const doc= await Text.create({...req.body,userID:req.user._id});
+    const doc= await Text.find({userID:req.user._id});
     res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
@@ -52,4 +52,4 @@ const deleteText= async (req, res) => {
     }
 }
 
-export {getConfigText,postconfigText,getAllText};
+export {getConfigText,postconfigText,getAllText,deleteText};
