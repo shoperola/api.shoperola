@@ -71,6 +71,7 @@ const update_address = async (req, res) => {
 
 const name_filter = async (req, res) => {
   try {
+    let zeroShipment;
     const client = await Client.findOne({ sub: req.user.sub });
     //console.log(client._id);
      const address = await Address.findById(req.params.id);
@@ -79,13 +80,17 @@ const name_filter = async (req, res) => {
       {shipping_country:address.Country},
       {shipping_state:address.State}]});
 
-      if(!shipment){
-        const zeroShipment = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
+      if(!shipment.length){
+        zeroShipment = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
+        address.shipment_rate=zeroShipment.shipping_rate;
+        await address.save();
         res.json({ status: "OK", data: zeroShipment });
       }
-      res.json({ status: "OK", data: shipment });
+      address.shipment_rate=shipment[0]?.shipping_rate || zeroShipment.shipping_rate;
+      await address.save();
+      res.json({ status: "OK", data: shipment[0]?.shipping_rate || zeroShipment.shipping_rate});
 
-    console.log(shipment[0].shipping_rate);
+    // console.log(shipment[0].shipping_rate);
   } catch (e) {
   console.log(e);
   res.status(404).json({ message: e.message });    

@@ -104,6 +104,10 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
+    instagramLink: {
+      type: String,
+      default: "",
+    },
     feesPerMonth: {
       type: Number,
       default: 0,

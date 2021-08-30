@@ -13,6 +13,7 @@ const AddressSchema = new Schema(
     Contact_Number: { type: Number },
     userID: { type: SchemaTypes.ObjectId, ref: "clients" },
    // shipmentId: { type: SchemaTypes.ObjectId, ref: "Shipping" }
+   shipment_rate:{ type: Number}
   },
   { timestamps: true }
 );
