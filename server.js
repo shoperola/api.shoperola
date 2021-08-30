@@ -10,6 +10,7 @@ import { User } from "./resources/user/user.model";
 import { Client } from "./resources/client/client.model";
 import {Admin} from "./resources/Admin website/admin-model";
 import UserRouter from "./resources/user/user.router";
+import TextRouter from "./resources/ConfigText/text.router"
 import RequestRouter from "./resources/requests/requests.router";
 import ClientRouter from "./resources/client/client.router";
 import TransactionRouter from "./resources/transaction/transaction.router";
@@ -63,6 +64,7 @@ import {add_tax_zero} from "./resources/tax_rates/tax_controller";
 import ShippmentRouter from "./resources/shipping_method/shipping_route";
 import {zero_shipping_rate} from "./resources/shipping_method/shipping_controller";
 import {view_amount} from "./resources/paymentLog/payment_log_controller";
+import {public_shipments} from "./resources/shipping_method/shipping_controller";
 
 config();
 const app = express();
@@ -95,6 +97,8 @@ app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
+
+app.use("/api/user",TextRouter);
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
@@ -122,6 +126,8 @@ app.get("/view_news",view_news);
 app.post("/add_zero", add_tax_zero);
 app.get("/view_amount/:id",view_amount);
 app.post("/add_zero_shippingRate", zero_shipping_rate);
+app.get("/shipments/:id", public_shipments);
+
 app.get("/products/:username/:id", getUserById, getProductById);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
@@ -144,6 +150,7 @@ app.use("/api/product", userModel, protect, ProductRouter);
 app.use("/api/feature_product", userModel, protect, feautreRouter);
 app.use("/api/tax_rates", userModel, protect, TaxRouter);
 app.use("/api/shipment", userModel, protect,ShippmentRouter);
+
 app.use("/api/banner", userModel, protect, BannerRouter);
 //app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/address", firebaseAuthProtect, AddressRouter);

@@ -116,4 +116,15 @@ const zero_shipping_rate = async(req, res) => {
         res.status(400).json({message: "something went wrong"});
     } 
 }
-export{add_shipment, view_shipments, view_shipment, update_shipment, delete_shipment, change_status,zero_shipping_rate};
+const public_shipments = async(req, res) => {
+    try {
+       
+        const public_shipments = await Shipping.find({userID: req.params.id});
+        res.status(200).json({success: "success", data: public_shipments});
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message: "something went wrong"});
+    }
+};
+export{add_shipment, view_shipments, public_shipments,view_shipment, update_shipment, delete_shipment, change_status,zero_shipping_rate};
