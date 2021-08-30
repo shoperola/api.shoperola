@@ -62,6 +62,7 @@ import {view_featured_products} from "./resources/featured_products/featured_con
 import {add_tax_zero} from "./resources/tax_rates/tax_controller";
 import ShippmentRouter from "./resources/shipping_method/shipping_route";
 import {zero_shipping_rate} from "./resources/shipping_method/shipping_controller";
+import {view_amount} from "./resources/paymentLog/payment_log_controller";
 
 config();
 const app = express();
@@ -139,6 +140,7 @@ app.use("/api/category", userModel, protect, CategoryRouter);
 app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
+app.get("/testing/:id", userModel, protect, view_amount);
 app.use("/api/feature_product", userModel, protect, feautreRouter);
 app.use("/api/tax_rates", userModel, protect, TaxRouter);
 app.use("/api/shipment", userModel, protect,ShippmentRouter);
