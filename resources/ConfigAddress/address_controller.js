@@ -1,17 +1,5 @@
 import {UserAddress} from "./address_model";
 
-const add_Address = async (req, res) => {
-    try{
-        if (!req.user) {
-            return res.status(400).json({ message: "User Not Found" });
-          }
-          const add_Address = await UserAddress.create({...req.body,userID: req.user._id});
-          res.status(201).json({success: "ok", data: add_Address});
-
-    }catch(e){
-        res.send(e);
-    }
-};
 
 const update_Address = async (req, res) => {
     try{
