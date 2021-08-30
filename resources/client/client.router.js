@@ -26,12 +26,11 @@ import {
   tvShowsViewsIncrement,
   search_tvshow,
 } from "../tvshows/tvshow_controller";
-//import {view_amount} from "../paymentLog/payment_log_controller";
+
 
 const router = Router();
 router.get("/view_order/:id",order_by_id);
 router.get("/view_orders", show_order);
-// router.get("/view_logs", view_amount);
 router.patch("/update_address_order/:id", update_address);
 router.route("/").get(getClient).post(createClient);
 router.route("/refreshToken").post(renewToken);

@@ -1,52 +1,61 @@
 import {Text} from "./text.model";
 
 const getConfigText= async (req, res) => {
+    try{
     if (!req.user) {
         return res.status(400).json({ message: "User not Found" });
     }
-    const TextId=req.params.id;
-    try{
+    const TextId=req.params.id; 
+    if(!TextId){
+        res.status(400).json({message: "Id is required!"});
+    }
+    
     const doc= await Text.findById(TextId);
     res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
+        res.status(400).json({message:e.message})
     }
 }
 
 
 
-const getAllText= async (req, res) => {
+const getAllText= async(req, res) => {
+    try{
     if (!req.user) {
         return res.status(400).json({ message: "User not Found" });
     }
-    try{
     const doc= await Text.find({userID: req.user._id});
     res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
+        res.status(400).json({message:e.message})
     }
-}
+};
 
 
 const postconfigText= async (req, res) => {
+    try{
     if (!req.user) {
         return res.status(400).json({ message: "User not Found" });
     }
-    try{
     const doc= await Text.create({...req.body,userID:req.user._id});
     res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
         res.status(400).json({message:e.message});
     }
-}
+};
 
 const deleteText= async (req, res) => {
+    try{
     if (!req.user) {
         return res.status(400).json({ message: "User not Found" });
     }
-    try{
         const id= req.params.id;
+        if(!id){
+            res.status(400).json({message: "Id is required!"});
+        }
     const doc= await Text.findByIdAndDelete(id);
     res.json({ status: "OK", data: doc});
     } catch (e) {
@@ -56,13 +65,16 @@ const deleteText= async (req, res) => {
 }
 
 const updateText= async (req, res) => {
+    try{
     if (!req.user) {
         return res.status(400).json({ message: "User not Found" });
     }
-    try{
+    
         const id=req.params.id;
-        const updateObject=req.body.Text;
-    const doc= await Text.findByIdAndUpdate(id,updateObject,{new: true});
+        if(!id){
+            res.status(400).json({message: "Id is required!"});
+        }
+    const doc= await Text.findByIdAndUpdate(id,{$set:req.body},{new: true});
     res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
