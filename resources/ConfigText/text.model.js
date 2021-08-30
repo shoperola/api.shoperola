@@ -13,7 +13,8 @@ const TextSchema = Schema({
   Text:{
     type: String,
     required: true
-  }
+  },
+  timestamps: true
 });
 
 export const Text = model("configText", TextSchema);
