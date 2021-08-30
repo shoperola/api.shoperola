@@ -98,7 +98,7 @@ app.get("/", (req, res) => {
   res.json("Server is Running");
 });
 
-app.use("/api/user",TextRouter);
+app.use("/api/user",userModel,protect,TextRouter);
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);

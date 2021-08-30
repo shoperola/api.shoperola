@@ -13,19 +13,43 @@ const getConfigText= async (req, res) => {
     }
 }
 
-const postconfigText= async (req, res) => {
+const getAllText= async (req, res) => {
     if (!req.user) {
         return res.status(400).json({ message: "User not Found" });
     }
-    const title= req.body.title;
-    const Addedon=req.body.date;
-    const Text= req.body.text;
     try{
-    const doc= await Text.create({title:title,Addedon:Addedon,Text:Text});
-    res.json({ status: "OK", data: doc.Text });
+    const doc= await Text.find({userID: req.user._id});
+    res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
     }
 }
 
-export {getConfigText,postconfigText};
+
+const postconfigText= async (req, res) => {
+    if (!req.user) {
+        return res.status(400).json({ message: "User not Found" });
+    }
+    try{
+    const doc= await Text.create({...req.body,userID:req.user._id});
+    res.json({ status: "OK", data: doc});
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message:e.message});
+    }
+}
+
+const deleteText= async (req, res) => {
+    if (!req.user) {
+        return res.status(400).json({ message: "User not Found" });
+    }
+    try{
+    const doc= await Text.create({...req.body,userID:req.user._id});
+    res.json({ status: "OK", data: doc});
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message:e.message});
+    }
+}
+
+export {getConfigText,postconfigText,getAllText};

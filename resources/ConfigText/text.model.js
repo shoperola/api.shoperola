@@ -12,9 +12,11 @@ const TextSchema = Schema({
   },
   Text:{
     type: String,
-    required: true
+    required: true,
+    },
+    userID:{type: SchemaTypes.ObjectId, ref: "users"}
   },
-  timestamps: true
-});
+{timestamps: true}
+);
 
 export const Text = model("configText", TextSchema);
