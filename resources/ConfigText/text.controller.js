@@ -48,8 +48,6 @@ const deleteText= async (req, res) => {
     try{
         const id= req.params.id;
     const doc= await Text.findByIdAndDelete(id);
-    doc.Text="";
-    await doc.save();
     res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
