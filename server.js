@@ -40,6 +40,7 @@ import { connect } from "./util/db";
 import { SECRETS } from "./util/config";
 import AddressRouter from "./resources/Address/address_routes";
 import AddressUserRouter from "./resources/ConfigAddress/address_router";
+import SocialRouter from "./resources/ConfigSocial/social_router";
 import { getUserById, getAdminById} from "./util/grabUserbyId";
 import {
   getLessons,
@@ -101,6 +102,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/user",userModel,protect,TextRouter);
 app.use("/api/user",userModel,protect,AddressUserRouter);
+app.use("/api/user",userModel,protect,SocialRouter)
 
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
