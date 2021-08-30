@@ -1,12 +1,13 @@
 import { Router } from "express";
 
-import { getConfigText,postconfigText,getAllText,deleteText} from "./text.controller";
+import { getConfigText,postconfigText,getAllText,deleteText,updateText} from "./text.controller";
 const router = Router();
 
-router.get("/configtext",getConfigText);
+router.get("/configtext/:id",getConfigText);
 router.post("/configtext",postconfigText);
 router.get("/viewalltext",getAllText);
-router.delete("/deletetext",deleteText);
+router.delete("/deletetext/:id",deleteText);
+router.put("/updatetext/:id",updateText);
 
 
 export default router;
