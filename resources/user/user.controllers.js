@@ -17,29 +17,6 @@ const getUserProfile = (req, res) => {
   res.json({ status: "ok", data: req.user });
 };
 
-// const postUserProfile= async (req, res) => {
-//   if (!req.user) {
-//     return res.status(400).json({ message: "User not Found" });
-//   }
-//   const userID = req.user._id;
-//   const updateObject= {...req.body};
-//   if (!updateObject) {
-//     return res.status(400).json({
-//       message: "Nothing to Update",
-//     });
-//   }
-//   try {
-//     const doc = await User.findByIdAndUpdate(userID, updateObject, {
-//       new: true,
-//     })
-//       .select("-password -identities")
-//       .lean()
-//       .exec();
-//     return res.json({ status: "ok", data: doc });
-//   } catch (e) {
-//     console.log(e.message);
-//   }
-// }
 
 const updateUserProfile = async (req, res) => {
   if (!req.user) {
