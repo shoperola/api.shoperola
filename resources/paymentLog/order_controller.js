@@ -36,6 +36,21 @@ const update_order = async (req, res) => {
 
 };
 
+const view_order = async (req, res) => {
+    try{
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+        const view_order = await Orders.find({user: req.user._id});
+        
+         res.send(view_order);
+    }catch(err){
+        console.log(err);
+        res.send(err.message);
+    }
+
+};
+
 const order_by_id = async(req, res) => {
     try{
         const client = await Client.findOne({ sub: req.user.sub });
@@ -73,4 +88,4 @@ const update_address = async (req, res) => {
     }
 }
 
-export { show_order, order_by_id, update_address,update_order};
+export { show_order, order_by_id, update_address,update_order,view_order};
