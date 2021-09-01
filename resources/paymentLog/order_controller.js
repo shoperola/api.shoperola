@@ -42,6 +42,7 @@ const view_order = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
+          
         const view_order = await Orders.find({user: req.user._id}).populate("products").populate("address");
         
          res.send(view_order);
@@ -51,7 +52,24 @@ const view_order = async (req, res) => {
     }
 
 };
+const view_order_byid = async (req, res) => {
+    try{
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+          const id = req.params.id;
+          if(!id){
+              return res.status(400).json({ message: "params id not found!!!"})
+          }
+        const view_order = await Orders.findById(id).populate("products").populate("address");
+        
+         res.send(view_order);
+    }catch(err){
+        console.log(err);
+        res.send(err.message);
+    }
 
+};
 const order_by_id = async(req, res) => {
     try{
         const client = await Client.findOne({ sub: req.user.sub });
@@ -89,4 +107,4 @@ const update_address = async (req, res) => {
     }
 }
 
-export { show_order, order_by_id, update_address,update_order,view_order};
+export { show_order, order_by_id, update_address,update_order,view_order,view_order_byid};
