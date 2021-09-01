@@ -61,7 +61,7 @@ const view_order_byid = async (req, res) => {
           if(!id){
               return res.status(400).json({ message: "params id not found!!!"})
           }
-        const view_order = await Orders.findById(id).populate("products").populate("address");
+        const view_order = await Orders.findById(id).populate("products").populate("address").populate("client");
         
          res.send(view_order);
     }catch(err){
