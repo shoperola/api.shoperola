@@ -8,7 +8,7 @@ import {
  // paymentintend
 } from "../../util/stripe";
 import { renewToken } from "../../util/cognito";
-import {  show_order, order_by_id,update_address } from "../paymentLog/order_controller";
+import {  show_order, order_by_id,update_address ,update_order} from "../paymentLog/order_controller";
 import {
   createClient,
   getClient,
@@ -32,6 +32,7 @@ const router = Router();
 router.get("/view_order/:id",order_by_id);
 router.get("/view_orders", show_order);
 router.patch("/update_address_order/:id", update_address);
+router.patch("/update_order",update_order);
 router.route("/").get(getClient).post(createClient);
 router.route("/refreshToken").post(renewToken);
 
