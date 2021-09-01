@@ -26,7 +26,8 @@ const update_order = async (req, res) => {
             return res.status(400).json({ message: "User Not Found" });
           }
         const updateObject= {...req.body};
-          const view_order = await Orders.findOneAndUpdate({user: req.user._id},updateObject);
+        const clientid=req.body.id;
+          const view_order = await Orders.findOneAndUpdate({user: req.user._id,client:clientid},updateObject);
         
          res.send(view_order);
     }catch(err){
