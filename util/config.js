@@ -24,7 +24,8 @@ const SECRETS = {
   domain_url: process.env.DOMAIN_URL,
   user_domain_url:process.env.USER_DOMAIN_URL,
   aws_accessKey_Id: process.env.AWS_ACCESS_KEY_ID,
-  aws_secret_key_Id: process.env.AWS_SECRET_ACCESS_KEY
+  aws_secret_key_Id: process.env.AWS_SECRET_ACCESS_KEY,
+  aws_region:process.env.AWS_REGION
   
 };
 
