@@ -28,12 +28,20 @@ const list_verified_emails = async (req, res) => {
         if(!req.user){
             return res.status(400).json({ message: "User not found!"})
         }
-        const get_list = await ses.listVerifiedEmailAddresses((err,data) => {
+        const get_list = await ses.listVerifiedEmailAddresses(async(err,data) => {
             if(err){
                 console.log(err);
             }
-            console.log(data.VerifiedEmailAddresses);
-            res.send(data);
+            const verify = await data.VerifiedEmailAddresses.filter(x => x == req.user.email_to_send);
+            console.log(verify);
+            if(!verify.length){
+                const is_not_verified = await User.findByIdAndUpdate(req.user._id, {$set: {is_verified: false}},{new: true});
+                return res.status(400).json({message:"not verified!!", data: is_not_verified.is_verified});
+            }
+            const make_verify = await User.findByIdAndUpdate(req.user._id, {$set: {is_verified: true}},{new: true});
+            console.log(make_verify);
+
+            res.json({success:"you are verified" , data: make_verify.is_verified});
         })
         //console.log(get_list);
     } catch (e) {
@@ -47,7 +55,7 @@ const send_email = async(req, res) => {
             return res.status(400).json({ message: "User not found!!"});
         }
         const send_email = req.body.email
-    var ses_mail = "testing AWS SES";
+   // var ses_mail = "testing AWS SES";
     var params = {
         Destination: { /* required */
           ToAddresses: [
@@ -71,7 +79,7 @@ const send_email = async(req, res) => {
             Data: 'Test email'
            }
           },
-        Source: 'kawthekar56@gmail.com', /* required */
+        Source: req.user.email_to_send
       };
     
    await ses.sendEmail(params, function(err, data) {
