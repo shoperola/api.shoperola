@@ -22,6 +22,12 @@ const OrdersSchema = Schema(
       required: true,
     },
     is_completed: { type: Boolean, default: false},
+    is_new: { type: Boolean, default: true},
+    is_processing: { type: Boolean, default: false},
+    is_delivered: { type: Boolean, default: false},
+    is_returned: { type: Boolean, default: false},
+    is_cancelled: { type: Boolean, default: false},
+    is_dispatched: { type: Boolean, default: false},
     // success: {
     //   type: String,
     //   enum: ["SUCCESS", "FAILED"]

@@ -373,7 +373,8 @@ if(!shipment.length){
 }
 
       //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
-Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
+const Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
+
 //console.log(`${shipment[0].shipping_rate}`);
 
 try {

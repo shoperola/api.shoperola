@@ -155,6 +155,12 @@ else{
   if(Orderpayload.status == 'SUCCESS'){
     console.log("iuoluoilul");
     order.is_completed = true;
+    order.is_new = true;
+    order.is_processing= false;
+    order.is_delivered= false;
+    order.is_returned= false;
+    order.is_cancelled= false;
+    order.is_dispatched= false;
     const cart = await Cart.findByIdAndUpdate(x.client.cartid,{$set:{products: [],total_price :0}},{new: true});
     console.log(cart);
   }

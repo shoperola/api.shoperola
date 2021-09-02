@@ -13,14 +13,63 @@ const show_order = async(req,res) => {
           const view_order = await Orders.find({client: client._id}).populate("products").populate("address");
           console.log(view_order);
         // const see_order = await view_order.filter(x => x.success === true);
-         res.send(view_order)
+         res.send(view_order);
     }catch(err){
         console.log(err);
         res.send(err.message);
     }
 };
 
+const update_order = async (req, res) => {
+    try{
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+        const updateObject= {...req.body};
+        const orderid=req.body.id;
+          const view_order = await Orders.findByIdAndUpdate(orderid,{$set:updateObject},{new: true});
+        
+         res.send(view_order);
+    }catch(err){
+        console.log(err);
+        res.send(err.message);
+    }
 
+};
+
+const view_order = async (req, res) => {
+    try{
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+          
+        const view_order = await Orders.find({user: req.user._id}).populate("products").populate("address");
+        
+         res.send(view_order);
+    }catch(err){
+        console.log(err);
+        res.send(err.message);
+    }
+
+};
+const view_order_byid = async (req, res) => {
+    try{
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+          const id = req.params.id;
+          if(!id){
+              return res.status(400).json({ message: "params id not found!!!"})
+          }
+        const view_order = await Orders.findById(id).populate({ path:"products",populate:{path:"tax",select:"tax_percentage"}}).populate("address").populate({path:"client",select:"email"});
+        
+         res.send(view_order);
+    }catch(err){
+        console.log(err);
+        res.send(err.message);
+    }
+
+};
 const order_by_id = async(req, res) => {
     try{
         const client = await Client.findOne({ sub: req.user.sub });
@@ -58,4 +107,4 @@ const update_address = async (req, res) => {
     }
 }
 
-export { show_order, order_by_id, update_address};
+export { show_order, order_by_id, update_address,update_order,view_order,view_order_byid};
