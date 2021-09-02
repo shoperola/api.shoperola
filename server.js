@@ -65,6 +65,7 @@ import ShippmentRouter from "./resources/shipping_method/shipping_route";
 import {zero_shipping_rate} from "./resources/shipping_method/shipping_controller";
 import {view_amount} from "./resources/paymentLog/payment_log_controller";
 import {public_shipments} from "./resources/shipping_method/shipping_controller";
+import EmailRouter from "./resources/Email templates/email_router";
 
 config();
 const app = express();
@@ -141,6 +142,7 @@ app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
+app.use("/api/sendEmail", userModel, protect, EmailRouter);
 app.use("/api/categories", userModel, protect, CategoriesRouter);
 app.use("/api/cart", firebaseAuthProtect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);

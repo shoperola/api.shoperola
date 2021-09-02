@@ -13,7 +13,7 @@ const SECRETS = {
   paypalBaseUrl: process.env.PAYPAL_BASE_URL,
   stripePublishKey: process.env.STRIPE_PUBLISH_KEY,
   stripeSecretKey: process.env.STRIPE_SECRET_KEY,
-  region: process.env.COGNITO_REGION,
+  region: process.env.AWS_REGION,
   userPool: process.env.COGNITO_USERPOOL,
   clientId: process.env.COGNITO_CLIENT,
   clientSecret: process.env.COGNITO_CLIENT_SECRET,
@@ -23,6 +23,8 @@ const SECRETS = {
   imDb_key: process.env.IMDB_API_KEY,
   domain_url: process.env.DOMAIN_URL,
   user_domain_url:process.env.USER_DOMAIN_URL,
+  aws_accessKey_Id: process.env.AWS_ACCESS_KEY_ID,
+  aws_secret_key_Id: process.env.AWS_SECRET_ACCESS_KEY
   
 };
 

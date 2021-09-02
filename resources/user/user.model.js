@@ -13,6 +13,12 @@ const UserSchema = new Schema(
       trim: true,
       unique: true,
     },
+    email_to_send:{
+      type: String,
+     // required: true,
+      trim: true,
+      unique: true,
+    },
     password: {
       type: String,
       trim: true,
@@ -65,6 +71,7 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
+    is_verified: { type: Boolean, default: false},
     publicUrl: {
       type: String,
       default: "",
