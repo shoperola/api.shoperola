@@ -67,16 +67,16 @@ const send_email = async(req, res) => {
           Body: { /* required */
             Html: {
              Charset: "UTF-8",
-             Data: "HTML_FORMAT_BODY"
+             Data: req.body.html
             },
-            Text: {
-             Charset: "UTF-8",
-             Data: "Testing AWS-SES"
-            }
+            // Text: {
+            //  Charset: "UTF-8",
+            //  Data: "Testing AWS-SES"
+            // }
            },
            Subject: {
             Charset: 'UTF-8',
-            Data: 'Test email'
+            Data: req.body.subject
            }
           },
         Source: req.user.email_to_send
