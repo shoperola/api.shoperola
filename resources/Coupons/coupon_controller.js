@@ -19,7 +19,7 @@ const getcoupons= async (req, res) => {
             return res.status(400).json({ message: "User not Found" });
         }
         const doc= await Coupon.find({userID: req.user._id});
-        res.json({ status: "OK", data: doc});
+        res.json({data:doc});
     } catch (e) {
         console.log(e);
         res.status(400).json({message:e.message})
@@ -32,7 +32,7 @@ const getcouponsbyid= async (req, res) => {
         }
         const id= req.params.id;
         const doc= await Coupon.findById(id);
-        res.json({ status: "OK", data: doc});
+        res.json({data: doc});
     } catch (e) {
         console.log(e);
         res.status(400).json({message:e.message})
