@@ -155,4 +155,20 @@ const remove_product = async (req, res) => {
   }
 };
 
-export { update_cart, view_cart, remove_product , update_quantity};
+const get_product_by_price = async (req, res) => {
+  try {
+    // if (!req.user) {
+    //   return res.status(400).json({ message: "User Not Found" });
+    // }
+    // const client = await Client.findOne({ sub: req.user.sub });
+    const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
+    console.log(products);
+    res.status(200).json({ products: products});
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+
+
+export { update_cart, view_cart, remove_product , update_quantity,get_product_by_price};
