@@ -381,8 +381,8 @@ const coupons = await Coupon.find({coupon_code: req.query.code});
 if(!coupons){
   console.log('no coupons found');
 }
-if(coupons.applies_to == 'order_over'){
-  
+for(let i of coupons){
+  const applies_to = i.applies_to
 }
 
 try {

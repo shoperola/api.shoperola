@@ -3,9 +3,11 @@ const { Schema, model, SchemaTypes } = mongoose;
 
 const CouponSchema = Schema({
     coupon_name:{type:String, default: ""},
-    coupon_code: {type: String, default: ""},
+    coupon_code: {type: String, default: "", unique: true},
     promotion: {type: String, enum: ['percentage_off', 'amount_off', 'free_shipping'], default: 'free_shipping'},
-    applies_to: {type: String ,enum:['any_order','single_product','orders-order',''], default: ""},
+    amount_off: {type: Number, default: 0},
+    percentage_off: {type: Number, default:0},
+    applies_to: {type: String ,enum:['any_order','single_product','orders_over','product_by_category'], default: ""},
     price:{ type: Number, default: 0 },
     product_name:{type: SchemaTypes.ObjectId, ref: "Ecommerce"},
     product_category:{ type: SchemaTypes.ObjectId, ref: "Category"},

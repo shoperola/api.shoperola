@@ -2,6 +2,8 @@ import { Cart } from "./cart_model";
 import { Client } from "../client/client.model";
 import { Ecommerce } from "../Ecommerce/ecomerce_model";
 import {User} from "../user/user.model";
+import {Coupon} from "../Coupons/coupon_model";
+import {Shipping} from "../shipping_method/shipping_model";
 
 const update_cart = async (req, res) => {
   try {
@@ -161,9 +163,89 @@ const get_product_by_price = async (req, res) => {
     //   return res.status(400).json({ message: "User Not Found" });
     // }
     // const client = await Client.findOne({ sub: req.user.sub });
-    const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
-    console.log(products);
-    res.status(200).json({ products: products});
+    const coupons = await Coupon.find({coupon_code: req.body.code});
+    if(!coupons){
+      res.status(404).json({ message: "no coupons"});
+    }
+    //for(let i of coupons){
+      if(coupons[0].applies_to == 'orders_over'){
+        console.log("sfdsf");
+        if(coupons[0].promotion == 'amount_off'){
+          const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
+          const q = await products.map(x => x.cart_total_price - coupons[0].amount_off);
+           //await products.save();
+          console.log(q);
+        }
+        else if(coupons[0].promotion == 'percentage_off'){
+        
+          const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
+          const q = await products.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
+          await products.save();
+          console.log(q);
+        }
+
+      }
+
+      else if(coupons[0].applies_to == 'single_product'){
+        if(i.promotion == 'amount_off'){
+          const products = await Cart.find({"products.pid": req.query.id}).populate("pid");
+          const q = await products.map(x => x.cart_total_price - coupons[0].amount_off);
+          await products.save();
+          console.log(q);
+        }
+        else if(coupons[0].promotion == 'percentage_off'){
+        
+          const products = await Cart.find({"products.pid": req.query.id}).populate("pid");
+          const q = await products.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
+          await products.save();
+          console.log(q);
+        }
+      }
+
+      else if(coupons[0].applies_to == 'product_by_category'){
+        if(i.promotion == 'amount_off'){
+          const product = await Ecommerce.find({category: req.query.id});
+          const we = await product.map(x => x._id);
+          //console.log(we);
+        const cart = await Cart.find({"products.pid": we}).populate("pid");
+        const q = await cart.map(x => x.cart_total_price - coupons[0].amount_off);
+        await cart.save();
+          console.log(q);
+        
+        }
+        else if(coupons[0].promotion == 'percentage_off'){
+          const product = await Ecommerce.find({category: req.query.id});
+          const we = await product.map(x => x._id);
+          const cart = await Cart.find({"products.pid": we}).populate("pid");
+          const q = await cart.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
+          await cart.save();
+          console.log(q);
+        }
+      }
+
+      else if(coupons[0].applies_to == 'any_order'){
+        if(i.promotion == 'amount_off'){
+        const cart = await Cart.find({}).populate("pid");
+        const q = await cart.map(x => x.cart_total_price - coupons[0].amount_off);
+        await cart.save();
+
+        console.log(q);
+        
+        }
+        else if(coupons[0].promotion == 'percentage_off'){
+          const cart = await Cart.find({}).populate("pid");
+          const q = await cart.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
+          await cart.save();
+          console.log(q);
+        }
+      }
+
+  //  }
+    res.status(200).json({message: 'coupon applied successfully'});
+    // const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
+    // const q = await products.map(x => x.cart_total_price - coupons[0].amount_off);
+    // console.log(q);
+    // res.status(200).json({ products: products});
   } catch (err) {
     console.log(err);
     res.status(400).json({message: 'something went wrong'});
