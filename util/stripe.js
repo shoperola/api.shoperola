@@ -11,6 +11,7 @@ import {Transaction} from "../resources/transaction/transactions.model";
 import { Ecommerce } from "../resources/Ecommerce/ecomerce_model";
 import {Address} from "../resources/Address/address_model";
 import {Shipping} from "../resources/shipping_method/shipping_model";
+import {Coupon} from "../resources/Coupons/coupon_model";
 
 const createAccount = async (user) =>
   await stripe.accounts.create({
@@ -376,6 +377,13 @@ if(!shipment.length){
 const Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
 
 //console.log(`${shipment[0].shipping_rate}`);
+const coupons = await Coupon.find({coupon_code: req.query.code});
+if(!coupons){
+  console.log('no coupons found');
+}
+if(coupons.applies_to == 'order_over'){
+  
+}
 
 try {
   paymentDetails = await PaymentLog.create({
@@ -397,6 +405,7 @@ try {
     }
     try {
       //item amount changed
+
       item[0].amount+=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate)*100;
       const session = await stripe.checkout.sessions.create(
         {
