@@ -5,6 +5,8 @@ const CouponSchema = Schema({
     coupon_name:{type:String, default: ""},
     coupon_code: {type: String, default: ""},
     promotion: {type: String, enum: ['percentage_off', 'amount_off', 'free_shipping'], default: 'free_shipping'},
+    percentage_off: {type:Number,default: 0},
+    amount_off:{type:Number, default: 0},
     applies_to: {type: String ,enum:['any_order','single_product','orders-order',''], default: ""},
     price:{ type: Number, default: 0 },
     product_name:{type: SchemaTypes.ObjectId, ref: "Ecommerce"},
