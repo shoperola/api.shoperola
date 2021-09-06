@@ -43,6 +43,7 @@ import AddressUserRouter from "./resources/ConfigAddress/address_router";
 import SocialRouter from "./resources/ConfigSocial/social_router";
 import AppsRouter from "./resources/ConfigApps/apps_router";
 import OrderRouter from "./resources/orders/order_router";
+import CouponRouter from "./resources/Coupons/coupon_router";
 import { getUserById, getAdminById} from "./util/grabUserbyId";
 import {
   getLessons,
@@ -155,6 +156,7 @@ app.use("/api/sendEmail", userModel, protect, EmailRouter);
 app.use("/api/categories", userModel, protect, CategoriesRouter);
 app.use("/api/cart", firebaseAuthProtect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
+app.use("/api/coupons",userModel,protect,CouponRouter);
 app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
