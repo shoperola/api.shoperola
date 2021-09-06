@@ -71,7 +71,7 @@ import {zero_shipping_rate} from "./resources/shipping_method/shipping_controlle
 import {view_amount} from "./resources/paymentLog/payment_log_controller";
 import {public_shipments} from "./resources/shipping_method/shipping_controller";
 import EmailRouter from "./resources/Email templates/email_router";
-
+import {get_product_by_price} from "./resources/Cart/cart_contoller";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -152,6 +152,7 @@ app.use("/api/transaction", TransactionRouter);
 app.use("/api/tvshow", userModel, protect, TvshowRouter);
 app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
+app.post('/get_orders_overPrice', get_product_by_price);
 app.use("/api/sendEmail", userModel, protect, EmailRouter);
 app.use("/api/categories", userModel, protect, CategoriesRouter);
 app.use("/api/cart", firebaseAuthProtect, CartRouter);

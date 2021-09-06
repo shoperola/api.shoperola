@@ -150,7 +150,8 @@ const  count_product = async (req, res) => {
     console.log(e);
     res.status(400).json({message: 'something went wrong'});
   }
-}
+};
+
 
 export {
   getProducts,
