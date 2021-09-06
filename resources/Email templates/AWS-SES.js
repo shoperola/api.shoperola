@@ -1,7 +1,8 @@
 import AWS from "aws-sdk";
 import { SECRETS } from "../../util/config";
 import {User} from "../user/user.model";
-
+import {Email} from "./email_template_model";
+ 
 AWS.config.update({region: SECRETS.region});
 
 var ses = new AWS.SES();
@@ -118,4 +119,77 @@ const send_email = async(req, res) => {
         res.status(400).json({message: e.message});
     }
 }
-export {verify_email, send_email,list_verified_emails, delete_verify_list}
+
+const create_email_template= async (req, res) => {
+    try {
+        if(!req.user){
+            return res.status(400).json({ message: "User not found!!"});
+        }
+        const createObject={...req.body,userID: req.user._id};
+        const email= await Email.create(createObject);
+        res.json({success:"Email Template created" , data: email});
+    } catch (e) {
+            console.log(e);
+            res.status(400).json({message: e.message});
+        }
+};
+
+const update_email_template= async (req, res) => {
+    try {
+        if(!req.user){
+            return res.status(400).json({ message: "User not found!!"});
+        }
+        const updateObject={...req.body};
+        const id= req.params.id;
+        const email= await Email.findByIdAndUpdate(id,updateObject,{new:true});
+        res.json({success:"Email Template updated" , data: email});
+    } catch (e) {
+            console.log(e);
+            res.status(400).json({message: e.message});
+        }
+};
+
+const delete_email_template= async (req, res) => {
+    try {
+        if(!req.user){
+            return res.status(400).json({ message: "User not found!!"});
+        }
+        const id= req.params.id;
+        const email= await Email.findByIdAndDelete(id,{new: true});
+        res.json({success:"Email Template deleted"});
+    } catch (e) {
+            console.log(e);
+            res.status(400).json({message: e.message});
+        }
+};
+
+const view_email_template= async (req, res) => {
+    try {
+        if(!req.user){
+            return res.status(400).json({ message: "User not found!!"});
+        }
+        const email= await Email.find({userID: req.user._id});
+        res.send(email);
+    } catch (e) {
+            console.log(e);
+            res.status(400).json({message: e.message});
+        }
+};
+
+const view_email_template_byid= async (req, res) => {
+    try {
+        if(!req.user){
+            return res.status(400).json({ message: "User not found!!"});
+        }
+        const id= req.params.id;
+        const email= await Email.findById(id);
+        res.send(email);
+    } catch (e) {
+            console.log(e);
+            res.status(400).json({message: e.message});
+        }
+};
+
+
+
+export {verify_email, send_email,list_verified_emails,create_email_template,update_email_template,delete_email_template,view_email_template,view_email_template_byid}
