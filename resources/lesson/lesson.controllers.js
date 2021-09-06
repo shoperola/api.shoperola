@@ -101,7 +101,7 @@ const updateLesson = async (req, res) => {
         .status(500)
         .json({ message: "Error scheduling job", error: e.message });
     }
-  }
+  } 
 
   try {
     const doc = await Lesson.findOneAndUpdate({ _id: id }, lessonObject, {new: true,

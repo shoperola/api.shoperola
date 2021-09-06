@@ -48,6 +48,29 @@ const list_verified_emails = async (req, res) => {
         console.log(e);
         res.send(e.message);
     }
+};
+
+const delete_verify_list = async(req,res) => {
+    try {
+        if(!req.user){
+            return res.status(400).json({ message: "User not found!"});
+        }
+        var params = {
+            EmailAddress: req.body.email
+        };
+    
+       await ses.deleteVerifiedEmailAddress(params, function(err, data) {
+            if(err) {
+                res.send(err);
+            } 
+            else {
+                res.send("Verified user deleted successfully!!!");
+            } 
+        });
+    } catch (e) {
+        console.log(e);
+        res.send(e.message);
+    }
 }
 const send_email = async(req, res) => {
     try {
@@ -95,4 +118,4 @@ const send_email = async(req, res) => {
         res.status(400).json({message: e.message});
     }
 }
-export {verify_email, send_email,list_verified_emails}
+export {verify_email, send_email,list_verified_emails, delete_verify_list}
