@@ -167,76 +167,76 @@ const get_product_by_price = async (req, res) => {
     if(!coupons){
       res.status(404).json({ message: "no coupons"});
     }
-    //for(let i of coupons){
+    console.log(coupons);
+    // for(let i of coupons){
       if(coupons[0].applies_to == 'orders_over'){
         console.log("sfdsf");
         if(coupons[0].promotion == 'amount_off'){
-          const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
-          const q = await products.map(x => x.cart_total_price - coupons[0].amount_off);
-           //await products.save();
-          console.log(q);
+          let cart = await Cart.find({cart_total_price:{$gte: req.body.price}});
+          cart = await cart.map(x =>{ x.cart_total_price -= coupons[0].amount_off;return x;});
+          const savecart= await cart.map(x=> x.save());
+
         }
         else if(coupons[0].promotion == 'percentage_off'){
         
-          const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
-          const q = await products.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
-          await products.save();
-          console.log(q);
+          let cart = await Cart.find({cart_total_price:{$gte: req.body.price}});
+          cart = await cart.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
+          const savecart= await cart.map(x=> x.save());
+
         }
 
       }
 
       else if(coupons[0].applies_to == 'single_product'){
-        if(i.promotion == 'amount_off'){
-          const products = await Cart.find({"products.pid": req.query.id}).populate("pid");
-          const q = await products.map(x => x.cart_total_price - coupons[0].amount_off);
-          await products.save();
-          console.log(q);
+        if(coupons[0].promotion == 'amount_off'){
+          let cart = await Cart.find({"products.pid": req.query.id}).populate("pid");
+          cart = await cart.map(x => {x.cart_total_price -= coupons[0].amount_off;return x;});
+          const savecart= await cart.map(x=> x.save());
+
         }
         else if(coupons[0].promotion == 'percentage_off'){
         
-          const products = await Cart.find({"products.pid": req.query.id}).populate("pid");
-          const q = await products.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
-          await products.save();
-          console.log(q);
+          let cart = await Cart.find({"products.pid": req.query.id}).populate("pid");
+          cart = await cart.map(x => {x.cart_total_price -= (x.cart_total_price * coupons[0].percentage_off)/100;return x;});
+          const savecart= await cart.map(x=> x.save());
+
         }
       }
 
       else if(coupons[0].applies_to == 'product_by_category'){
-        if(i.promotion == 'amount_off'){
+        if(coupons[0].promotion == 'amount_off'){
           const product = await Ecommerce.find({category: req.query.id});
           const we = await product.map(x => x._id);
           //console.log(we);
-        const cart = await Cart.find({"products.pid": we}).populate("pid");
-        const q = await cart.map(x => x.cart_total_price - coupons[0].amount_off);
-        await cart.save();
-          console.log(q);
+        let cart = await Cart.find({"products.pid": we}).populate("pid");
+        cart = await cart.map(x => {x.cart_total_price -= coupons[0].amount_off;return x;});
+        const savecart= await cart.map(x=> x.save());
+
         
         }
         else if(coupons[0].promotion == 'percentage_off'){
           const product = await Ecommerce.find({category: req.query.id});
           const we = await product.map(x => x._id);
-          const cart = await Cart.find({"products.pid": we}).populate("pid");
-          const q = await cart.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
-          await cart.save();
-          console.log(q);
+          let cart = await Cart.find({"products.pid": we}).populate("pid");
+          cart = await cart.map(x => {x.cart_total_price -= (x.cart_total_price * coupons[0].percentage_off)/100;return x;});
+          const savecart= await cart.map(x=> x.save());
         }
       }
 
       else if(coupons[0].applies_to == 'any_order'){
-        if(i.promotion == 'amount_off'){
-        const cart = await Cart.find({}).populate("pid");
-        const q = await cart.map(x => x.cart_total_price - coupons[0].amount_off);
-        await cart.save();
-
-        console.log(q);
+        if(coupons[0].promotion == 'amount_off'){
+        let cart = await Cart.find({}).populate("pid");
+        cart = await cart.map(x => {x.cart_total_price-= coupons[0].amount_off;return x;});
+        const savecart= await cart.map(x=> x.save());
         
         }
         else if(coupons[0].promotion == 'percentage_off'){
           const cart = await Cart.find({}).populate("pid");
-          const q = await cart.map(x => x.cart_total_price - (x.cart_total_price * coupons[0].percentage_off)/100);
-          await cart.save();
-          console.log(q);
+          console.log(cart);
+          const q = await cart.map(x => {x.cart_total_price -= (x.cart_total_price * coupons[0].percentage_off)/100;  return x;});
+          const savecart= await cart.map(x=> x.save());
+          // await cart.save();
+          // console.log(q);
         }
       }
 

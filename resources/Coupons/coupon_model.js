@@ -12,10 +12,10 @@ const CouponSchema = Schema({
     product_name:{type: SchemaTypes.ObjectId, ref: "Ecommerce"},
     product_category:{ type: SchemaTypes.ObjectId, ref: "Category"},
     limit: {type:String, enum: ['unlimited', 'limited'], default: 'unlimited'},
+    no_of_user:{type:Number, default: 0},
     start_date: {type: Date, default: ''},
     end_date: {type: Date, default: ''},
     limit_one_person: {type: Boolean, default: false},
-    never_expire: {type: Boolean, default: false},
     status: {type: String, enum:['active','inactive'], default: 'active'},
     userID:{type: SchemaTypes.ObjectId, ref: "users"}
   },
