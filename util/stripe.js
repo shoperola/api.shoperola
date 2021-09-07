@@ -374,16 +374,21 @@ if(!shipment.length){
 }
 
       //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
-const Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
+let Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
 
 //console.log(`${shipment[0].shipping_rate}`);
 const coupons = await Coupon.find({coupon_code: req.query.code});
 if(!coupons){
   console.log('no coupons found');
 }
-for(let i of coupons){
-  const applies_to = i.applies_to
-}
+if(!coupons[0].applies_to=='free_shipping'){
+  Shipment_rate=0;
+  item[0].amount+=parseInt(Shipment_rate)*100;
+  }else
+  item[0].amount=cart.cart_total_price*100;
+// for(let i of coupons){
+//   const applies_to = i.applies_to
+// }
 
 try {
   paymentDetails = await PaymentLog.create({
@@ -405,8 +410,6 @@ try {
     }
     try {
       //item amount changed
-
-      item[0].amount+=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate)*100;
       const session = await stripe.checkout.sessions.create(
         {
           payment_method_types: ["card"],

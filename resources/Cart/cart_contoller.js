@@ -238,6 +238,8 @@ const get_product_by_price = async (req, res) => {
           // await cart.save();
           // console.log(q);
         }
+      } else if(coupons[0].applies_to == 'free_shipping'){
+        console.log("free_shipping");
       }
 
   //  }
