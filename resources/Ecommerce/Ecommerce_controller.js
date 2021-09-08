@@ -106,7 +106,7 @@ const updateProduct = async (req, res) => {
       new: true});
       const view = await product.populate("tax",async(err,res)=>{
         console.log(res);
-        if(res.tax._id == name[0]._id){
+        if(res.tax._id == name[0]._id){ 
           const total_price_zero = res.sale_price;
           const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
          console.log(`zero % - ${saved}`);
