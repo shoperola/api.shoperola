@@ -17,7 +17,6 @@ const getUserProfile = (req, res) => {
   res.json({ status: "ok", data: req.user });
 };
 
-
 const updateUserProfile = async (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
@@ -31,14 +30,14 @@ const updateUserProfile = async (req, res) => {
     ? {
         ...req.body,
         bannerImage: req.file.location,
-        publicUrl: `${SECRETS.user_domain_url}/${
-          username ? username : req.user.username
+        publicUrl: `https://${username ? username : req.user.username}.${
+          SECRETS.user_domain_url
         }`,
       }
     : {
         ...req.body,
-        publicUrl: `${SECRETS.user_domain_url}/${
-          username ? username : req.user.username
+        publicUrl: `https://${username ? username : req.user.username}.${
+          SECRETS.user_domain_url
         }`,
       };
   if (!updateObject) {
