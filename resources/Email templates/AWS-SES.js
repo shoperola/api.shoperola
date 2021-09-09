@@ -98,7 +98,6 @@ const send_email = async (req, res) => {
     // const id = req.params.id;
     // const template = await Email.findById(id);
     // var ses_mail = "testing AWS SES";
-
     const params = {
       Source: req.user.email_to_send,
       Template: req.body.template,
@@ -106,7 +105,7 @@ const send_email = async (req, res) => {
       Destination: {
         ToAddresses: [send_email],
       },
-      TemplateData: '{ "first-name":"Pratheek","last-name":"Kawthekar" }',
+      TemplateData: `{ "first-name": "Pratheek","last-name": "Kawthekar","link": "${req.user.publicUrl}","email": "${req.user.email_to_send}","application": "${req.user.publicUrl}"}`,
     };
     ses.sendTemplatedEmail(params, (err, data) => {
       if (err) console.log(err, err.stack);
