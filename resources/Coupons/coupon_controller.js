@@ -1,5 +1,5 @@
 import {Coupon} from './coupon_model';
-
+import {Client} from '../client/client.model';
 const postcoupons= async (req, res) => {
     try {
         if (!req.user) {
@@ -9,7 +9,7 @@ const postcoupons= async (req, res) => {
         const createObject= {...req.body,userID: req.user._id};
         
         const doc= await Coupon.create(createObject);
-        console.log(doc);
+        
         res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
@@ -85,7 +85,27 @@ const getcoupons_client= async (req, res) => {
     }
 }
 
-export {postcoupons,getcoupons,getcouponsbyid,updatecoupons,deletecoupons,getcoupons_client};
+const is_used = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({ message: "User not Found" });
+        
+        }
+        const id = req.params.id;
+        const client = await Client.find({_id: req.body.clientid});
+        console.log(client[0].coupons_used);
+        const is_used = await Coupon.findByIdAndUpdate(id, {$set: req.body}, {new: true});
+        if(is_used.is_used == true){
+            await client[0].coupons_used.push(id);
+            const saved = await client[0].save();
+        }
+        res.status(200).json({message:"coupon used one time", data: saved});
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message:err.message})
+    }
+}
+export {postcoupons,getcoupons,getcouponsbyid,updatecoupons,deletecoupons,getcoupons_client,is_used};
 
 
 
