@@ -86,7 +86,8 @@ import { zero_shipping_rate } from "./resources/shipping_method/shipping_control
 import { view_amount } from "./resources/paymentLog/payment_log_controller";
 import { public_shipments } from "./resources/shipping_method/shipping_controller";
 import EmailRouter from "./resources/Email templates/email_router";
-import { get_product_by_price } from "./resources/Cart/cart_contoller";
+import {get_product_by_price} from "./resources/Cart/cart_contoller";
+import {getcoupons_client} from "./resources/Coupons/coupon_controller";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -157,7 +158,7 @@ app.post("/add_zero", add_tax_zero);
 app.get("/view_amount/:id", view_amount);
 app.post("/add_zero_shippingRate", zero_shipping_rate);
 app.get("/shipments/:id", public_shipments);
-
+app.get("/view_coupons", firebaseAuthProtect, getcoupons_client);
 app.get("/products/:username/:id", getUserById, getProductById);
 app.get("/latest/:username", getUserById, trending);
 app.get("/latestTvShows/:username", getUserById, tvShowLatest);
