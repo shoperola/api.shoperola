@@ -78,7 +78,9 @@ const send_email = async(req, res) => {
         if(!req.user){
             return res.status(400).json({ message: "User not found!!"});
         }
-        const send_email = req.body.email
+        const send_email = req.body.email;
+        const id=req.params.id;
+        const template= await Email.findById(id);
    // var ses_mail = "testing AWS SES";
     var params = {
         Destination: { /* required */
@@ -91,16 +93,16 @@ const send_email = async(req, res) => {
           Body: { /* required */
             Html: {
              Charset: "UTF-8",
-             Data: req.body.html
+             Data: template.body
             },
-            // Text: {
-            //  Charset: "UTF-8",
-            //  Data: "Testing AWS-SES"
-            // }
+            Text: {
+             Charset: "UTF-8",
+             Data: template.title
+            }
            },
            Subject: {
             Charset: 'UTF-8',
-            Data: req.body.subject
+            Data: template.subject
            }
           },
         Source: req.user.email_to_send

@@ -381,11 +381,11 @@ const coupons = await Coupon.find({coupon_code: req.query.code});
 if(!coupons){
   console.log('no coupons found');
 }
-if(!coupons[0].applies_to=='free_shipping'){
+if(coupons[0].applies_to=='free_shipping'){
   Shipment_rate=0;
-  item[0].amount+=parseInt(Shipment_rate)*100;
+  item[0].amount+=Shipment_rate;
   }else
-  item[0].amount=cart.cart_total_price*100;
+  item[0].amount=(cart.cart_total_price+Shipment_rate)*100;
 // for(let i of coupons){
 //   const applies_to = i.applies_to
 // }
@@ -398,7 +398,7 @@ try {
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: parseInt((item[0].amount)/100) + Shipment_rate,
+      amount: parseInt((item[0].amount)/100),
       address: address,
       shipment_rate: Shipment_rate
     });
