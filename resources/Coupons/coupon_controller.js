@@ -5,8 +5,11 @@ const postcoupons= async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User not Found" });
         }
+
         const createObject= {...req.body,userID: req.user._id};
+        
         const doc= await Coupon.create(createObject);
+        console.log(doc);
         res.json({ status: "OK", data: doc});
     } catch (e) {
         console.log(e);
@@ -66,8 +69,23 @@ const deletecoupons= async (req, res) => {
     }
 }
 
-export {postcoupons,getcoupons,getcouponsbyid,updatecoupons,deletecoupons};
+const getcoupons_client= async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({ message: "User not Found" });
+        
+        }
+        //const client = await Client.findOne({ sub: req.user.sub });
 
+        const doc= await Coupon.find({userID: req.body.id});
+        res.json({data:doc});
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({message:e.message})
+    }
+}
+
+export {postcoupons,getcoupons,getcouponsbyid,updatecoupons,deletecoupons,getcoupons_client};
 
 
 
