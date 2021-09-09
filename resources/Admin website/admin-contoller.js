@@ -23,13 +23,13 @@ const updateUserProfile = async (req, res) => {
     ? {
         ...req.body,
         bannerImage: req.file.location,
-        publicUrl: `${SECRETS.domain_url}/${
+        publicUrl: `${SECRETS.user_domain_url}/${
           username ? username : req.user.username
         }`,
       }
     : {
         ...req.body,
-        publicUrl: `${SECRETS.domain_url}/${
+        publicUrl: `${SECRETS.user_domain_url}/${
           username ? username : req.user.username
         }`,
       };
@@ -115,7 +115,7 @@ const getDashboardDetails = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-   // const videos = await Lesson.find({ madeBy: req.user._id });
+    // const videos = await Lesson.find({ madeBy: req.user._id });
     const products = await Ecommerce.find({ userID: req.user._id });
     const category = await Category.find({});
 
@@ -126,10 +126,10 @@ const getDashboardDetails = async (req, res) => {
     res.json({
       status: "OK",
       data: {
-       // videosCount: videos.length,
+        // videosCount: videos.length,
         //tvshowsCount: tvshows.length,
         productsCount: products.length,
-        categoryCount : category.length
+        categoryCount: category.length,
         //subscriberCount: subscribers.length,
       },
     });

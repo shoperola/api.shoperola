@@ -31,13 +31,13 @@ const updateUserProfile = async (req, res) => {
     ? {
         ...req.body,
         bannerImage: req.file.location,
-        publicUrl: `${SECRETS.domain_url}/${
+        publicUrl: `${SECRETS.user_domain_url}/${
           username ? username : req.user.username
         }`,
       }
     : {
         ...req.body,
-        publicUrl: `${SECRETS.domain_url}/${
+        publicUrl: `${SECRETS.user_domain_url}/${
           username ? username : req.user.username
         }`,
       };
