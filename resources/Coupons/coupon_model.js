@@ -17,6 +17,7 @@ const CouponSchema = Schema({
     end_date: {type: Date, default: ''},
     limit_one_person: {type: Boolean, default: false},
     status: {type: String, enum:['active','inactive'], default: 'active'},
+    is_used: {type: Boolean, default: false},
     userID:{type: SchemaTypes.ObjectId, ref: "users"},
     clientId: {type: SchemaTypes.ObjectId, ref: "clients"}
   },
