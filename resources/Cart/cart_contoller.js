@@ -158,7 +158,7 @@ const remove_product = async (req, res) => {
 };
 
 const get_product_by_price = async (req, res) => {
-  try {
+  try { 
     // if (!req.user) {
     //   return res.status(400).json({ message: "User Not Found" });
     // }
@@ -167,7 +167,10 @@ const get_product_by_price = async (req, res) => {
     if(!coupons){
       res.status(404).json({ message: "no coupons"});
     }
+
+    //console.log(coupons);
     if(Date.parse(coupons[0].end_date)> Date.parse(new Date())){
+    // for(let i of coupons){
       if(coupons[0].applies_to == 'orders_over'){
         console.log("sfdsf");
         if(coupons[0].promotion == 'amount_off'){
@@ -241,16 +244,16 @@ const get_product_by_price = async (req, res) => {
         console.log("free_shipping");
       }
 
-      res.status(200).json({message: 'coupon applied successfully'});
-   }else{
-     for(let i of coupons){
-       coupons[0].status="inactive";
-       await coupons[0].save();
-     }
-     
+  //  }
+    res.status(200).json({message: 'coupon applied successfully'});
+  }else{
+    for(let i of coupons){
+      coupons[0].status="inactive";
+      await coupons[0].save();
+    }
     res.status(400).json({message: 'Coupon code Expired'});
 
-   }
+  }
     // const products = await Cart.find({cart_total_price:{$gte: req.body.price}});
     // const q = await products.map(x => x.cart_total_price - coupons[0].amount_off);
     // console.log(q);

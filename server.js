@@ -106,8 +106,8 @@ const adminModel = (req, res, next) => {
   next();
 };
 //const cognitoAuthMiddleware = await getVerifyMiddleware();
-app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
 app.post("/signup", userModel, signup);
