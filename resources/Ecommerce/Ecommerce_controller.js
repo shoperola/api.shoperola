@@ -54,9 +54,19 @@ const addProduct = async (req, res) => {
       return res.status(400).json({ message: "User Not Found" });
     }
     console.log(req.files, req.body);
+    let variantArray=[];
+    const flag=req.body.flag;
+    if(flag==true){
+        console.log("JHKJASKDGH");
+        const variant_image=req.file;
+        console.log(variant_image.location);
+        const variantData={...req.body,variant_image:variant_image.location};
+        variantArray.push(variantData);
+        console.log(variantArray);
+    }
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-    const updateObject ={ ...req.body, userID: req.user._id };
+    const updateObject ={ ...req.body,variants:variantArray ,userID: req.user._id };
     image ? (updateObject.image = image[0].location) : null;
     image1 ? (updateObject.image1 = image1[0].location) : null;
     image2 ? (updateObject.image2 = image2[0].location) : null;
@@ -65,17 +75,17 @@ const addProduct = async (req, res) => {
     image5 ? (updateObject.image5 = image5[0].location) : null;
   
     const product = await Ecommerce.create(updateObject);
-    const view = await product.populate("tax", async(err,res) => {
-      if(res.tax._id == name[0]._id){
-        const total_price_zero = res.sale_price;
-        const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
-       console.log(`zero % - ${saved}`);
-      }
-      const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
-      const total_price = Math.trunc(res.sale_price + tax_amount);
-      const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
-      console.log(`with tax % - ${saved}`);
-    });
+    // const view = await product.populate("tax", async(err,res) => {
+    //   if(res.tax._id == name[0]._id){
+    //     const total_price_zero = res.sale_price;
+    //     const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
+    //    console.log(`zero % - ${saved}`);
+    //   }
+    //   const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+    //   const total_price = Math.trunc(res.sale_price + tax_amount);
+    //   const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+    //   console.log(`with tax % - ${saved}`);
+    // });
     res.json({ status: "OK", data: product });
   } catch (e) {
     console.log(e);

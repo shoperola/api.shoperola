@@ -10,6 +10,7 @@ import {
 import {add_tax} from "../zero_tax/zero_controller";
 import { upload } from "../../util/s3-spaces";
 const uploadFields = [
+  { name:"variant_image"},
   { name: "image" },
   { name: "image1" },
   { name: "image2" },
