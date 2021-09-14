@@ -98,6 +98,7 @@ const addProduct = async (req, res) => {
   }
 };
 
+
 const updateProduct = async (req, res) => {
   try {
     if (!req.user) {
@@ -192,6 +193,25 @@ const  count_product = async (req, res) => {
   }
 };
 
+const add_variant = async (req, res) => {
+  try {
+    const vid=req.params.id;
+    const ID= req.body.id;
+    const product= await Ecommerce.findById(ID);
+    const variant=product.variants.filter(x=>x._id==vid);
+    console.log(variant);
+    variant[0].variant_price=req.body.variant_price;
+    variant[0].variant_quantity=req.body.variant_quantity;
+    variant[0].variant=req.body.variant;
+    variant[0].variant_image=req.file.location;
+    await product.save();
+    res.status(200).json({message: 'success', data: variant});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
 
 export {
   getProducts,
@@ -200,5 +220,6 @@ export {
   updateProduct,
   deleteProduct,
   getproducy_by_category,
-  count_product
+  count_product,
+  add_variant
 };
