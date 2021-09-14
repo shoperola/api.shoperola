@@ -55,22 +55,22 @@ const addProduct = async (req, res) => {
     }
    // console.log(req.files, req.body);
   // console.log("pplpl");
-    // let variantArray=[];
-    // const flag=req.body.flag;
-    // console.log(flag);
-    // if(flag){
-    //     console.log("JHKJASKDGH");  
-    //     const variant_image=req.files;
-    //     console.log(variant_image.variant_image[0].location);
-    //     const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
-    //     variantArray.push(variantData);
-    //     console.log(variantArray);
-    // }
+    let variantArray=[];
+    const flag=req.body.flag;
+    console.log(flag);
+    if(flag){
+        console.log("JHKJASKDGH");  
+        const variant_image=req.files;
+        console.log(variant_image.variant_image[0].location);
+        const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
+        variantArray.push(variantData);
+        console.log(variantArray);
+    }
     //let variant;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
     //variant = await Variants.create({});
-    const updateObject ={ ...req.body,userID: req.user._id };
+    const updateObject ={ ...req.body,variants: variantArray,userID: req.user._id };
     image ? (updateObject.image = image[0].location) : null;
     image1 ? (updateObject.image1 = image1[0].location) : null;
     image2 ? (updateObject.image2 = image2[0].location) : null;
@@ -106,28 +106,28 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    // let variantArray=[];
-    // const flag=req.body.flag;
-    // console.log(flag);
-    // if(flag){
-    //     console.log("JHKJASKDGH");  
-    //     const variant_image=req.files;
-    //     console.log(variant_image.variant_image[0].location);
-    //     const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
-    //     variantArray.push(variantData);
-    //     console.log(variantArray);
-    // }
+    let variantArray=[];
+    const flag=req.body.flag;
+    console.log(flag);
+    if(flag){
+        console.log("JHKJASKDGH");  
+        const variant_image=req.files;
+        console.log(variant_image.variant_image[0].location);
+        const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
+        variantArray.push(variantData);
+        console.log(variantArray);
+    }
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
       image ? (updateObject.image = image[0].location) : null;
-      image1 ? (updateObject.image1 = image1[0].location) : null;
+      image1 ? (updateObject.image1 = image1[0].location) : null; 
       image2 ? (updateObject.image2 = image2[0].location) : null;
       image3 ? (updateObject.image3 = image3[0].location) : null;
       image4 ? (updateObject.image4 = image4[0].location) : null;
       image5 ? (updateObject.image5 = image5[0].location) : null;
     
-    const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
+    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject, $addToSet:{variants: variantArray}}, {
       new: true});
       const view = await product.populate("tax",async(err,res)=>{
         console.log(res);

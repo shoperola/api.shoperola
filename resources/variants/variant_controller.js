@@ -2,12 +2,10 @@ import {Variants} from "./variant_model";
 
 const add_variant = async(req,res) =>{
 try {
-    
-     const objects = [...req.body]
+    const id = req.params.id;
+    const objects = {...req.body}
     // console.log(objects);
-    const add = await Variants.create({title: req.body.title});
-     add.push(objects);
-    await add.save();
+    const add = await Variants.insertMany([objects])
     console.log(add);
     res.send(add)
 } catch (er) {
