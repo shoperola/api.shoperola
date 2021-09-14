@@ -24,10 +24,7 @@ const EcommerceSchema = new Schema(
     sku: String,
     quantity: Number,
     track_quantity: Boolean,
-    variants: [{
-        option:{ type: String},
-        value:{ type: Array}
-  }],
+    variants: { type: SchemaTypes.ObjectId, ref: "Variants"},
     continue_selling: Boolean,
     category: { type: SchemaTypes.ObjectId, ref: "Category" },
     status: { type: Boolean, default: true },
