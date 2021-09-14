@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 const { Schema, model, SchemaTypes } = mongoose;
-// const variantSchema = new Schema({
-//   variant: String,
-//   variant_price: Number,
-//   variant_quantity: Number,
-//   variant_sku: String,
-//   variant_image: String
-// });
+const variantSchema = new Schema({
+  variant: String,
+  variant_price: Number,
+  variant_quantity: Number,
+  variant_sku: String,
+  variant_image: String
+});
 const EcommerceSchema = new Schema(
   {
     title: String,
@@ -24,7 +24,9 @@ const EcommerceSchema = new Schema(
     sku: String,
     quantity: Number,
     track_quantity: Boolean,
-    variants: { type: SchemaTypes.ObjectId, ref: "Variants"},
+    variants: [variantSchema],
+    options:[{ type: String}],
+    value: [{ type:String}],
     continue_selling: Boolean,
     category: { type: SchemaTypes.ObjectId, ref: "Category" },
     status: { type: Boolean, default: true },
