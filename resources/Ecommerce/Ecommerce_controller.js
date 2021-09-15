@@ -193,7 +193,8 @@ const add_variant = async (req, res) => {
         variantArray.push(variantData);
         console.log(variantArray);
     const ID= req.body.id;
-    const product= await Ecommerce.findByIdAndUpdate(ID,{$addToset:{variants: variantArray}},{new: true});
+    const Obj = {variants: variantArray}
+    const product= await Ecommerce.findByIdAndUpdate(ID,{$addToset:{Obj}},{new: true});
     console.log(product);
     res.status(200).json({message: 'success', data: product});
     
