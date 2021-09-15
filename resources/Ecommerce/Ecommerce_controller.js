@@ -108,7 +108,13 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    
+    let value,options;
+    const flag= req.body.flag;
+    if(flag){
+      console.log("JHKJASKDGH");  
+        value=req.body.value;
+        options=req.body.options;
+    }
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
@@ -118,7 +124,7 @@ const updateProduct = async (req, res) => {
       image3 ? (updateObject.image3 = image3[0].location) : null;
       image4 ? (updateObject.image4 = image4[0].location) : null;
       image5 ? (updateObject.image5 = image5[0].location) : null;
-    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject}, {
+    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject,$addToset:{options:options,value:value}}, {
       new: true});
       const view = await product.populate("tax",async(err,res)=>{
         console.log(res);
@@ -183,19 +189,11 @@ const  count_product = async (req, res) => {
 const add_variant = async (req, res) => {
   try {
     let variantArray=[];
-    const flag=req.body.flag;
-    let value,options;
-    if(flag){
-      console.log("JHKJASKDGH");  
-        value=req.body.value;
-        options=req.body.options;
         const variantData={...req.body,variant_image:req.file.location};
         variantArray.push(variantData);
         console.log(variantArray);
-    }
-    const vid=req.params.id;
     const ID= req.body.id;
-    const product= await Ecommerce.findByIdAndUpdate(ID,{$addToset:{variants: variantArray,options:options,value: value}},{new: true});
+    const product= await Ecommerce.findByIdAndUpdate(ID,{$addToset:{variants: variantArray}},{new: true});
     console.log(product);
     res.status(200).json({message: 'success', data: product});
     
@@ -240,6 +238,19 @@ const delete_variant= async (req, res) => {
   }
 }
 
+const view_variant= async (req, res) => {
+  try {
+    const ID= req.body.id;
+    const product= await Ecommerce.findById(ID);
+
+    res.status(200).json({message: 'success', data: product.variants});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+
 export {
   getProducts,
   getProductById,
@@ -250,5 +261,6 @@ export {
   count_product,
   add_variant,
   delete_variant,
-  update_variant
+  update_variant,
+  view_variant
 };
