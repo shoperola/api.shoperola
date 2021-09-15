@@ -108,20 +108,7 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    let variantArray=[];
-    const flag=req.body.flag;
-    console.log(flag);
-    let value,options;
-    if(flag){
-      console.log("JHKJASKDGH");  
-        value=req.body.value;
-        options=req.body.options;
-        const variant_image=req.files;
-        console.log(variant_image.variant_image[0].location);
-        const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
-        variantArray.push(variantData);
-        console.log(variantArray);
-    }
+    
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
@@ -131,7 +118,7 @@ const updateProduct = async (req, res) => {
       image3 ? (updateObject.image3 = image3[0].location) : null;
       image4 ? (updateObject.image4 = image4[0].location) : null;
       image5 ? (updateObject.image5 = image5[0].location) : null;
-    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject, $addToSet:{variants: variantArray,options:options,value: value}}, {
+    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject}, {
       new: true});
       const view = await product.populate("tax",async(err,res)=>{
         console.log(res);
@@ -195,17 +182,57 @@ const  count_product = async (req, res) => {
 
 const add_variant = async (req, res) => {
   try {
+    let variantArray=[];
+    const flag=req.body.flag;
+    let value,options;
+    if(flag){
+      console.log("JHKJASKDGH");  
+        value=req.body.value;
+        options=req.body.options;
+        const variantData={...req.body,variant_image:req.file.location};
+        variantArray.push(variantData);
+        console.log(variantArray);
+    }
+    const vid=req.params.id;
+    const ID= req.body.id;
+    const product= await Ecommerce.findByIdAndUpdate(ID,{$addToset:{variants: variantArray,options:options,value: value}},{new: true});
+    console.log(product);
+    res.status(200).json({message: 'success', data: product});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+const update_variant = async (req, res) => {
+  try {
     const vid=req.params.id;
     const ID= req.body.id;
     const product= await Ecommerce.findById(ID);
     const variant=product.variants.filter(x=>x._id==vid);
-    console.log(variant);
     variant[0].variant_price=req.body.variant_price;
     variant[0].variant_quantity=req.body.variant_quantity;
     variant[0].variant=req.body.variant;
     variant[0].variant_image=req.file.location;
+    console.log(variant);
     await product.save();
     res.status(200).json({message: 'success', data: variant});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+
+const delete_variant= async (req, res) => {
+  try {
+    const vid=req.params.id;
+    const ID= req.body.id;
+    // const product= await Ecommerce.findById(ID);;
+
+    console.log(removed);
+
+    res.status(200).json({message: 'success', data: removed});
     
   } catch (e) {
     console.log(e);
@@ -221,5 +248,7 @@ export {
   deleteProduct,
   getproducy_by_category,
   count_product,
-  add_variant
+  add_variant,
+  delete_variant,
+  update_variant
 };

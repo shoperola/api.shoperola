@@ -6,7 +6,9 @@ import {
   updateProduct,
   deleteProduct,
   count_product,
-  add_variant
+  add_variant,
+  delete_variant,
+  update_variant
 } from "./Ecommerce_controller";
 import {add_tax} from "../zero_tax/zero_controller";
 import { upload } from "../../util/s3-spaces";
@@ -30,5 +32,7 @@ router
   .delete(deleteProduct);
 router.post('/count_delete_tax/:id', count_product);
 router.post('/add_tax', add_tax);
-router.post('/add_variant/:id',upload.single("file"), add_variant);
+router.post('/add_variant/:id',upload.single("image"), add_variant);
+router.put('/update_variant/:id',upload.single("image"),update_variant)
+router.delete('/delete_variant/:id',delete_variant)
 export default router;
