@@ -53,24 +53,10 @@ const addProduct = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-   // console.log(req.files, req.body);
-  // console.log("pplpl");
-    const flag=req.body.flag;
-    console.log(flag);
-    let updateObject;
-    const variantsID= req.body.id;
-    //let variant;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-    //variant = await Variants.create({});
-    
-    updateObject ={ ...req.body,userID: req.user._id };
-    if(flag)
-     { 
-       const value=req.body.value;
-      const options=req.body.options;
-      updateObject ={ ...req.body,options:options,value:value,userID: req.user._id,variants:variantsID};
-    }
+
+    const updateObject ={ ...req.body,userID: req.user._id };
     image ? (updateObject.image = image[0].location) : null;
     image1 ? (updateObject.image1 = image1[0].location) : null;
     image2 ? (updateObject.image2 = image2[0].location) : null;
@@ -109,19 +95,9 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    let value,options;
-    const flag= req.body.flag;
-    let updateObject;
-    const variantsID= req.body.id;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-    updateObject ={ ...req.body};
-    if(flag){
-      console.log("JHKJASKDGH");  
-        const value=req.body.value;
-        const options=req.body.options;
-        updateObject ={ ...req.body,options:options,value:value};
-    }
+      const updateObject ={ ...req.body};
       image ? (updateObject.image = image[0].location) : null;
       image1 ? (updateObject.image1 = image1[0].location) : null; 
       image2 ? (updateObject.image2 = image2[0].location) : null;

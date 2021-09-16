@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 
 const VariantSchema = Schema({
-  
+  options:[{ type:String}],
+  value: [{ type:String}],
   variant_title: [{ type: String}],
   variant_price: [{type: Number}],
   variant_quantity: [{ type: Number}],
