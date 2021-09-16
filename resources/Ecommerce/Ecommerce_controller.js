@@ -57,13 +57,19 @@ const addProduct = async (req, res) => {
   // console.log("pplpl");
     const flag=req.body.flag;
     console.log(flag);
-      value=req.body.value;
-      options=req.body.options;
-      //let variant;
+    let updateObject;
+    const variantsID= req.body.id;
+    //let variant;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
     //variant = await Variants.create({});
-    const updateObject ={ ...req.body,options:options,value:value,userID: req.user._id };
+    
+    updateObject ={ ...req.body,userID: req.user._id };
+    if(flag)
+     { const value=req.body.value;
+      const options=req.body.options;
+      updateObject ={ ...req.body,options:options,value:value,variants:variantsID};
+    }
     image ? (updateObject.image = image[0].location) : null;
     image1 ? (updateObject.image1 = image1[0].location) : null;
     image2 ? (updateObject.image2 = image2[0].location) : null;
@@ -104,15 +110,15 @@ const updateProduct = async (req, res) => {
     const flag= req.body.flag;
     let updateObject;
     const variantsID= req.body.id;
-    if(flag){
-      console.log("JHKJASKDGH");  
-        value=req.body.value;
-        options=req.body.options;
-        updateObject ={ ...req.body,options:options,value:value,variants:variantsID};
-    }
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-       updateObject ={ ...req.body,variants:variantsID};
+    updateObject ={ ...req.body,variants:variantsID};
+    if(flag){
+      console.log("JHKJASKDGH");  
+        const value=req.body.value;
+        const options=req.body.options;
+        updateObject ={ ...req.body,options:options,value:value,variants:variantsID};
+    }
       image ? (updateObject.image = image[0].location) : null;
       image1 ? (updateObject.image1 = image1[0].location) : null; 
       image2 ? (updateObject.image2 = image2[0].location) : null;
