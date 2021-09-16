@@ -219,11 +219,12 @@ const delete_variant= async (req, res) => {
   try {
     const vid=req.params.id;
     const ID= req.body.id;
-    // const product= await Ecommerce.findById(ID);;
-
-    console.log(removed);
-
-    res.status(200).json({message: 'success', data: removed});
+    const product= await Ecommerce.findById(ID);
+    console.log(product);
+    // const variant=product.variants.filter(x=>x._id==vid);
+    await product.variants.pull({_id:vid});
+    await product.save();
+    res.status(200).json({message: 'success', data: product});
     
   } catch (e) {
     console.log(e);

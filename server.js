@@ -201,9 +201,9 @@ export const start = async () => {
   try {
     await connect();
     app.listen(PORT, () => {
-      if (SECRETS.node_env === "development") {
-        expressListRoutes(app);
-      }
+      // if (SECRETS.node_env === "development") {
+      //   expressListRoutes(app);
+      // }
       console.log(`REST API on http://localhost:${PORT}/`);
     });
   } catch (e) {
