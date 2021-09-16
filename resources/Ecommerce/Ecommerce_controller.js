@@ -7,7 +7,7 @@ const getProducts = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-    const products = await Ecommerce.find({userID: req.user._id}).populate("tax").populate("variants");
+    const products = await Ecommerce.find({userID: req.user._id}).populate("tax").populate("Variants");
     res.json({ status: "OK", data: products });
   } catch (e) {
     console.log(e);
@@ -66,9 +66,10 @@ const addProduct = async (req, res) => {
     
     updateObject ={ ...req.body,userID: req.user._id };
     if(flag)
-     { const value=req.body.value;
+     { 
+       const value=req.body.value;
       const options=req.body.options;
-      updateObject ={ ...req.body,options:options,value:value,variants:variantsID};
+      updateObject ={ ...req.body,options:options,value:value,userID: req.user._id,variants:variantsID};
     }
     image ? (updateObject.image = image[0].location) : null;
     image1 ? (updateObject.image1 = image1[0].location) : null;
@@ -112,12 +113,12 @@ const updateProduct = async (req, res) => {
     const variantsID= req.body.id;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-    updateObject ={ ...req.body,variants:variantsID};
+    updateObject ={ ...req.body};
     if(flag){
       console.log("JHKJASKDGH");  
         const value=req.body.value;
         const options=req.body.options;
-        updateObject ={ ...req.body,options:options,value:value,variants:variantsID};
+        updateObject ={ ...req.body,options:options,value:value};
     }
       image ? (updateObject.image = image[0].location) : null;
       image1 ? (updateObject.image1 = image1[0].location) : null; 
