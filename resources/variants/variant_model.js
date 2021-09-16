@@ -3,13 +3,12 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const VariantSchema = Schema({
   
-  title: { type: String},
   variant_title: [{ type: String}],
   variant_price: [{type: Number}],
   variant_quantity: [{ type: Number}],
-  variant_sku: [{ type:String}]
-  //userID: { type: SchemaTypes.ObjectId, ref: "users" },
-  
+  variant_sku: [{ type:String}],
+  variant_image: [{ type:String}],
+  userID: { type: SchemaTypes.ObjectId, ref: "users" }
 
 });
 

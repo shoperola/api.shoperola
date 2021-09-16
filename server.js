@@ -4,6 +4,8 @@ import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";
 import expressListRoutes from "express-list-routes";
+import { upload } from "./util/s3-spaces";
+
 // modules
 import { signup, signin, protect } from "./util/auth";
 import { User } from "./resources/user/user.model";
@@ -88,7 +90,8 @@ import { public_shipments } from "./resources/shipping_method/shipping_controlle
 import EmailRouter from "./resources/Email templates/email_router";
 import {get_product_by_price} from "./resources/Cart/cart_contoller";
 import {getcoupons_client} from "./resources/Coupons/coupon_controller";
-import {add_variant} from "./resources/variants/variant_controller";
+import VariantRouter from "./resources/variants/variant_router";
+
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -120,7 +123,7 @@ app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
-app.post("/add_variant", add_variant);
+app.use("/api/product",userModel,protect,VariantRouter)
 app.use("/api/user", userModel, protect, TextRouter);
 app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);

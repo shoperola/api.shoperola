@@ -1,13 +1,6 @@
 import mongoose from "mongoose";
 
 const { Schema, model, SchemaTypes } = mongoose;
-const variantSchema = new Schema({
-  variant: String,
-  variant_price: Number,
-  variant_quantity: Number,
-  variant_sku: String,
-  variant_image: String
-});
 const EcommerceSchema = new Schema(
   {
     title: String,
@@ -24,7 +17,7 @@ const EcommerceSchema = new Schema(
     sku: String,
     quantity: Number,
     track_quantity: Boolean,
-    variants: [variantSchema],
+    variants: {type: SchemaTypes.ObjectId, ref: "Variants"},
     options:[{ type: String}],
     value: [{ type:String}],
     continue_selling: Boolean,
