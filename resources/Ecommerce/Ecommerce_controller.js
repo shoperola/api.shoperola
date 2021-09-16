@@ -102,21 +102,24 @@ const updateProduct = async (req, res) => {
     }
     let value,options;
     const flag= req.body.flag;
+    let updateObject;
+    const variantsID= req.body.id;
     if(flag){
       console.log("JHKJASKDGH");  
         value=req.body.value;
         options=req.body.options;
+        updateObject ={ ...req.body,options:options,value:value,variants:variantsID};
     }
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-      const updateObject ={ ...req.body};
+       updateObject ={ ...req.body,variants:variantsID};
       image ? (updateObject.image = image[0].location) : null;
       image1 ? (updateObject.image1 = image1[0].location) : null; 
       image2 ? (updateObject.image2 = image2[0].location) : null;
       image3 ? (updateObject.image3 = image3[0].location) : null;
       image4 ? (updateObject.image4 = image4[0].location) : null;
       image5 ? (updateObject.image5 = image5[0].location) : null;
-    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject,$addToset:{options:options,value:value}}, {
+    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject}, {
       new: true}).populate("variants");
       const view = await product.populate("tax",async(err,res)=>{
         console.log(res);
