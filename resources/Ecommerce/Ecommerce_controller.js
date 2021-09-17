@@ -104,8 +104,8 @@ const updateProduct = async (req, res) => {
       image3 ? (updateObject.image3 = image3[0].location) : null;
       image4 ? (updateObject.image4 = image4[0].location) : null;
       image5 ? (updateObject.image5 = image5[0].location) : null;
-    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject}, {
-      new: true}).populate("variants");
+    const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
+      new: true});
       const view = await product.populate("tax",async(err,res)=>{
         console.log(res);
         if(res.tax._id == name[0]._id){ 
@@ -118,9 +118,10 @@ const updateProduct = async (req, res) => {
         const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
     console.log(`with tax % - ${saved}`); 
    });
+   const pro= await Ecommerce.findById(product._id).populate("variants");
    console.log('Product updated');
-    console.log(product);
-    res.json({ status: "OK", data: product });
+    console.log(pro);
+    res.json({ status: "OK", data: pro });
 } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error updating product" });
