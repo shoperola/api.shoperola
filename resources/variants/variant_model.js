@@ -9,6 +9,7 @@ const VariantSchema = Schema({
   variant_quantity: [{ type: Number}],
   variant_sku: [{ type:String}],
   variant_image: [{ type:String}],
+  tax: { type: SchemaTypes.ObjectId, ref: "Tax" },
   userID: { type: SchemaTypes.ObjectId, ref: "users" }
 
 });

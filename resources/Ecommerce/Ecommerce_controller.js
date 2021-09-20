@@ -110,33 +110,33 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    // const {image,image1,image2,image3,image4,image5} = req.files;
-    // const name = await Tax.find({tax_name: 'ZERO_TAX'});
+     const {image,image1,image2,image3,image4,image5} = req.files;
+     const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
-      // image ? (updateObject.image = image[0].location) : null;
-      // image1 ? (updateObject.image1 = image1[0].location) : null; 
-      // image2 ? (updateObject.image2 = image2[0].location) : null;
-      // image3 ? (updateObject.image3 = image3[0].location) : null;
-      // image4 ? (updateObject.image4 = image4[0].location) : null;
-      // image5 ? (updateObject.image5 = image5[0].location) : null;
-    const product = await Ecommerce.findByIdAndUpdate(id, {$set: {updateObject}}, {
-      new: true}).populate("variants");
-  //     console.log(product);
-  //     const view = await product.populate("tax",async(err,res)=>{
-  //       console.log(res);
-  //       if(res.tax._id == name[0]._id){ 
-  //         const total_price_zero = res.sale_price;
-  //         const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
-  //        console.log(`zero % - ${saved}`);
-  //       }
-  //       const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
-  //       const total_price = Math.trunc(res.sale_price + tax_amount);
-  //       const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
-  //   console.log(`with tax % - ${saved}`); 
-  //  });
-  //  console.log('Product updated');
-  //   console.log(product);
-    res.json({ status: "OK", data: product });
+      image ? (updateObject.image = image[0].location) : null;
+      image1 ? (updateObject.image1 = image1[0].location) : null; 
+      image2 ? (updateObject.image2 = image2[0].location) : null;
+      image3 ? (updateObject.image3 = image3[0].location) : null;
+      image4 ? (updateObject.image4 = image4[0].location) : null;
+      image5 ? (updateObject.image5 = image5[0].location) : null;
+    const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
+      new: true});
+      const view = await product.populate("tax",async(err,res)=>{
+        console.log(res);
+        if(res.tax._id == name[0]._id){ 
+          const total_price_zero = res.sale_price;
+          const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
+         console.log(`zero % - ${saved}`);
+        }
+        const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+        const total_price = Math.trunc(res.sale_price + tax_amount);
+        const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+    console.log(`with tax % - ${saved}`); 
+   });
+   const pro= await Ecommerce.findById(product._id).populate("variants");
+   console.log('Product updated');
+    console.log(pro);
+    res.json({ status: "OK", data: pro });
 } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error updating product" });
