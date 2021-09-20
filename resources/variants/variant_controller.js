@@ -67,7 +67,7 @@ const update_variant = async(req,res) =>{
         console.log(id);
         const update = await Variants.updateMany({_id:id},{$set:objects});
         const add= await Variants.findById(id);
-        console.log(add);
+        console.log(add); 
         res.send(add)
     } catch (er) {
         console.log(er);
