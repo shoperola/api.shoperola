@@ -27,12 +27,24 @@ try {
         var sum = 0;
         var tax_price = 0
         var total_price = 0
+        if(tax_value===0){
+            for(var i=0; i< price.length; i++) {
+                tax_price = ((price[i]*tax_value)/(100 + tax_value));  
+                total_price = Math.trunc(price[i] + tax_price)
+              sum = total_price*quantity[i];
+              add_variants.variant_total.push(sum);
+              await add_variants.save();
+              console.log(sum)
+                 }
+        }else{
         for(var i=0; i< price.length; i++) {
              tax_price = ((price[i]*tax_value)/(100 + tax_value));  
              total_price = Math.trunc(price[i] + tax_price)
            sum = total_price*quantity[i];
+           add_variants.variant_total.push(sum);
+              await add_variants.save();
            console.log(sum)
-}
+}}
     }
     res.send(add)
 } catch (er) {
@@ -53,7 +65,8 @@ const update_variant = async(req,res) =>{
         const objects = {...req.body,variant_image:files}
         // console.log(objects);
         console.log(id);
-        const add = await Variants.updateMany({_id:id},{$set:objects});
+        const update = await Variants.updateMany({_id:id},{$set:objects});
+        const add= await Variants.findById(id);
         console.log(add);
         res.send(add)
     } catch (er) {
