@@ -7,7 +7,7 @@ const getProducts = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-    const products = await Ecommerce.find({userID: req.user._id}).populate("tax").populate("variants");
+    const products = await Ecommerce.find({userID: req.user._id}).populate("tax");
     res.json({ status: "OK", data: products });
   } catch (e) {
     console.log(e);
@@ -24,7 +24,7 @@ const getProductById = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    const product = await Ecommerce.findById(id).populate("variants");
+    const product = await Ecommerce.findById(id);
     console.log(product);
     res.json({ status: "OK", data: product });
   } catch (e) {
@@ -53,10 +53,25 @@ const addProduct = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
+   // console.log(req.files, req.body);
+  // console.log("pplpl");
+    let variantArray=[];
+    const flag=req.body.flag;
+    console.log(flag);
+    if(flag){
+        console.log("JHKJASKDGH");  
+        const variant_image=req.files;
+        console.log(variant_image.variant_image[0].location);
+        const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
+        variantArray.push(variantData);
+        console.log(variantArray);
+      }
+
+      //let variant;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
-
-    const updateObject ={ ...req.body,userID: req.user._id };
+    //variant = await Variants.create({});
+    const updateObject ={ ...req.body,variants: variantArray,userID: req.user._id };
     image ? (updateObject.image = image[0].location) : null;
     image1 ? (updateObject.image1 = image1[0].location) : null;
     image2 ? (updateObject.image2 = image2[0].location) : null;
@@ -95,37 +110,39 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    const {image,image1,image2,image3,image4,image5} = req.files;
-    const name = await Tax.find({tax_name: 'ZERO_TAX'});
+    // const {image,image1,image2,image3,image4,image5} = req.files;
+    // const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
-      image ? (updateObject.image = image[0].location) : null;
-      image1 ? (updateObject.image1 = image1[0].location) : null; 
-      image2 ? (updateObject.image2 = image2[0].location) : null;
-      image3 ? (updateObject.image3 = image3[0].location) : null;
-      image4 ? (updateObject.image4 = image4[0].location) : null;
-      image5 ? (updateObject.image5 = image5[0].location) : null;
-    const product = await Ecommerce.findByIdAndUpdate(id, {updateObject}, {
+      // image ? (updateObject.image = image[0].location) : null;
+      // image1 ? (updateObject.image1 = image1[0].location) : null; 
+      // image2 ? (updateObject.image2 = image2[0].location) : null;
+      // image3 ? (updateObject.image3 = image3[0].location) : null;
+      // image4 ? (updateObject.image4 = image4[0].location) : null;
+      // image5 ? (updateObject.image5 = image5[0].location) : null;
+    const product = await Ecommerce.findByIdAndUpdate(id, {$set: {updateObject}}, {
       new: true}).populate("variants");
-      const view = await product.populate("tax",async(err,res)=>{
-        console.log(res);
-        if(res.tax._id == name[0]._id){ 
-          const total_price_zero = res.sale_price;
-          const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
-         console.log(`zero % - ${saved}`);
-        }
-        const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
-        const total_price = Math.trunc(res.sale_price + tax_amount);
-        const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
-    console.log(`with tax % - ${saved}`); 
-   });
-   console.log('Product updated');
-    console.log(product);
+  //     console.log(product);
+  //     const view = await product.populate("tax",async(err,res)=>{
+  //       console.log(res);
+  //       if(res.tax._id == name[0]._id){ 
+  //         const total_price_zero = res.sale_price;
+  //         const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price_zero}},{new: true});
+  //        console.log(`zero % - ${saved}`);
+  //       }
+  //       const tax_amount = ((res.sale_price)*res.tax.tax_percentage)/(100+res.tax.tax_percentage);
+  //       const total_price = Math.trunc(res.sale_price + tax_amount);
+  //       const saved = await Ecommerce.findOneAndUpdate({_id:product._id},{$set: {total_price:total_price}},{new: true});
+  //   console.log(`with tax % - ${saved}`); 
+  //  });
+  //  console.log('Product updated');
+  //   console.log(product);
     res.json({ status: "OK", data: product });
 } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error updating product" });
   }
 };
+
 
 const deleteProduct = async (req, res) => {
   try {
@@ -166,7 +183,70 @@ const  count_product = async (req, res) => {
   }
 };
 
+const add_variant = async (req, res) => {
+  try {
+    let variantArray=[];
+        const variantData={...req.body,variant_image:req.file.location};
+        variantArray.push(variantData);
+        console.log(variantArray);
+    const ID= req.body.id;
+    const product= await Ecommerce.findByIdAndUpdate(ID,{$addToSet:{variants: variantArray}},{new: true});
+    console.log(product);
+    res.status(200).json({message: 'success', data: product});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+const update_variant = async (req, res) => {
+  try {
+    const vid=req.params.id;
+    const ID= req.body.id;
+    const product= await Ecommerce.findById(ID);
+    const variant=product.variants.filter(x=>x._id==vid);
+    variant[0].variant_price=req.body.variant_price;
+    variant[0].variant_quantity=req.body.variant_quantity;
+    variant[0].variant=req.body.variant;
+    variant[0].variant_image=req.file.location;
+    console.log(variant);
+    await product.save();
+    res.status(200).json({message: 'success', data: variant});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
 
+const delete_variant= async (req, res) => {
+  try {
+    const vid=req.params.id;
+    const ID= req.body.id;
+    // const product= await Ecommerce.findById(ID);;
+    
+    console.log(removed);
+
+    res.status(200).json({message: 'success', data: removed});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
+
+const view_variant= async (req, res) => {
+  try {
+    const ID= req.body.id;
+    const product= await Ecommerce.findById(ID);
+
+    res.status(200).json({message: 'success', data: product.variants});
+    
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({message: 'something went wrong'});
+  }
+}
 
 export {
   getProducts,
@@ -175,5 +255,9 @@ export {
   updateProduct,
   deleteProduct,
   getproducy_by_category,
-  count_product
+  count_product,
+  add_variant,
+  delete_variant,
+  update_variant,
+  view_variant
 };
