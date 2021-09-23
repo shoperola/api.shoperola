@@ -6,7 +6,6 @@ const add_variant = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-
     const files = req.files.map((x) => x.location);
     const objects = { ...req.body, variant_image: files, userID: req.user._id };
     const zero_tax = await Tax.find({ tax_name: "ZERO_TAX" });
@@ -26,7 +25,7 @@ const add_variant = async (req, res) => {
         for (var i = 0; i < price.length; i++) {
           tax_price = (price[i] * tax_value) / (100 + tax_value);
           total_price = Math.trunc(price[i] + tax_price);
-          sum = total_price * quantity[i];
+          sum = total_price;
           add_variants.variant_total.push(sum);
           await add_variants.save();
           console.log(sum);
@@ -35,7 +34,7 @@ const add_variant = async (req, res) => {
         for (var i = 0; i < price.length; i++) {
           tax_price = (price[i] * tax_value) / (100 + tax_value);
           total_price = Math.trunc(price[i] + tax_price);
-          sum = total_price * quantity[i];
+          sum = total_price;
           add_variants.variant_total.push(sum);
           await add_variants.save();
           console.log(sum);
@@ -76,7 +75,7 @@ const update_variant = async (req, res) => {
       for (var i = 0; i < price.length; i++) {
         tax_price = (price[i] * tax_value) / (100 + tax_value);
         total_price = Math.trunc(price[i] + tax_price);
-        sum = total_price * quantity[i];
+        sum = total_price;
         add.variant_total.push(sum);
           await add.save();
           console.log(sum);
@@ -85,7 +84,7 @@ const update_variant = async (req, res) => {
       for (var i = 0; i < price.length; i++) {
         tax_price = (price[i] * tax_value) / (100 + tax_value);
         total_price = Math.trunc(price[i] + tax_price);
-        sum = total_price * quantity[i];
+        sum = total_price;
         add.variant_total.push(sum);
           await add.save();
           console.log(sum);
