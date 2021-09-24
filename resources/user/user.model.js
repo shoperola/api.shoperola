@@ -71,6 +71,8 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
+    store_name:{ type:String, default:""},
+    industry:{ type: String, default: ""},
     is_verified: { type: Boolean, default: false},
     publicUrl: {
       type: String,
@@ -145,6 +147,10 @@ const UserSchema = new Schema(
       type: Number,
       default: 0,
     },
+    name_on_card:{ type: String, default: ""},
+    card_number:{ type: Number, default: 0},
+    expiry: {type:Date, default: ''},
+    cvv: {type:Number, default: 0}
   },
   { timestamps: true }
 );
@@ -181,7 +187,7 @@ UserSchema.pre("save", async function (next) {
     this.lastName
   );
 
-  this.publicUrl = `${SECRETS.domain_url}/${this.username}`;
+  this.publicUrl = `${this.username}.${SECRETS.domain_url}`;
 
   const params = {
     name: `${this.firstName} ${this.lastName}`,

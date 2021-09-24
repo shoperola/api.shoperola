@@ -6,7 +6,7 @@ const update_Address = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
         }
-        const id = req.body.id;
+        const id = req.user._id;
         const doc= await UserAddress.findById(id);
         if(!doc){
               const add_Address = await UserAddress.create({...req.body,userID: req.user._id});
