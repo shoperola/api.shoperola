@@ -8,8 +8,8 @@ import {
   getDashboardDetails,
 } from "./admin-contoller";
 import {social_add,view_social, social_update, social_delete} from "./Social_footer/social_controller";
-import {add_logo,update_logo,delete_logo} from "./Logo/logo_contoller";
-import  {add_link, update_link,delete_link} from "./Link/link_controller";
+import {add_logo,view_logo,update_logo,delete_logo} from "./Logo/logo_contoller";
+import  {add_link,view_link, update_link,delete_link} from "./Link/link_controller";
 import  {add_home_setting,view_home_setting, update_home_setting, delete_home_setting} from "./home srtting page/home_setting_controller";
 import {add_AdminAddress,view_AdminAddress, update_AdminAddress,delete_AdminAddress} from "./Address_footer/address_controller";
 import {add_contact, update_contact, delete_contact} from "./contact_us/contact_us_controller";
@@ -33,11 +33,13 @@ router.delete("/delete_social/", social_delete);
 
 
 router.post("/add_logo", upload.single("file"), add_logo);
+router.get("/view_logo", view_logo);
 router.patch("/update_logo", upload.single("file"), update_logo);
 router.delete("/delete_logo", delete_logo);
 
 
 router.post("/add_link", add_link);
+router.get("/view_link", view_link);
 router.patch("/update_link", update_link);
 router.delete("/delete_link", delete_link);
 
