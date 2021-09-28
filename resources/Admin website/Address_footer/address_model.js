@@ -29,7 +29,8 @@ const AdminAddressSchema = new Schema(
     },
     email: {
         type:String
-    }
+    },
+    adminID:{type:SchemaTypes.ObjectId,ref:'admins'}
   },
   { timestamps: true }
 );

@@ -5,7 +5,8 @@ const add_AdminAddress = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-          const add_AdminAddress = await AdminAddress.create({...req.body});
+          const createObject = { ...req.body,adminID: req.user._id}
+          const add_AdminAddress = await AdminAddress.create(createObject);
           res.status(201).json({success: "ok", data: add_AdminAddress});
 
     }catch(e){
@@ -18,11 +19,11 @@ const update_AdminAddress = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
         }
-        const id = req.params.id
-        const check = await AdminAddress.findById(id);
+        const check = await AdminAddress.find({adminID: req.user._id});
         if(!check){
             res.status(400).send("something went wrong");
         }
+        const id = check[0]._id;
         const remove = await AdminAddress.findByIdAndUpdate(id,{$set: req.body}, {new: true});
         console.log(remove);
         res.status(200).json({success: "ok", data: remove});
@@ -33,7 +34,10 @@ const update_AdminAddress = async (req, res) => {
 
 const view_AdminAddress = async(req,res) => {
     try{
-        const view = await AdminAddress.find({})
+        if(!req.user){
+            return res.status(400).json({ message: "User Not Found" });
+        }
+        const view = await AdminAddress.find({adminID: req.user._id})
         res.status(200).json({success: "ok", data:view});
     }catch(e){
         res.send(e);
@@ -45,11 +49,11 @@ const delete_AdminAddress = async(req,res) => {
         if(!req.user){
             return res.status(400).json({ message: "User Not Found" });
         }
-        const id = req.params.id;
-        const check = await AdminAddress.findById(id);
+        const check = await AdminAddress.find({adminID: req.user._id});
         if(!check){
             res.status(400).send("something went wrong");
         }
+        const id = check[0]._id;
         const remove = await AdminAddress.findByIdAndDelete(id);
         console.log(remove);
         res.status(200).json({success: "ok", data: remove});
