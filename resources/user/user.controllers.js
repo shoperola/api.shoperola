@@ -656,6 +656,15 @@ const getDashboardDetails = async (req, res) => {
   }
 };
 
+const getall_users = async (req,res) => {
+  try {
+    const getUser = await User.find({});
+    res.status(200).json({data: getUser});
+  } catch (err) {
+    res.status(400).json({err});
+  }
+}
+
 export {
   getUserProfile,
   updateUserProfile,
@@ -678,4 +687,5 @@ export {
   updatePublicUrl,
   getSubscribers,
   getDashboardDetails,
+  getall_users
 };

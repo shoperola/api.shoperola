@@ -91,6 +91,7 @@ import EmailRouter from "./resources/Email templates/email_router";
 import {get_product_by_price} from "./resources/Cart/cart_contoller";
 import {getcoupons_client} from "./resources/Coupons/coupon_controller";
 import VariantRouter from "./resources/variants/variant_router";
+import {getall_users} from "./resources/user/user.controllers";
 
 config();
 const app = express();
@@ -125,6 +126,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/product",userModel,protect,VariantRouter)
 app.use("/api/user", userModel, protect, TextRouter);
+app.get("/admin_users", getall_users);
 app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
 app.use("/api/user", userModel, protect, AppsRouter);

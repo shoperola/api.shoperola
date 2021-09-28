@@ -27,6 +27,7 @@ import {
   getSubject,
   getSubscribers,
   getDashboardDetails,
+  
 } from "./user.controllers";
 import {
   getTransactionById,
@@ -99,5 +100,6 @@ router.route("/transaction/").get(getTransactions);
 router.route("/transaction/:id").get(getTransactionById);
 
 router.get("/details", getDashboardDetails);
+
 
 export default router;
