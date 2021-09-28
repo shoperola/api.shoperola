@@ -10,7 +10,8 @@ const LinkSchema = new Schema(
     link3:{type: String},
     url3:{type: String},
     link4:{type: String},
-    url4:{type: String}
+    url4:{type: String},
+    adminID:{type:SchemaTypes.ObjectId,ref:'admins'}
   },
   
   { timestamps: true }

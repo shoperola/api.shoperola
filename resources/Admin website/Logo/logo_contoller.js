@@ -5,7 +5,8 @@ const add_logo = async (req, res) => {
         if (!req.user) {
             return res.status(400).json({ message: "User Not Found" });
           }
-          const upload_logo = await Logo.create({logo:req.file.location});
+          const createLogo={logo:req.file.location,adminID: req.user._id};
+          const upload_logo = await Logo.create(createLogo);
           console.log(upload_logo);
           res.status(201).json({success: "ok", data: upload_logo});
     }catch(e){
@@ -18,12 +19,12 @@ const update_logo = async (req, res) => {
         if(!req.user){
             return res.status(400).json({ message: "User not Found" });
         }
-        const id = req.params.id
-        const check = await Logo.findById(id);
+        const check = await Logo.find({adminID: req.user._id});
         if(!check){
             res.status(400).json({ message: "no logo found"});
         }
         console.log(req.file.location);
+        const id = check[0]._id;
         const update = await Logo.findByIdAndUpdate(id,{logo: req.file.location},{new: true});
         console.log(update);
         res.status(200).json({status:"ok", data: update});
@@ -33,8 +34,10 @@ const update_logo = async (req, res) => {
 };
 const view_logo = async(req,res)=> {
     try{
-       
-        const view = await Logo.find({})
+        if(!req.user){
+            res.status(400).json({ message: "User not found" });
+        }
+        const view = await Logo.find({adminID: req.user._id})
         res.status(200).json({status:"ok", data: view});
     }catch(err){
         res.send(err);
@@ -45,11 +48,11 @@ const delete_logo = async(req,res)=> {
         if(!req.user){
             res.status(400).json({ message: "User not found" });
         }
-        const id = req.params.id
-        const check = await Logo.findById(id);
+        const check = await Logo.find({adminID: req.user._id});
         if(!check){
             res.status(404).json({ message: "no logo found" });
         }
+        const id = check[0]._id;
         const remove = await Logo.findByIdAndDelete(id);
         console.log(remove);
         res.status(200).json({ status: "ok" , data: remove});

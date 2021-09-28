@@ -53,21 +53,6 @@ const addProduct = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-   // console.log(req.files, req.body);
-  // console.log("pplpl");
-    // let variantArray=[];
-    // const flag=req.body.flag;
-    // console.log(flag);
-    // if(flag){
-    //     console.log("JHKJASKDGH");  
-    //     const variant_image=req.files;
-    //     console.log(variant_image.variant_image[0].location);
-    //     const variantData={...req.body,variant_image:variant_image.variant_image[0].location};
-    //     variantArray.push(variantData);
-    //     console.log(variantArray);
-    //   }
-
-      //let variant;
     const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
     //variant = await Variants.create({});

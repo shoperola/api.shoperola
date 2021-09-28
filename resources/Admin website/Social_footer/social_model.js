@@ -13,7 +13,8 @@ const SocialSchema = Schema({
     },
     linkedin:{
         type:String
-    }
+    },
+    adminID:{type:SchemaTypes.ObjectId,ref:'admins'}
 });
 
 export const Social = model("Social", SocialSchema);

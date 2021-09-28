@@ -10,7 +10,7 @@ import { Tvshow } from "../tvshows/tvshow_model";
 import { SECRETS } from "../../util/config";
 const { Types } = mongoose;
 
-const getUserProfile = (req, res) => {
+const  getUserProfile = (req, res) => {
   if (!req.user) {
     return res.status(400).json({ message: "User not Found" });
   }

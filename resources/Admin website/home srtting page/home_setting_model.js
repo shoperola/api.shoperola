@@ -47,7 +47,8 @@ const HomePageSchema = new Schema(
     },
     image_description_4:{
         type: String
-    }
+    },
+    adminID:{type:SchemaTypes.ObjectId,ref:'admins'}
   },
   { timestamps: true }
 );
