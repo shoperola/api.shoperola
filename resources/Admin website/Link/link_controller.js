@@ -41,7 +41,7 @@ const view_link = async (req, res) => {
             return res.status(400).json({ message: "User not found"});
 
         }
-        const view_link = await Link.find({adminID: req.user._id})
+        const view_link = await Link.find({})
         console.log(view_link);
         res.status(200).json({status:"ok",data: view_link});
     } catch (e) {

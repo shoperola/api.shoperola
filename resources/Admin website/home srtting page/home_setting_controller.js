@@ -37,7 +37,7 @@ const add_home_setting = async (req, res) => {
 };
 const view_home_setting = async (req, res) => {
   try {
-    const view_all = await HomePage.find({adminID: req.user._id});
+    const view_all = await HomePage.find({});
     res.status(201).json({ status: "OK", data: view_all });
   } catch (e) {
     console.log(e);

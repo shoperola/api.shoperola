@@ -37,7 +37,7 @@ const view_logo = async(req,res)=> {
         if(!req.user){
             res.status(400).json({ message: "User not found" });
         }
-        const view = await Logo.find({adminID: req.user._id})
+        const view = await Logo.find({})
         res.status(200).json({status:"ok", data: view});
     }catch(err){
         res.send(err);

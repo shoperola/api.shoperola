@@ -92,7 +92,6 @@ import {get_product_by_price} from "./resources/Cart/cart_contoller";
 import {getcoupons_client} from "./resources/Coupons/coupon_controller";
 import VariantRouter from "./resources/variants/variant_router";
 import {getall_users} from "./resources/user/user.controllers";
-
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -137,6 +136,7 @@ app.use("/api/user", userModel, protect, UserRouter);
 app.get("/profile/:username", ProfileDataController);
 app.get("/tvshow/:username", getUserById, viewall_tvshow);
 app.use("/admin", adminModel, protect, AdminRouter);
+app.use("/admin", AdminRouter);
 app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 app.get("/movies/:username", getUserById, getLessons);
 app.get("/movie/:username/:id", getUserById, getLesson);

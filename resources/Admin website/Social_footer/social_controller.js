@@ -38,7 +38,7 @@ const view_social = async(req,res) => {
         if(!req.user){
             return res.status(400).json({ message: "User Not Found" })
         }
-        const view_socail = await Social.find({adminID: req.user._id});
+        const view_socail = await Social.find({});
         res.status(200).json({success:"ok", data: view_socail});
     }catch(err){
         res.send(err);
