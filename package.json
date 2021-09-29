@@ -12,7 +12,6 @@
     "start:pm2": "pm2 start index.js --node-args=\"--es-module-specifier-resolution=node\"",
     "heroku_push": "git add . && git commit -am 'heroku' && git push heroku master",
     "heroku_pull": "git add . && git commit -am 'heroku' && git pull heroku master"
-
   },
   "keywords": [],
   "author": "",
