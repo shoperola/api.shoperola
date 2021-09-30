@@ -180,7 +180,7 @@ app.use("/api/studio", userModel, protect, StudioRouter);
 app.use("/api/lesson", userModel, protect, LessonRouter);
 app.post("/get_orders_overPrice", get_product_by_price);
 
-app.use("/api/sendEmail", userModel, protect, EmailRouter);
+// app.use("/api/sendEmail", userModel, protect, EmailRouter);
 app.use("/api/categories", userModel, protect, CategoriesRouter);
 app.use("/api/cart", firebaseAuthProtect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
