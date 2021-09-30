@@ -187,7 +187,7 @@ UserSchema.pre("save", async function (next) {
     this.lastName
   );
 
-  this.publicUrl = `${this.username}.${SECRETS.domain_url}`;
+  this.publicUrl = `https://${this.username}.${SECRETS.domain_url}`;
 
   const params = {
     name: `${this.firstName} ${this.lastName}`,
