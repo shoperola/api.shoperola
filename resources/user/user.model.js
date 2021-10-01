@@ -37,32 +37,6 @@ const UserSchema = new Schema(
       unique: true,
       default: "",
     },
-    identities: {
-      google: {
-        type: String,
-        default: "",
-      },
-      facebook: {
-        type: String,
-        default: "",
-      },
-      linkedin: {
-        type: String,
-        default: "",
-      },
-      twitter: {
-        type: String,
-        default: "",
-      },
-    },
-    services: {
-      type: String,
-      default: "",
-    },
-    profession: {
-      type: String,
-      default: "",
-    },
     location: {
       type: String,
       default: "",
@@ -71,60 +45,7 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
-    store_name:{ type:String, default:""},
-    industry:{ type: String, default: ""},
-    is_verified: { type: Boolean, default: false},
-    publicUrl: {
-      type: String,
-      default: "",
-    },
-    bannerImage: {
-      type: String,
-      default:
-        "https://sgp1.digitaloceanspaces.com/storage.tellytell.com/banner-default.png",
-    },
-    picture: {
-      type: String,
-      default: "",
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
-    featured: [
-      {
-        url: String,
-      },
-    ],
     categories: [{ type: SchemaTypes.ObjectId, ref: "Category" }],
-    websiteLink: {
-      type: String,
-      default: "",
-    },
-    facebookLink: {
-      type: String,
-      default: "",
-    },
-    linkedinLink: {
-      type: String,
-      default: "",
-    },
-    twitterLink: {
-      type: String,
-      default: "",
-    },
-    instagramLink: {
-      type: String,
-      default: "",
-    },
-    feesPerMonth: {
-      type: Number,
-      default: 0,
-    },
-    feesPerYear: {
-      type: Number,
-      default: 0,
-    },
     settings: {
       country: {
         type: String,
@@ -139,18 +60,10 @@ const UserSchema = new Schema(
       type: Number,
       default: 0,
     },
-    views: {
-      type: Number,
-      default: 0,
-    },
-    reviewsCount: {
-      type: Number,
-      default: 0,
-    },
-    name_on_card:{ type: String, default: ""},
-    card_number:{ type: Number, default: 0},
-    expiry: {type:Date, default: ''},
-    cvv: {type:Number, default: 0}
+    // name_on_card:{ type: String, default: ""},
+    // card_number:{ type: Number, default: 0},
+    // expiry: {type:Date, default: ''},
+    // cvv: {type:Number, default: 0}
   },
   { timestamps: true }
 );
@@ -187,18 +100,18 @@ UserSchema.pre("save", async function (next) {
     this.lastName
   );
 
-  this.publicUrl = `https://${this.username}.${SECRETS.domain_url}`;
+  // this.publicUrl = `https://${this.username}.${SECRETS.domain_url}`;
 
-  const params = {
-    name: `${this.firstName} ${this.lastName}`,
-    size: 256,
-    rounded: true,
-    background: "3d1f98",
-    color: "fff",
-  };
-  this.picture = `https://ui-avatars.com/api/?${new URLSearchParams(
-    params
-  ).toString()}`;
+  // const params = {
+  //   name: `${this.firstName} ${this.lastName}`,
+  //   size: 256,
+  //   rounded: true,
+  //   background: "3d1f98",
+  //   color: "fff",
+  // };
+  // this.picture = `https://ui-avatars.com/api/?${new URLSearchParams(
+  //   params
+  // ).toString()}`;
 
   try {
     const hash = await bcrypt.hash(this.password, 8);

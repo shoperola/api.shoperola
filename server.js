@@ -117,12 +117,13 @@ app.use(morgan("dev"));
 app.post("/signup", userModel, signup);
 app.post("/signin", userModel, signin);
 app.post("/signup_admin", adminModel, signup);
-app.post("/sigin_admin", adminModel, signin);
+app.post("/signin_admin", adminModel, signin);
 app.post("/signupClient", clientModel, signup);
 app.post("/signinClient", clientModel, signin);
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
+
 app.use("/api/product",userModel,protect,VariantRouter)
 app.use("/api/user", userModel, protect, TextRouter);
 app.get("/admin_users", getall_users);
@@ -196,7 +197,7 @@ app.use("/api/shipment", userModel, protect, ShippmentRouter);
 app.use("/api/banner", userModel, protect, BannerRouter);
 //app.post("/cognito/generateTokens", generateTokensfromCode);
 app.use("/api/address", firebaseAuthProtect, AddressRouter);
-app.use("/api/client", firebaseAuthProtect, ClientRouter);
+app.use("/api/client", ClientRouter);
 // app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
 //   console.log("Recieved");
 //   res.json("Success");

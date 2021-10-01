@@ -1,15 +1,6 @@
 import mongoose from "mongoose";
 const { Schema, SchemaTypes, model } = mongoose;
 import bcrypt from "bcrypt";
-const watchhistory = new Schema({
-  vid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "lessons",
-  },
-  time: {
-    type: String,
-  },
-});
 
 const ClientSchema = new Schema({
   username: {
@@ -25,11 +16,6 @@ const ClientSchema = new Schema({
   lastName: {
     type: String,
   },
-  sub: {
-    type: String,
-    unique: true,
-    required: true,
-  },
   status: {
     type: Boolean,
     default: false,
@@ -38,10 +24,9 @@ const ClientSchema = new Schema({
     type: SchemaTypes.ObjectId,
     ref: "Cart",
   },
-  watchhistory: [watchhistory],
-  watchlist: { type: SchemaTypes.ObjectId, ref: "Watchlist" },
   coupons_used: [{ type: SchemaTypes.ObjectId, ref: "Coupon"}],
-  userID: { type: SchemaTypes.ObjectId, ref: "users" }
+  userID: { type: SchemaTypes.ObjectId, ref: "users" },
+  machine_id:{ type: String,default:"MACHINECODE"}
 
 });
 

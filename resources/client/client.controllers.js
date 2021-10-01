@@ -1,8 +1,6 @@
 import { Client } from "./client.model";
 import { User } from "../user/user.model";
-import { Subscription } from "../subscription/subscription.model";
 import { Cart } from "../Cart/cart_model";
-import { Watchlist } from "../watchlist/watchlist_model";
 
 const getClient = async (req, res) => {
   try {
@@ -19,58 +17,55 @@ const createClient = async (req, res) => {
   if (!userID) {
     return res.status(400).json({ message: "Instructor ID not provided" });
   }
-  const { sub, username, given_name, family_name, email } = req.user;
   let client;
   let cart;
   try {
     cart = await Cart.create({});
-
-    const watchlist = await Watchlist.create({});
-    client = await Client.create({
-      email: email,
-      username: username,
-      firstName: given_name,
-      lastName: family_name,
-      sub: sub,
-      cartid: cart._id,
-      watchlist: watchlist._id,
-      ...req.body,
-    });
-  } catch (e) {
-    console.log(e.message);
-    if (e.message.includes("E11000 duplicate key error collection")) {
-      console.log("client already exists");
-      client = await Client.findOne({ sub: sub });
-      await Cart.findByIdAndDelete(cart._id);
-    } else {
-      return res.status(500).json({ message: "Error creating client" });
-    }
-  }
+    const createObject={...req.body};
+    client = await Client.create({createObject,cartid:cart._id,userID: req.body.userID});
+      // email: req.body.email,
+      // username: req.body.username,
+      // firstName: req.body.firstName,
+      // lastName: req.body.lastName,
+      // cartid: cart._id,
+      // machine_id: req.body.machine_id
+    } catch (e) {
+      console.log(e.message);
+      if (e.message.includes("E11000 duplicate key error collection")) {
+        console.log("client already exists");
+          client = await Client.findOne({ userID: userID });
+          await Cart.findByIdAndDelete(cart._id);
+          res.status(500).json({ status: "client already exists"});
+        } else {
+            return res.status(500).json({ message: "Error creating client" });
+          }
+        }
   let user;
   try {
     user = await User.findById(userID);
+    res.status(200).json({ status: "client created",data: client});
   } catch (e) {
     console.log(e.message);
     return res.status(500).json({ message: "Error finding user" });
   }
 
   // create Relation
-  try {
-    const relation = await Subscription.create({
-      subscriber: client._id,
-      instructor: userID,
-      amount: 0,
-    });
-    res.status(201).json({ status: "OK", data: client });
-  } catch (e) {
-    console.log(e.message);
-    if (e.message.includes("E11000 duplicate key error collection")) {
-      console.log("client already exists");
-      res.status(200).json({ status: "OK", data: client });
-    } else {
-      res.status(500).json({ message: "Error creating relation" });
-    }
-  }
+  // try {
+  //   const relation = await Subscription.create({
+  //     subscriber: client._id,
+  //     instructor: userID,
+  //     amount: 0,
+  //   });
+  //   res.status(201).json({ status: "OK", data: client });
+  // } catch (e) {
+  //   console.log(e.message);
+  //   if (e.message.includes("E11000 duplicate key error collection")) {
+  //     console.log("client already exists");
+  //     res.status(200).json({ status: "OK", data: client });
+  //   } else {
+  //     res.status(500).json({ message: "Error creating relation" });
+  //   }
+  // }
 };
 
 const suspendClient = async (req, res) => {

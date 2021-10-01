@@ -13,11 +13,7 @@ const update_cart = async (req, res) => {
     const client = await Client.findOne({ sub: req.user.sub });
   //  console.log(client);
     const id = req.body.productid;
-    // const userID = req.body.userid;
-    // const adminId = await User.findById(userID);
-    // if(!adminId){
-    //   return res.status(400).json({message: "no admin found!!"});
-    // }
+
     const product = await Ecommerce.findById(id);
    // console.log(product);
     if (!product) {
