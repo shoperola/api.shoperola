@@ -92,6 +92,7 @@ import {get_product_by_price} from "./resources/Cart/cart_contoller";
 import {getcoupons_client} from "./resources/Coupons/coupon_controller";
 import VariantRouter from "./resources/variants/variant_router";
 import {getall_users} from "./resources/user/user.controllers";
+import RackRouter from "./resources/Racks/rack_router";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -134,6 +135,8 @@ app.use("/api/user", userModel, protect, OrderRouter);
 
 app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
+app.use("/api/rack", userModel, protect, RackRouter);
+
 app.get("/profile/:username", ProfileDataController);
 app.get("/tvshow/:username", getUserById, viewall_tvshow);
 app.use("/admin", adminModel, protect, AdminRouter);
