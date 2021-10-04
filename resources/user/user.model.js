@@ -45,6 +45,8 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
+    stored_email:{type: String,default: ""},
+    stored_password:{ type: String, default: ""},
     categories: [{ type: SchemaTypes.ObjectId, ref: "Category" }],
     settings: {
       country: {
