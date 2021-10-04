@@ -189,14 +189,14 @@ app.use("/api/rack", userModel, protect, RackRouter);
 // // app.use("/api/sendEmail", userModel, protect, EmailRouter);
 // app.use("/api/categories", userModel, protect, CategoriesRouter);
 // app.use("/api/cart", firebaseAuthProtect, CartRouter);
-// app.use("/api/category", userModel, protect, CategoryRouter);
+app.use("/api/category", userModel, protect, CategoryRouter);
 // app.use("/api/coupons", userModel, protect, CouponRouter);
 // app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
 // app.get("/testing/:id", userModel, protect, view_amount);
 // app.use("/api/feature_product", userModel, protect, feautreRouter);
-// app.use("/api/tax_rates", userModel, protect, TaxRouter);
+app.use("/api/tax_rates", userModel, protect, TaxRouter);
 // app.use("/api/shipment", userModel, protect, ShippmentRouter);
 
 // app.use("/api/banner", userModel, protect, BannerRouter);

@@ -17,8 +17,6 @@ const EcommerceSchema = new Schema(
     sku: String,
     quantity: Number,
     track_quantity: Boolean,
-    variant_flag: {type:Boolean, default: false},
-    variants: {type: SchemaTypes.ObjectId, ref: "Variants"},
     // options:[{ type: String}],
     // value: [{ type:String}],
     continue_selling: Boolean,
