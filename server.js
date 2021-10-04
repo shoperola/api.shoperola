@@ -1,5 +1,5 @@
 // packages
-import express, { urlencoded, json } from "express";
+import express from "express";
 import morgan from "morgan";
 import { config } from "dotenv";
 import cors from "cors";

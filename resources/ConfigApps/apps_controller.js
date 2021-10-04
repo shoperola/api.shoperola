@@ -6,20 +6,15 @@ const putapps = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-  const {androidapp,iosapp,androidtv,appletv,fireostv} = req.files;
+  const {androidapp,splashscreen} = req.files;
   const appsObject = {...req.body, userID: req.user._id};
   console.log(appsObject);
     androidapp ? (appsObject.androidapp = androidapp[0].location) : null;
-    iosapp ? (appsObject.iosapp = iosapp[0].location) : null;
-    androidtv ? (appsObject.androidtv = androidtv[0].location) : null;
-    appletv ? (appsObject.appletv = appletv[0].location) : null;
-    fireostv ? (appsObject.fireostv = fireostv[0].location) : null;
-  
+    splashscreen ? (appsObject.splashscreen = splashscreen[0].location) : null;
   const id= req.body.id;
   const check=await Apps.findById(id); 
   if(!check){
       const newapps= await Apps.create(appsObject);
-      console.log(newapps+ "hello ");
       return res.json({ status: "OK", data: newapps });
   }
   const updateapps= await Apps.findByIdAndUpdate(id,{$set: appsObject}, {new: true});

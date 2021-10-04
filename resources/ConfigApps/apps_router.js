@@ -4,10 +4,8 @@ import { upload } from "../../util/s3-spaces";
 const router = Router();
 const uploadFields = [
     { name: "androidapp" },
-    { name: "iosapp" },
-    { name: "androidtv" },
-    { name: "appletv" },
-    { name: "fireostv" }
+    { name: "splashscreen" },
+
   ];
 router.put("/apps",upload.fields(uploadFields),putapps);
 router.get("/apps",getapps);
