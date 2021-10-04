@@ -39,10 +39,8 @@ const view_category = async (req, res) => {
 
 const view = async (req, res) => {
   try {
-    const check = await User.findById(req.user._id, { categories: 1 }).populate(
-      "categories"
-    );
-    res.send(check.categories);
+    const categories= await Category.find({});
+    res.send(categories);
   } catch (e) {
     res.send(e.message);
   }
