@@ -7,7 +7,6 @@ const uploadFields = [
     { name: "splashscreen" },
 
   ];
-router.put("/apps",upload.fields(uploadFields),putapps);
-router.get("/apps",getapps);
+  router.route("/").get(getapps).put(upload.fields(uploadFields),putapps);
 
 export default router;

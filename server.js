@@ -130,7 +130,7 @@ app.use("/api/text", userModel, protect, TextRouter);
 app.use("/api/logo", userModel, protect, LogoRouter);
 app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
-app.use("/api/user", userModel, protect, AppsRouter);
+app.use("/api/apps", userModel, protect, AppsRouter);
 app.use("/api/user", userModel, protect, OrderRouter);
 
 // app.use("/api/languages", LanguageRouter);
