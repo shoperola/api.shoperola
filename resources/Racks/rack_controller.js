@@ -35,5 +35,21 @@ const rackview=async (req, res) => {
   }
 }
 
+const rackdelete=async (req, res) => {
+  try{
+    const rack=await Rack.find({userID: req.user._id});
+    const rackname=req.body.rackname;
+    console.log(rack[0]);
+    if(rackname in rack[0]){
+      console.log("true");
+    }
+      // `rack[0].${rackname}` = " ";
+    await rack[0].save();
+  
+    res.json({status:'updated',data:rack});
+  }catch(e){
+      res.json(e.message);
+  }
+}
 
-export {rackcreate,rackupdate,rackview};
+export {rackcreate,rackupdate,rackview,rackdelete};

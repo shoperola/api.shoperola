@@ -26,6 +26,6 @@ router
   .get(getProductById)
   .put(upload.fields(uploadFields), updateProduct)
   .delete(deleteProduct);
-router.post('/count_delete_tax/:id', count_product);
-router.post('/add_tax', add_tax);
+// router.post('/count_delete_tax/:id', count_product);
+// router.post('/add_tax', add_tax);
 export default router;
