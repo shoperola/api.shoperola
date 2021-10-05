@@ -109,10 +109,10 @@ const userModel = (req, res, next) => {
 //   next();
 // };
 
-// const adminModel = (req, res, next) => {
-//   req.model = Admin;
-//   next();
-// };
+const adminModel = (req, res, next) => {
+  req.model = Admin;
+  next();
+};
 //const cognitoAuthMiddleware = await getVerifyMiddleware();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -124,8 +124,8 @@ app.get("/", (req, res) => {
 app.post("/signup", userModel, signup);
 app.post("/signin", userModel, signin);
 app.post("/vmlogin",vendingsignin);
-// app.post("/signup_admin", adminModel, signup);
-// app.post("/signin_admin", adminModel, signin);
+app.post("/signup_admin", adminModel, signup);
+app.post("/signin_admin", adminModel, signin);
 // app.post("/signupClient", clientModel, signup);
 // app.post("/signinClient", clientModel, signin);
 
