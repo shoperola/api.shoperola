@@ -26,10 +26,13 @@ const rackupdate=async (req, res) => {
 
 const rackview=async (req, res) => {
   try{
+    if (!req.user) {
+      return res.status(400).json({ message: "User not Found" });
+    }
     const rack=await Rack.find({userID: req.user._id},);
     console.log(rack);
   
-    res.json({status:'updated',data:rack});
+    res.json({status:'OK',data:rack});
   }catch(e){
       res.json(e.message);
   }

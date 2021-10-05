@@ -7,7 +7,7 @@ import expressListRoutes from "express-list-routes";
 import { upload } from "./util/s3-spaces";
 
 // modules
-import { signup, signin, protect } from "./util/auth";
+import { signup, signin, protect,vendingsignin,vendingprotect } from "./util/auth";
 import { User } from "./resources/user/user.model";
 import { Client } from "./resources/client/client.model";
 import { Admin } from "./resources/Admin website/admin-model";
@@ -92,8 +92,10 @@ import {get_product_by_price} from "./resources/Cart/cart_contoller";
 import {getcoupons_client} from "./resources/Coupons/coupon_controller";
 import VariantRouter from "./resources/variants/variant_router";
 import {getall_users} from "./resources/user/user.controllers";
+import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
+import ContactRouter from "./resources/ContactRequest/contact_us_router";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -116,15 +118,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("dev"));
+app.get("/", (req, res) => {
+  res.json("Server is Running");
+});
 app.post("/signup", userModel, signup);
 app.post("/signin", userModel, signin);
+app.post("/vmlogin",vendingsignin);
 // app.post("/signup_admin", adminModel, signup);
 // app.post("/signin_admin", adminModel, signin);
 // app.post("/signupClient", clientModel, signup);
 // app.post("/signinClient", clientModel, signin);
-app.get("/", (req, res) => {
-  res.json("Server is Running");
-});
 
 app.use("/api/text", userModel, protect, TextRouter);
 app.use("/api/logo", userModel, protect, LogoRouter);
@@ -132,10 +135,15 @@ app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
 app.use("/api/apps", userModel, protect, AppsRouter);
 app.use("/api/user", userModel, protect, OrderRouter);
+app.use("/api/contact",ContactRouter);
+
+// app.use("/view_product",);
+
 
 // app.use("/api/languages", LanguageRouter);
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/rack", userModel, protect, RackRouter);
+app.get("/rackview",userModel,vendingprotect,rackview);
 
 // app.get("/admin_users", getall_users);
 // app.use("/api/product",userModel,protect,VariantRouter);
