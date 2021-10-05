@@ -7,7 +7,7 @@ const getProducts = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-    const products = await Ecommerce.find({userID: req.user._id}).populate("tax").populate("variants");
+    const products = await Ecommerce.find({userID: req.user._id}).populate("tax").populate("category");
     res.json({ status: "OK", data: products });
   } catch (e) {
     console.log(e);
