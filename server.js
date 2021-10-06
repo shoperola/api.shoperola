@@ -96,6 +96,7 @@ import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
+import{view_contact} from "./resources/ContactRequest/contact_us_controller";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -135,15 +136,16 @@ app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
 app.use("/api/apps", userModel, protect, AppsRouter);
 app.use("/api/user", userModel, protect, OrderRouter);
-app.use("/api/contact",ContactRouter);
+app.get("/api/contact",view_contact);
+app.use("/api/user", userModel, protect, UserRouter);
+app.use("/api/rack", userModel, protect, RackRouter);
 
 // app.use("/view_product",);
 
 
 // app.use("/api/languages", LanguageRouter);
-app.use("/api/user", userModel, protect, UserRouter);
-app.use("/api/rack", userModel, protect, RackRouter);
 app.get("/rackview",userModel,vendingprotect,rackview);
+app.use("/contact",userModel,vendingprotect,ContactRouter);
 
 // app.get("/admin_users", getall_users);
 // app.use("/api/product",userModel,protect,VariantRouter);
