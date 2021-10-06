@@ -42,8 +42,9 @@ const view_order = async (req, res) => {
             return res.status(400).json({ message: "User Not Found" });
           }
           
-        const view_order = await Orders.find({user: req.user._id});        
-         res.send(view_order);
+        const view_order = await Orders.find({user: req.user._id});
+        const total_orders=view_order.length;        
+         res.json({status:"OK",total_orders:total_orders,data:view_order});
     }catch(err){
         console.log(err);
         res.send(err.message);
