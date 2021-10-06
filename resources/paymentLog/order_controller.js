@@ -43,8 +43,10 @@ const view_order = async (req, res) => {
           }
           
         const view_order = await Orders.find({user: req.user._id});
-        const total_orders=view_order.length;        
-         res.json({status:"OK",total_orders:total_orders,data:view_order});
+        const total_orders=view_order.length;     
+        let total_sales =0;
+        view_order.map(x=>{total_sales+=x.amount})  
+         res.json({status:"OK",total_orders:total_orders,total_sales:total_sales,data:view_order});
     }catch(err){
         console.log(err);
         res.send(err.message);
