@@ -3,11 +3,6 @@ const { SchemaTypes, model, Schema } = mongoose;
 
 const OrdersSchema = Schema(
   {
-    client: {
-      type: SchemaTypes.ObjectId,
-      required: true,
-      ref: "clients",
-    },
     user: {
       type: SchemaTypes.ObjectId,
       required: true,

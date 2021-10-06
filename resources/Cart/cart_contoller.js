@@ -10,7 +10,6 @@ const update_cart = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-    const client = await Client.findOne({ sub: req.user.sub });
   //  console.log(client);
     const id = req.body.productid;
 

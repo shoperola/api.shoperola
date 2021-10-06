@@ -5,12 +5,11 @@ import { Orders} from "../orders/order_model";
 
 const show_order = async(req,res) => {
     try{
-        const client = await Client.findOne({ sub: req.user.sub });
-        if(!client){
-            res.status(404).json({message: "no client found!!!"})
-        }
-        console.log(client._id);
-          const view_order = await Orders.find({client: client._id}).populate("products").populate("address");
+        if (!req.user) {
+            return res.status(400).json({ message: "User Not Found" });
+          }
+
+          const view_order = await Orders.find({user: req.user._id}).populate("products").populate("address");
           console.log(view_order);
         // const see_order = await view_order.filter(x => x.success === true);
          res.send(view_order);

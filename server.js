@@ -135,7 +135,7 @@ app.use("/api/logo", userModel, protect, LogoRouter);
 app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
 app.use("/api/apps", userModel, protect, AppsRouter);
-app.use("/api/user", userModel, protect, OrderRouter);
+app.use("/api/order", userModel, protect, OrderRouter);
 app.get("/api/contact",view_contact);
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/rack", userModel, protect, RackRouter);
