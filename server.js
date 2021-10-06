@@ -147,7 +147,7 @@ app.use("/api/rack", userModel, protect, RackRouter);
 app.get("/rackview",userModel,vendingprotect,rackview);
 app.use("/contact",userModel,vendingprotect,ContactRouter);
 
-// app.get("/admin_users", getall_users);
+app.get("/admin_users", getall_users);
 // app.use("/api/product",userModel,protect,VariantRouter);
 // app.get("/profile/:username", ProfileDataController);
 // app.get("/tvshow/:username", getUserById, viewall_tvshow);
