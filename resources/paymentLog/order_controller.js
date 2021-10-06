@@ -42,8 +42,7 @@ const view_order = async (req, res) => {
             return res.status(400).json({ message: "User Not Found" });
           }
           
-        const view_order = await Orders.find({user: req.user._id}).populate("products").populate("address");
-        
+        const view_order = await Orders.find({user: req.user._id});        
          res.send(view_order);
     }catch(err){
         console.log(err);
