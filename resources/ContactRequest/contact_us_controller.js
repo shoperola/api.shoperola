@@ -14,7 +14,7 @@ const view_contact = async (req, res) => {
   try {
     const view_contact = await Contact.find({});
 
-    res.status(201).send(view_contact);
+    res.status(200).send(view_contact);
   } catch (e) {
     res.status(400).send(e);
   }
