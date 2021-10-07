@@ -97,9 +97,8 @@ const vendingsignin= async (req, res) => {
     console.log(user.stored_password + req.body.password);
     if(user.stored_password===req.body.password){
       const token = newToken(user);
-      const logo=await Logo.findOne({userID:user._id});
-      console.log(logo);
-      return res.status(201).send({ status: "ok", loginStatus:true,logo:logo,token: token});
+      const logoObject=await Logo.findOne({userID:user._id});
+      return res.status(201).send({ status: "ok", loginStatus:true,logo:logoObject.logo,token: token});
     }
     return res.status(401).send({ message: "Wrong Password" });
 
