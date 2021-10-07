@@ -1,7 +1,7 @@
 import { Payment } from "../resources/payments/payments.model";
 import { newToken, verifyToken } from "./jwt";
 import {User} from "../resources/user/user.model";
-import {Logo} from "./logo_model";
+import {Logo} from "../resources/ConfigLogo/logo_model";
 
 
 const signup = async (req, res) => {
