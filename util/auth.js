@@ -2,6 +2,7 @@ import { Payment } from "../resources/payments/payments.model";
 import { newToken, verifyToken } from "./jwt";
 import {User} from "../resources/user/user.model";
 import {Logo} from "../resources/ConfigLogo/logo_model";
+import {Cart} from "../resources/Cart/cart_model";
 
 
 const signup = async (req, res) => {
@@ -23,6 +24,9 @@ const signup = async (req, res) => {
       await Payment.create({ userID: user._id });
     }
     const token = newToken(user);
+    const cart = await Cart.create({userID:user._id});
+    user.cartID=cart._id;
+    await user.save();
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e.message);

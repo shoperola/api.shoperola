@@ -58,10 +58,7 @@ const UserSchema = new Schema(
         default: "",
       },
     },
-    totalEarnings: {
-      type: Number,
-      default: 0,
-    },
+    cartID:{type:SchemaTypes.ObjectId,ref:'carts'}
     // name_on_card:{ type: String, default: ""},
     // card_number:{ type: Number, default: 0},
     // expiry: {type:Date, default: ''},

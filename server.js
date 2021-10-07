@@ -198,7 +198,7 @@ app.get("/admin_users", getall_users);
 
 // // app.use("/api/sendEmail", userModel, protect, EmailRouter);
 // app.use("/api/categories", userModel, protect, CategoriesRouter);
-// app.use("/api/cart", firebaseAuthProtect, CartRouter);
+app.use("/api/cart", userModel,vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.get("/category",userModel,vendingprotect,viewCategories);
 // app.use("/api/coupons", userModel, protect, CouponRouter);
