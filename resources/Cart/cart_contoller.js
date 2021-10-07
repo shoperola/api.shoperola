@@ -18,6 +18,11 @@ const update_cart = async (req, res) => {
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
+    const check = await Cart.findById(req.user.cartID); //console.log(check.products);
+    const index = check.products.findIndex((x) => x.pid == id);
+    if(index>=0){
+      return res.send({status:"Already in the cart",cart:check});
+    }
     const quantity = await product.quantity;
     //console.log(quantity);
     const req_quantity = req.body.req_quantity;
@@ -74,26 +79,37 @@ const update_quantity = async (req, res) => {
     if (!product) {
       return res.status(400).json({ message: "Invalid Product Id" });
     }
-    const quantity = await product.quantity;
+    
+    let quantity = await product.quantity;
+    let quantity2=quantity;
     //console.log(product);
     //console.log(quantity);
+    const cart = await Cart.findById(req.user.cartID).populate({
+      path: "products",
+      populate: {
+        path: "pid",
+      },
+    });
+    const index = await cart.products.filter((x) => x._id == id);
+    if(req_quantity<index[0].quantity){
+    product.quantity+=index[0].quantity;
+    await product.save();
+  }
+  quantity2= await product.quantity;
+
     if (req_quantity < quantity) {
-      const cart = await Cart.findById(req.user.cartID).populate({
-        path: "products",
-        populate: {
-          path: "pid",
-        },
-      });
-      const index = await cart.products.filter((x) => x._id == id);
-      index[0].quantity = req_quantity;
-       await cart.save();
+      await cart.save();
       let total_price = 0;
       cart.products.map((x) => {
         total_price += x.pid.total_price * x.quantity;
       });
-      const saved =await cart.updateOne({ $set: { cart_total_price: total_price } });
-
-      const remaining_quantity = (await quantity) - req_quantity;
+      await cart.updateOne({ $set: { cart_total_price: total_price } });
+      const saved= await Cart.findById(req.user.cartID);
+      if(req_quantity==index[0].quantity){
+        return res.send({status:"Updated", cart:saved});
+      }
+      index[0].quantity = req_quantity;
+      const remaining_quantity = quantity2 - req_quantity;
       console.log(remaining_quantity);
       const a = await product.updateOne({
         $set: { quantity: remaining_quantity },
@@ -107,6 +123,7 @@ const update_quantity = async (req, res) => {
           cart: saved,
           message: "quantity updated successfully",
         });
+      
     } else if (req_quantity >= quantity) {
       res.send({status:"out of stock!!!", stock:quantity});
     }
