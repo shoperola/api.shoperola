@@ -25,8 +25,8 @@ const signup = async (req, res) => {
     }
     const token = newToken(user);
     const cart = await Cart.create({userID:user._id});
-    user.cartID=cart._id;
-    await user.save();
+    // user.cartID=cart._id;
+    // await user.save();
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e.message);
