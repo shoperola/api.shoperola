@@ -1,6 +1,8 @@
 import { Payment } from "../resources/payments/payments.model";
 import { newToken, verifyToken } from "./jwt";
 import {User} from "../resources/user/user.model";
+import {Logo} from "./logo_model";
+
 
 const signup = async (req, res) => {
   const Model = req.model;
@@ -95,7 +97,8 @@ const vendingsignin= async (req, res) => {
     console.log(user.stored_password + req.body.password);
     if(user.stored_password===req.body.password){
       const token = newToken(user);
-      return res.status(201).send({ status: "ok", loginStatus:true,token: token});
+      const logo=await Logo.findOne({userID:user._id});
+      return res.status(201).send({ status: "ok", loginStatus:true,logo:logo,token: token});
     }
     return res.status(401).send({ message: "Wrong Password" });
 
