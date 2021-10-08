@@ -96,7 +96,6 @@ import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
-import{view_contact} from "./resources/ContactRequest/contact_us_controller";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;

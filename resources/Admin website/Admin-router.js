@@ -70,7 +70,7 @@ router.delete("/remove_address", delete_AdminAddress);
 router.patch("/update_contact/:id", update_contact);
 router.delete("/delete_contact/:id", delete_contact);
 
-//router.post("/add_demo", add_demo);
+router.post("/add_demo", add_demo);
 router.post("/update_demo/:id",update_Demo);
 router.delete("/delete_demo/:id",delete_Demo);
 export default router;

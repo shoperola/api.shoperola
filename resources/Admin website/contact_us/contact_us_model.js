@@ -10,4 +10,4 @@ const ContactSchema = new Schema(
   { timestamps: true }
 );
 
-export const Contact = model("Contact", ContactSchema);
+export const Contact = model("AdminContactus", ContactSchema);
