@@ -151,7 +151,7 @@ app.get("/admin_users", getall_users);
 // app.get("/profile/:username", ProfileDataController);
 // app.get("/tvshow/:username", getUserById, viewall_tvshow);
 app.use("/admin", adminModel, protect, AdminRouter);
-// app.use("/admin", AdminRouter);
+app.use("/admin", AdminRouter);
 // app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 // app.get("/movies/:username", getUserById, getLessons);
 // app.get("/movie/:username/:id", getUserById, getLesson);

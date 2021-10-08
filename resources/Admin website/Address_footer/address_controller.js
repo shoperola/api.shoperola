@@ -34,10 +34,7 @@ const update_AdminAddress = async (req, res) => {
 
 const view_AdminAddress = async(req,res) => {
     try{
-        if(!req.user){
-            return res.status(400).json({ message: "User Not Found" });
-        }
-        const view = await AdminAddress.find({adminID: req.user._id})
+        const view = await AdminAddress.find({})
         res.status(200).json({success: "ok", data:view});
     }catch(e){
         res.send(e);
