@@ -13,12 +13,6 @@ const UserSchema = new Schema(
       trim: true,
       unique: true,
     },
-    // email_to_send:{
-    //   type: String,
-    //  // required: true,
-    //   trim: true,
-    //   unique: true,
-    // },
     password: {
       type: String,
       trim: true,
@@ -59,10 +53,6 @@ const UserSchema = new Schema(
       },
     },
     cartID:{type:SchemaTypes.ObjectId,ref:'carts'}
-    // name_on_card:{ type: String, default: ""},
-    // card_number:{ type: Number, default: 0},
-    // expiry: {type:Date, default: ''},
-    // cvv: {type:Number, default: 0}
   },
   { timestamps: true }
 );

@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { generateSignupLink } from "../../util/paypal";
 import { upload } from "../../util/s3-spaces";
-import {
-  onBoardUser,
-  refreshAccountUrl,
-  checkAccountStatus,
-} from "../../util/stripe";
+// import {
+//   onBoardUser,
+//   refreshAccountUrl,
+//   checkAccountStatus,
+// } from "../../util/stripe";
 import {
   getRequest,
   getRequests,
@@ -84,21 +84,21 @@ router.route("/requests").get(getRequests);
 router.route("/password").post(changeUserPassword);
 
 
-router.route("/request/:id").get(getRequest);
+// router.route("/request/:id").get(getRequest);
 
-router.route("/request/answer/:id").get(answerRequest);
+// router.route("/request/answer/:id").get(answerRequest);
 
-router.route("/paypal/getActionUrl").get(generateSignupLink);
+// router.route("/paypal/getActionUrl").get(generateSignupLink);
 
-router.route("/stripe/onboard-user").get(onBoardUser);
+// router.route("/stripe/onboard-user").get(onBoardUser);
 
-router.route("/stripe/onboard-user/refresh").get(refreshAccountUrl);
+// router.route("/stripe/onboard-user/refresh").get(refreshAccountUrl);
 
-router.route("/stripe/checkAccountStatus").get(checkAccountStatus);
+// router.route("/stripe/checkAccountStatus").get(checkAccountStatus);
 
-router.route("/transaction/").get(getTransactions);
+// router.route("/transaction/").get(getTransactions);
 
-router.route("/transaction/:id").get(getTransactionById);
+// router.route("/transaction/:id").get(getTransactionById);
 
 router.get("/details", getDashboardDetails);
 
