@@ -98,16 +98,16 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-// UserSchema.pre(
-//   "findOneAndDelete",
-//   { document: true, query: true },
-//   async function (next) {
-//     const userID = this.getFilter()["_id"];
-//     console.log("DELETING USER", userID);
-//     await Payment.findOneAndDelete({ userID });
-//     next();
-//   }
-// );
+UserSchema.pre(
+  "findOneAndDelete",
+  { document: true, query: true },
+  async function (next) {
+    const userID = this.getFilter()["_id"];
+    console.log("DELETING USER", userID);
+    await Payment.findOneAndDelete({ userID });
+    next();
+  }
+);
 
 UserSchema.methods.checkPassword = function (password) {
   const passwordHash = this.password;
