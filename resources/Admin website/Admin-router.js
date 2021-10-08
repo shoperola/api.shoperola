@@ -26,6 +26,8 @@ router.route("/password").post(changeUserPassword);
 
 
 router.get("/details", getDashboardDetails);
+
+// router.route("/social").get(view_social).post(social_add).patch(social_update).delete(social_delete);
 router.post("/add_social", social_add);
 router.get("/view_social",view_social)
 router.patch("/update_social", social_update);

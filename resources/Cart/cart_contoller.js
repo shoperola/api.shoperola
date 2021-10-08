@@ -21,7 +21,7 @@ const update_cart = async (req, res) => {
     const check = await Cart.findById(req.user.cartID); //console.log(check.products);
     const index = check.products.findIndex((x) => x.pid == id);
     if(index>=0){
-      return res.send({status:"Already in the cart",cart:check});
+      return res.status(400).json({status:"Already in the cart",cart:check});
     }
     const quantity = await product.quantity;
     //console.log(quantity);
@@ -56,7 +56,7 @@ const update_cart = async (req, res) => {
       await cart.updateOne({ $set: { cart_total_price: total_price } });
       res.send(cart);
     } else if (req_quantity >= quantity) {
-      res.send({ status: "out of stock!!!", stock: quantity });
+      res.status(400).json({ status: "out of stock!!!", stock: quantity });
     }
   } catch (e) {
     res.send(e);
@@ -125,7 +125,7 @@ const update_quantity = async (req, res) => {
         });
       
     } else if (req_quantity >= quantity) {
-      res.send({status:"out of stock!!!", stock:quantity});
+      res.status(400).json({status:"out of stock!!!", stock:quantity});
     }
   } catch (e) {
     console.log(e);

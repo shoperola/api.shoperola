@@ -25,24 +25,24 @@ import StudioRouter from "./resources/Studio/studio_routes";
 import CartRouter from "./resources/Cart/cart_routes";
 import CategoriesRouter from "./resources/Content_category/Content_category_routes";
 import ProductRouter from "./resources/Ecommerce/ecommerce.router";
-// import AdminRouter from "./resources/Admin website/Admin-router";
+import AdminRouter from "./resources/Admin website/Admin-router";
 // import LanguageRouter from "./resources/language/language.router";
 // import WatchlistRouter from "./resources/watchlist/watchlist_routes";
-// import { view_social } from "./resources/Admin website/Social_footer/social_controller";
-// import { view_logo } from "./resources/Admin website/Logo/logo_contoller";
-// import { view_link } from "./resources/Admin website/Link/link_controller";
-// import { view_home_setting } from "./resources/Admin website/home srtting page/home_setting_controller";
-// import { view_AdminAddress } from "./resources/Admin website/Address_footer/address_controller";
-// import {
-//   view_contact,
-//   add_contact,
-//   view_contact_id,
-// } from "./resources/Admin website/contact_us/contact_us_controller";
-// import {
-//   view_Demo,
-//   add_demo,
-//   view_Demo_id,
-// } from "./resources/Admin website/demo/demo_controller";
+import { view_social } from "./resources/Admin website/Social_footer/social_controller";
+import { view_logo } from "./resources/Admin website/Logo/logo_contoller";
+import { view_link } from "./resources/Admin website/Link/link_controller";
+import { view_home_setting } from "./resources/Admin website/home srtting page/home_setting_controller";
+import { view_AdminAddress } from "./resources/Admin website/Address_footer/address_controller";
+import {
+  view_contact,
+  add_contact,
+  view_contact_id,
+} from "./resources/Admin website/contact_us/contact_us_controller";
+import {
+  view_Demo,
+  add_demo,
+  view_Demo_id,
+} from "./resources/Admin website/demo/demo_controller";
 // import TvwatchlistRouter from "./resources/watchlist_tv/watchTv_routes";
 import { getPublicProfile as ProfileDataController } from "./resources/user/user.controllers";
 import { connect } from "./util/db";
@@ -151,7 +151,7 @@ app.get("/admin_users", getall_users);
 // app.use("/api/product",userModel,protect,VariantRouter);
 // app.get("/profile/:username", ProfileDataController);
 // app.get("/tvshow/:username", getUserById, viewall_tvshow);
-// app.use("/admin", adminModel, protect, AdminRouter);
+app.use("/admin", adminModel, protect, AdminRouter);
 // app.use("/admin", AdminRouter);
 // app.get("/tvshow/:username/:id", getUserById, view_tvshow);
 // app.get("/movies/:username", getUserById, getLessons);
@@ -163,17 +163,17 @@ app.get("/admin_users", getall_users);
 //   getUserById,
 //   getproducy_by_category
 // );
-// app.get("/view_social", view_social);
-// app.get("/view_home_setting", view_home_setting);
-// app.get("/view_link", view_link);
-// app.get("/view_admin_address", view_AdminAddress);
-// app.get("/view_admin_logo", view_logo);
-// app.get("/view_contact", view_contact);
-// app.post("/add_contact", add_contact);
-// app.get("/view_contact_id/:id", view_contact_id);
-// app.post("/add_demo", add_demo);
-// app.get("/view_demo", view_Demo);
-// app.get("/view_demo_id/:id", view_Demo_id);
+app.get("/view_social", view_social);
+app.get("/view_home_setting", view_home_setting);
+app.get("/view_link", view_link);
+app.get("/view_admin_address", view_AdminAddress);
+app.get("/view_admin_logo", view_logo);
+app.get("/view_contact", view_contact);
+app.post("/add_contact", add_contact);
+app.get("/view_contact_id/:id", view_contact_id);
+app.post("/add_demo", add_demo);
+app.get("/view_demo", view_Demo);
+app.get("/view_demo_id/:id", view_Demo_id);
 // app.post("/add_news", add_news);
 // app.get("/view_news", view_news);
 // app.post("/add_zero", add_tax_zero);

@@ -13,12 +13,12 @@ const UserSchema = new Schema(
       trim: true,
       unique: true,
     },
-    email_to_send:{
-      type: String,
-     // required: true,
-      trim: true,
-      unique: true,
-    },
+    // email_to_send:{
+    //   type: String,
+    //  // required: true,
+    //   trim: true,
+    //   unique: true,
+    // },
     password: {
       type: String,
       trim: true,
