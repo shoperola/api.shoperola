@@ -90,14 +90,14 @@ const update_quantity = async (req, res) => {
     if(req_quantity==index[0].quantity){
       return res.send({status:"Same Quantity Found, No updation", cart:cart});
     }
-    else if(req_quantity<index[0].quantity){
+    if(req_quantity<index[0].quantity){
       product.quantity+=index[0].quantity;
       await product.save();
       index[0].quantity = req_quantity;
       quantity2= await product.quantity;
   }
 
-    else if (req_quantity < quantity) {
+    if (req_quantity < quantity) {
       index[0].quantity= req_quantity;
       
       let total_price = 0;
