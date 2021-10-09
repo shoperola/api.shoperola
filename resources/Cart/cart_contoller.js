@@ -84,31 +84,29 @@ const update_quantity = async (req, res) => {
     let quantity2=quantity;
     //console.log(product);
     //console.log(quantity);
-    const cart = await Cart.findById(req.user.cartID).populate({
-      path: "products",
-      populate: {
-        path: "pid",
-      },
-    });
-    const index = await cart.products.filter((x) => x._id == id);
-    if(req_quantity<index[0].quantity){
-    product.quantity+=index[0].quantity;
-    await product.save();
+    let cart = await Cart.findById(req.user.cartID).populate({path:"products",populate: {
+      path:'pid'}});
+    let index = await cart.products.filter((x) => x._id == id);
+    if(req_quantity==index[0].quantity){
+      return res.send({status:"Same Quantity Found, No updation", cart:cart});
+    }
+    else if(req_quantity<index[0].quantity){
+      product.quantity+=index[0].quantity;
+      await product.save();
+      index[0].quantity = req_quantity;
+      quantity2= await product.quantity;
   }
-  quantity2= await product.quantity;
 
-    if (req_quantity < quantity) {
-      await cart.save();
+    else if (req_quantity < quantity) {
+      index[0].quantity= req_quantity;
+      
       let total_price = 0;
       cart.products.map((x) => {
         total_price += x.pid.total_price * x.quantity;
       });
+      await cart.save();
       await cart.updateOne({ $set: { cart_total_price: total_price } });
       const saved= await Cart.findById(req.user.cartID);
-      if(req_quantity==index[0].quantity){
-        return res.send({status:"Updated", cart:saved});
-      }
-      index[0].quantity = req_quantity;
       const remaining_quantity = quantity2 - req_quantity;
       console.log(remaining_quantity);
       const a = await product.updateOne({
