@@ -11,13 +11,10 @@ import {
 } from "./AWS-SES";
 const router = Router();
 
-router.post("/send", send_email);
-router.post("/verify", verify_email);
-router.get("/get_list", list_verified_emails);
-router.post("/create_email_template", create_email_template);
-router.put("/update_email_template/:id", update_email_template);
-router.delete("/delete_email_template/:id", delete_email_template);
-router.get("/view_email_template", view_email_template);
-router.get("/view_email_template/:id", view_email_template_byid);
+// router.post("/send", send_email);
+// router.post("/verify", verify_email);
+// router.get("/get_list", list_verified_emails);
+router.route("/").post(create_email_template).get(view_email_template);
+router.route("/:id").put(update_email_template).get(view_email_template_byid).delete(delete_email_template);
 
 export default router;

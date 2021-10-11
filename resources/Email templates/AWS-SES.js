@@ -126,7 +126,7 @@ const create_email_template = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User not found!!" });
     }
-    const createObject = { ...req.body, userID: req.user._id };
+    const createObject = { ...req.body, adminID: req.user._id };
     const email = await Email.create(createObject);
     var params = {
       Template: {
@@ -142,7 +142,7 @@ const create_email_template = async (req, res) => {
     // Handle promise's fulfilled/rejected states
     templatePromise
       .then(function (data) {
-        console.log("Template Updated");
+        console.log("Template created");
         res.json({ success: "Email Template created", data: email });
       })
       .catch(function (err) {
@@ -210,7 +210,7 @@ const view_email_template = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User not found!!" });
     }
-    const email = await Email.find({ userID: req.user._id });
+    const email = await Email.find({ adminID: req.user._id });
     res.send(email);
   } catch (e) {
     console.log(e);
