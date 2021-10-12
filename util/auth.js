@@ -3,7 +3,12 @@ import { newToken, verifyToken } from "./jwt";
 import {User} from "../resources/user/user.model";
 import {Logo} from "../resources/ConfigLogo/logo_model";
 import {Cart} from "../resources/Cart/cart_model";
+import AWS from "aws-sdk";
+import { SECRETS } from "./config";
 
+AWS.config.update({ region: SECRETS.region });
+
+var ses = new AWS.SES();
 
 const signup = async (req, res) => {
   const Model = req.model;
@@ -29,6 +34,25 @@ const signup = async (req, res) => {
     await cart.save();
     user.cartID=cart._id;
     await user.save();
+//  email ////////////////////////////////////////////
+const send_email = req.body.email;
+    const params = {
+      Source: "hello@shoperola.com",
+      Template: "vm_welcome",
+      ConfigurationSetName: "ConfigSet",
+      Destination: {
+        ToAddresses: [send_email],
+      },
+       TemplateData: `{ "first-name": "${req.body.firstName}","last-name": "${req.body.lastName}"}`
+    };
+    ses.sendTemplatedEmail(params, (err, data) => {
+      if (err){
+        console.log(err, err.stack);  
+        return res.status(400).send({ error:err});
+      } 
+      else console.log(data); // successful response
+    });
+    /////////////////////////////////////////
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e.message);

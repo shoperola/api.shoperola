@@ -95,9 +95,6 @@ const send_email = async (req, res) => {
       return res.status(400).json({ message: "User not found!!" });
     }
     const send_email = req.body.email;
-    // const id = req.params.id;
-    // const template = await Email.findById(id);
-    // var ses_mail = "testing AWS SES";
     const params = {
       Source: req.user.email_to_send,
       Template: req.body.template,
