@@ -5,7 +5,7 @@ const ContactSchema = new Schema(
   {
     name: {type: String, default:''},
     contact_no: {type: String, default:''},
-    description: {type: String, default:''}
+    description: {type: String, default:''},
   },
   { timestamps: true }
 );

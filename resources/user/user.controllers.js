@@ -26,19 +26,14 @@ const updateUserProfile = async (req, res) => {
 
   const { username } = req.body;
   console.log(username);
+  
   const updateObject = req.file
     ? {
         ...req.body,
-        bannerImage: req.file.location,
-        publicUrl: `https://${username ? username : req.user.username}.${
-          SECRETS.user_domain_url
-        }`,
+        bannerImage: req.file.location
       }
     : {
-        ...req.body,
-        publicUrl: `https://${username ? username : req.user.username}.${
-          SECRETS.user_domain_url
-        }`,
+        ...req.body
       };
   if (!updateObject) {
     return res.status(400).json({

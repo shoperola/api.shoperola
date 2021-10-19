@@ -94,6 +94,7 @@ import VariantRouter from "./resources/variants/variant_router";
 import {getall_users} from "./resources/user/user.controllers";
 import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
+import {send_cart} from "./resources/Racks/rack_controller";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
 config();
@@ -138,13 +139,15 @@ app.use("/api/order", userModel, protect, OrderRouter);
 app.get("/api/contact",view_contact);
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/rack", userModel, protect, RackRouter);
+app.use("/sendCart", userModel, vendingprotect, send_cart);
+
 
 // app.use("/view_product",);
 
 
 // app.use("/api/languages", LanguageRouter);
 app.get("/rackview",userModel,vendingprotect,rackview);
-app.use("/contact",userModel,vendingprotect,ContactRouter);
+// app.use("/contact",userModel,vendingprotect,ContactRouter);
 
 app.get("/admin_users", getall_users);
 // app.use("/api/product",userModel,protect,VariantRouter);
