@@ -67,11 +67,13 @@ const view_order = async (req, res) => {
         const mapids = x.products.map((some) => {
           const mapss = Productsidarray.map((pro) => {
             if (JSON.stringify(pro) === JSON.stringify(some.pid)) {
-              if (!most_sold_products.includes(pro))
-                   most_sold_products.push(pro);
+              if (!most_sold_products.some(od=>{ if(od.pro=== pro && od.date=== x.createdAt)return true;}))
+                   most_sold_products.push({pro:pro,date:x.createdAt});
             }else if (JSON.stringify(pro) !== JSON.stringify(some.pid)) {
-              if(!least_sold_products.includes(pro))
-              least_sold_products.push(pro);
+              if (
+                !least_sold_products.some(od=>{ if(od.pro=== pro && od.date=== x.createdAt) return true; })
+              )
+                least_sold_products.push({ pro: pro, date: x.createdAt });
             }
           });
         });
