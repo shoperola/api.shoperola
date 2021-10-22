@@ -2,6 +2,8 @@
 import { Client } from "../client/client.model";
 import { Address } from "../Address/address_model";
 import { Orders } from "../orders/order_model";
+import {Ecommerce} from "../Ecommerce/ecomerce_model";
+import {Cart } from "../Cart/cart_model";
 
 const show_order = async (req, res) => {
   try {
@@ -48,15 +50,41 @@ const view_order = async (req, res) => {
     }
 
     const view_order = await Orders.find({ user: req.user._id });
+    const view_cart= await Cart.find({});
+    console.log(view_order);
+    const Productsview= await Ecommerce.find({});
+    const Productsidarray=[];
+    const prod=Productsview.map(x=>Productsidarray.push(x._id));
+    console.log("Prod id "+ Productsidarray);
     const total_orders = view_order.length;
     let total_sales = 0;
-    view_order.map((x) => {
+    const least_sold_products=[];
+    const most_sold_products = [];
+    const maporders= view_order.map((x) => {
       total_sales += x.amount;
     });
+    const carts= view_cart.map((x)=>{
+        const mapids = x.products.map((some) => {
+          const mapss = Productsidarray.map((pro) => {
+            if (JSON.stringify(pro) === JSON.stringify(some.pid)) {
+              if (!most_sold_products.includes(pro))
+                   most_sold_products.push(pro);
+            }else if (JSON.stringify(pro) !== JSON.stringify(some.pid)) {
+              if(!least_sold_products.includes(pro))
+              least_sold_products.push(pro);
+            }
+          });
+        });
+      });
+      console.log("Most sold " + most_sold_products);
+      console.log("Least sold " +least_sold_products);
+
     res.json({
       status: "OK",
       total_orders: total_orders,
       total_sales: total_sales,
+      Least_sold_products:least_sold_products,
+      Most_sold_products:most_sold_products,
       data: view_order,
     });
   } catch (err) {
