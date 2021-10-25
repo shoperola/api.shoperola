@@ -132,16 +132,16 @@ const createCheckoutSession = async (req, res) => {
   }
 
   let client;
-  try {
-    client = await Client.findOne({ sub: req.user.sub });
-    if (!client) {
-      throw new Error("Unable to find client");
-    }
-  } catch (e) {
-    console.log(e.message);
-    return res.status(400).json({ message: "Unable to find client" });
-  }
-  const clientID = client._id.toString();
+  // try {
+  //   client = await Client.findOne({ sub: req.user.sub });
+  //   if (!client) {
+  //     throw new Error("Unable to find client");
+  //   }
+  // } catch (e) {
+  //   console.log(e.message);
+  //   return res.status(400).json({ message: "Unable to find client" });
+  // }
+  // const clientID = client._id.toString();
   const { userID, paymentType } = req.body;
   if (!userID) {
     return res.status(400).json({
@@ -175,7 +175,6 @@ const createCheckoutSession = async (req, res) => {
 
   try {
     paymentDetails = await PaymentLog.create({
-      client: clientID,
       user: userID,
       ip: req.ip,
       processed_by: "stripe",
@@ -270,12 +269,12 @@ const checkSessionStatusOnSuccess = async (req, res) => {
     }
     console.log(req.body);
 
-    const client = await Client.findOne({ sub: req.user.sub })
-      .select("firstName lastName")
-      .lean();
-    if (!client) {
-      throw new Error("Client not found");
-    }
+    // const client = await Client.findOne({ sub: req.user.sub })
+    //   .select("firstName lastName")
+    //   .lean();
+    // if (!client) {
+    //   throw new Error("Client not found");
+    // }
 
     const sellerData = await Payment.findOne({ userID });
     if (!sellerData) {
@@ -287,7 +286,7 @@ const checkSessionStatusOnSuccess = async (req, res) => {
 
     console.log(session);
     // const customer = await stripe.customers.retrieve(session.customer);
-    return res.json({ status: "OK", data: { session, client } });
+    return res.json({ status: "OK", data: { session} });
   } catch (e) {
     console.log(e.message);
     res
@@ -301,16 +300,16 @@ const cartCheckoutSession = async (req, res) => {
     res.status(400).json({ message: "Client Not Found" });
   }
   let client;
-  try {
-   client = await Client.findOne({ sub: req.user.sub });
-    if (!client) {
-      throw new Error("Unable to find client");
-    }
-  } catch (e) {
-    console.log(e.message);
-    return res.status(400).json({ message: "Unable to find client" });
-  }
-  const clientID = client._id.toString();
+  // try {
+  //  client = await Client.findOne({ sub: req.user.sub });
+  //   if (!client) {
+  //     throw new Error("Unable to find client");
+  //   }
+  // } catch (e) {
+  //   console.log(e.message);
+  //   return res.status(400).json({ message: "Unable to find client" });
+  // }
+  // const clientID = client._id.toString();
   const { userID} = req.body;
   if (!userID) {
     return res.status(400).json({
@@ -338,7 +337,7 @@ const cartCheckoutSession = async (req, res) => {
     });
   }
  console.log(sellerData);
-  const cart = await Cart.findById(client.cartid).populate({path:"products",populate: {
+  const cart = await Cart.findById(user.cartID).populate({path:"products",populate: {
     path: 'pid'}});
   //console.log(JSON.stringify(cart, null, 4));
   let products_id = [];
@@ -360,47 +359,44 @@ const cartCheckoutSession = async (req, res) => {
      }
   })
   //console.log(item[0].amount);
-  const address = await Address.findById(req.body.id);
+  // const address = await Address.findById(req.body.id);
   //console.log(address);
-  let zero_shipping;
-  const shipment = await Shipping.find({$and:[
-    {shipping_country:address.Country},
-    {shipping_state:address.State}]});
-//console.log(shipment.length);
-if(!shipment.length){
-  zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
-  console.log(zero_shipping.shipping_rate)
+//   let zero_shipping;
+//   const shipment = await Shipping.find({$and:[
+//     {shipping_country:address.Country},
+//     {shipping_state:address.State}]});
+// //console.log(shipment.length);
+// if(!shipment.length){
+//   zero_shipping = await Shipping.findOne({shipping_name:"ZERO_SHIPPING_RATE"});
+//   console.log(zero_shipping.shipping_rate)
      
-}
+// }
 
-      //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
-let Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
+//       //res.send(item[0].amount + (shipment[0]?.shipping_rate || zero_shipping.shipping_rate));
+// let Shipment_rate=parseInt(shipment[0]?.shipping_rate || zero_shipping.shipping_rate);
 
 //console.log(`${shipment[0].shipping_rate}`);
-const coupons = await Coupon.find({coupon_code: req.query.code});
-if(!coupons){
-  console.log('no coupons found');
-}
-if(coupons[0].applies_to=='free_shipping'){
-  Shipment_rate=0;
-  item[0].amount+=Shipment_rate;
-  }else
-  item[0].amount=(cart.cart_total_price+Shipment_rate)*100;
+// const coupons = await Coupon.find({coupon_code: req.query.code});
+// if(!coupons){
+//   console.log('no coupons found');
+// }
+// if(coupons[0].applies_to=='free_shipping'){
+//   Shipment_rate=0;
+//   item[0].amount+=Shipment_rate;
+//   }else
+//   item[0].amount=(cart.cart_total_price+Shipment_rate)*100;
 // for(let i of coupons){
 //   const applies_to = i.applies_to
 // }
 
 try {
   paymentDetails = await PaymentLog.create({
-      client: clientID,
       user: userID,
       ip: req.ip,
       processed_by: "stripe",
       paymentType: "Ecommerce",
       products: products_id,
-      amount: parseInt((item[0].amount)/100),
-      address: address,
-      shipment_rate: Shipment_rate
+      amount: parseInt((item[0].amount)/100)
     });
   } catch (e) {
     console.log(e.message);

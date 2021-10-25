@@ -16,7 +16,8 @@ const OrdersSchema = Schema(
       type: String,
       required: true,
     },
-    // is_completed: { type: Boolean, default: false},
+    is_completed: { type: Boolean, default: false },
+    is_abandoned: { type: Boolean, default: false },
     // is_new: { type: Boolean, default: true},
     // is_processing: { type: Boolean, default: false},
     // is_delivered: { type: Boolean, default: false},
@@ -29,7 +30,7 @@ const OrdersSchema = Schema(
     // },
     products: [{ type: SchemaTypes.ObjectId, ref: "Ecommerce" }],
     amount: { type: Number, default: 0 },
-    address: { type: SchemaTypes.ObjectId, ref: "Address"},
+    address: { type: SchemaTypes.ObjectId, ref: "Address" },
     //shipment_rate: { type: SchemaTypes.ObjectId, ref: "Shipping"}
   },
   {

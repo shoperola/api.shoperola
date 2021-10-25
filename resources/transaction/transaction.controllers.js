@@ -83,53 +83,6 @@ const sessionCompleteEventListener = async (req, res) => {
   console.log(TransactionPayload);
   // insert into transaction collection
   let transaction;
-  console.log(payment_type);
-  if(payment_type === "subscription"){
-  try {
-    transaction = await Transaction.create(TransactionPayload);
-  } catch (e) {
-    console.log(e.message);
-    return res
-      .status(400)
-      .json({ message: "Error inserting transaction data", error: e.message });
-  }
-
-
-  //subscription as active
-
-  try {
-    console.log(transaction);
-    const startDate = new Date(transaction.createdAt);
-    const endDate =
-      transaction.paymentType === "monthly"
-        ? new Date(startDate.setMonth(startDate.getMonth() + 1))
-        : new Date(startDate.setYear(startDate.getFullYear() + 1));
-    // console.log(typeof endDate, endDate);
-    const sub = await Subscription.findOneAndUpdate(
-      {
-        subscriber: transaction.client,
-        instructor: transaction.user,
-      },
-      {
-        amount: transaction.amount,
-        subType: transaction.paymentType,
-        subStart: transaction.createdAt,
-        subEnd: endDate.toISOString(),
-      }
-    );
-    console.log(sub);
-    const client = await Client.findByIdAndUpdate(transaction.client, {
-      status: true,
-    });
-
-    res.json({ message: "Transaction Logged Successfully" });
-  } catch (e) {
-    console.log(e.message);
-    return res.status(500).json({ message: "Error updating subscription" });
-  }
-}
-
-else{
   const Orderpayload = (() => {
     const currency = data.data.object.currency;
     return {
@@ -148,20 +101,16 @@ else{
   // const client = await Client.findOne({ sub: req.user.sub });
   console.log("enterr");
   const order = await Orders.create(Orderpayload);
-  const x = await order.populate('client').execPopulate();
+  const x = await order.populate('user').execPopulate();
   console.log(x);
-  console.log(`asdfggh ${x.client.cartid}`);
-  console.log(`statussssss ${Orderpayload?.status}`);
+  console.log(`asdfggh ${x.user.cartID}`);
+  // console.log(`statussssss ${Orderpayload?.status}`);
   if(Orderpayload.status == 'SUCCESS'){
     console.log("iuoluoilul");
     order.is_completed = true;
-    order.is_new = true;
-    order.is_processing= false;
-    order.is_delivered= false;
-    order.is_returned= false;
-    order.is_cancelled= false;
-    order.is_dispatched= false;
-    const cart = await Cart.findByIdAndUpdate(x.client.cartid,{$set:{products: [],total_price :0}},{new: true});
+    order.is_abandoned= false;
+    // await order.save();
+    const cart = await Cart.findByIdAndUpdate(x.user.cartID,{$set:{products: [],total_price :0}},{new: true});
     console.log(cart);
   }
   console.log(`remove successs!!!! ${order}`);
@@ -169,7 +118,6 @@ else{
   res.json({order});
 
 }
-};
 
 const getTransactions = async (req, res) => {
   try {

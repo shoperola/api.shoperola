@@ -95,6 +95,7 @@ import {getall_users} from "./resources/user/user.controllers";
 import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
 import {send_cart} from "./resources/Racks/rack_controller";
+import {uploadPhoto,view_photo} from "./resources/Photo_checkout/photo_controller";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
 config();
@@ -192,7 +193,7 @@ app.get("/view_news", view_news);
 // //app.get("/search_movie/:username/:name", getUserById, search_movies);
 // app.get("/search_tvshow/:username/:name", getUserById, search_tvshow);
 // app.use("/api/request", clientModel, protect, RequestRouter);
-// app.use("/api/transaction", TransactionRouter);
+app.use("/api/transaction", TransactionRouter);
 // app.use("/api/tvshow", userModel, protect, TvshowRouter);
 // app.use("/api/studio", userModel, protect, StudioRouter);
 // app.use("/api/lesson", userModel, protect, LessonRouter);
@@ -203,6 +204,16 @@ app.use("/api/email", adminModel, protect, EmailRouter);
 app.use("/api/cart", userModel,vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.get("/category",userModel,vendingprotect,viewCategories);
+app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"),uploadPhoto);
+app.get(
+  "/api/getphoto",
+  userModel,
+  vendingprotect,
+  view_photo
+);
+
+
+
 // app.use("/api/coupons", userModel, protect, CouponRouter);
 // app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
