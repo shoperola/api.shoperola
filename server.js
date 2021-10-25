@@ -96,6 +96,10 @@ import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
 import {send_cart} from "./resources/Racks/rack_controller";
 import {uploadPhoto,view_photo} from "./resources/Photo_checkout/photo_controller";
+import {
+  uploadPhotoFootfall,
+  view_photo_footfall,
+} from "./resources/Footfalls/footfalls_controller";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
 config();
@@ -205,13 +209,14 @@ app.use("/api/cart", userModel,vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.get("/category",userModel,vendingprotect,viewCategories);
 app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"),uploadPhoto);
-app.get(
-  "/api/getphoto",
-  userModel,
-  protect,
-  view_photo
-);
+app.get("/api/getphoto", userModel, protect, view_photo);
 
+app.post(
+  "/api/footfalls",
+  upload.single("file"),
+  uploadPhotoFootfall
+);
+app.get("/api/footfalls", userModel, protect, view_photo_footfall);
 
 
 // app.use("/api/coupons", userModel, protect, CouponRouter);
