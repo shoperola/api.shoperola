@@ -208,7 +208,7 @@ app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"),uploadP
 app.get(
   "/api/getphoto",
   userModel,
-  vendingprotect,
+  protect,
   view_photo
 );
 

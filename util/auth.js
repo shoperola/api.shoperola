@@ -48,7 +48,6 @@ const send_email = req.body.email;
     ses.sendTemplatedEmail(params, (err, data) => {
       if (err){
         console.log(err, err.stack);  
-        return res.status(400).send({ error:err});
       } 
       else console.log(data); // successful response
     });
