@@ -10,7 +10,7 @@ const uploadPhoto=async(req,res,next)=>{
          console.log(upload_logo);
          res.status(201).json({ success: "ok", data: upload_logo });
        } catch (e) {
-         res.send(e);
+         res.status(400).json(e);
        }
 }
 const view_photo = async (req, res) => {
