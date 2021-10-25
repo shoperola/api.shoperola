@@ -7,15 +7,15 @@ const uploadPhotoFootfall=async(req,res,next)=>{
          console.log(upload_logo);
          res.status(201).json({ success: "ok", data: upload_logo });
        } catch (e) {
-         res.status(400).json(e);
+         res.status(400).json({error:e,message:"Something went wrong"});
        }
 }
 const view_photo_footfall = async (req, res) => {
   try {
     const view = await Footfall.find({});
     res.status(200).json({ status: "ok", data: view });
-  } catch (err) {
-    res.send(err);
+  } catch (e) {
+         res.status(400).json({ error: e, message: "Something went wrong" });
   }
 };
 export {uploadPhotoFootfall,view_photo_footfall};
