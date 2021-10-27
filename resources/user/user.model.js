@@ -43,6 +43,7 @@ const UserSchema = new Schema(
     stored_password:{ type: String, default: ""},
     dispensebag:{type:String,enum:["Yes","No"]},
     dispensecharge:{type:String,enum:["Free","Paid"]},
+    dispensepaid:{type:Number,default:0},
     categories: [{ type: SchemaTypes.ObjectId, ref: "Category" }],
     settings: {
       country: {
