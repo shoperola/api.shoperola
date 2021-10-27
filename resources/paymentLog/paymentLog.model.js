@@ -3,11 +3,6 @@ const { SchemaTypes, model, Schema } = mongoose;
 
 const PaymentLogSchema = Schema(
   {
-    client: {
-      type: SchemaTypes.ObjectId,
-      required: true,
-      ref: "clients",
-    },
     user: {
       type: SchemaTypes.ObjectId,
       required: true,
@@ -36,8 +31,6 @@ const PaymentLogSchema = Schema(
       ref: "Ecommerce"
       
     }],
-    address: { type: SchemaTypes.ObjectId, ref: "Address"},
-    shipment_rate: {type: Number, default: 0 }
   },
   {
     timestamps: true,

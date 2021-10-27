@@ -1,23 +1,12 @@
 import { PaymentLog } from "../paymentLog/paymentLog.model";
 import { Transaction } from "./transactions.model";
-import { Subscription } from "../subscription/subscription.model";
-import zeroDecimalCurrencies from "../../util/ZRC";
 import {Orders} from "../orders/order_model";
-import { Client } from "../client/client.model";
 import { Cart } from "../Cart/cart_model";
-
-const processedByStripe = (logData) => {
-  return logData.processed_by === "stripe";
-};
 
 const sessionCompleteEventListener = async (req, res) => {
   console.log(JSON.stringify(req.body));
-  const data = req.body;
-  const paymentLogId =
-    data.resource !== undefined
-      ? data.resource.custom_id
-      : data.data.object.metadata.custom_id;
-  const payment_type =  data.data.object.metadata.payment_type;
+  const {paymentLogId,currency,confirmationID,amount} = req.body;
+  const payment_type ="Ecommerce";
   console.log(paymentLogId);
   if (!paymentLogId) {
     return res.status(400).json({ message: "custom_id Not found" });
@@ -62,21 +51,11 @@ const sessionCompleteEventListener = async (req, res) => {
 
   //create Transaction Payload to be inserted
   const TransactionPayload = (() => {
-    const currency = processedByStripe(logData)
-      ? data.data.object.currency
-      : data.resource.amount.currency_code;
-
     return {
       ...logData,
-      confirmationID: processedByStripe(logData)
-        ? data.data.object.id
-        : data.resource.id,
+      confirmationID: confirmationID,
       currency: currency,
-      amount: processedByStripe(logData)
-        ? currency.toUpperCase() in zeroDecimalCurrencies
-          ? data.data.object.amount_total
-          : data.data.object.amount_total / 100
-        : data.resource.amount.value,
+      amount: amount/100,
       status: "SUCCESS",
     };
   })();
@@ -84,27 +63,20 @@ const sessionCompleteEventListener = async (req, res) => {
   // insert into transaction collection
   let transaction;
   const Orderpayload = (() => {
-    const currency = data.data.object.currency;
     return {
       ...logData,
-      confirmationID: processedByStripe(logData)
-        ? data.data.object.id
-        : data.resource.id,
+      confirmationID: confirmationID,
       currency: currency,
-      amount: currency.toUpperCase() in zeroDecimalCurrencies
-          ? data.data.object.amount_total
-          : data.data.object.amount_total / 100,
-      status: "SUCCESS"
+      amount: amount / 100,
+      status: "SUCCESS",
     };
   })();
- // console.log(Orderpayload);
-  // const client = await Client.findOne({ sub: req.user.sub });
-  console.log("enterr");
-  const order = await Orders.create(Orderpayload);
+
+  try {
+    const order = await Orders.create(Orderpayload);
   const x = await order.populate('user').execPopulate();
   console.log(x);
   console.log(`asdfggh ${x.user.cartID}`);
-  // console.log(`statussssss ${Orderpayload?.status}`);
   if(Orderpayload.status == 'SUCCESS'){
     console.log("iuoluoilul");
     order.is_completed = true;
@@ -115,7 +87,10 @@ const sessionCompleteEventListener = async (req, res) => {
   }
   console.log(`remove successs!!!! ${order}`);
 
-  res.json({order});
+  res.status(200).json({status:"OK Transaction Completed"});
+}catch(e){
+  res.status(400).json({status:"Something wrong",error:e});
+}
 
 }
 

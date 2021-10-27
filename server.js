@@ -5,6 +5,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import expressListRoutes from "express-list-routes";
 import { upload } from "./util/s3-spaces";
+import fileUpload from "express-fileupload";
 
 // modules
 import { signup, signin, protect,vendingsignin,vendingprotect } from "./util/auth";
@@ -95,7 +96,11 @@ import {getall_users} from "./resources/user/user.controllers";
 import {rackview} from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
 import {send_cart} from "./resources/Racks/rack_controller";
-import {uploadPhoto,view_photo} from "./resources/Photo_checkout/photo_controller";
+import {
+  uploadPhoto,
+  view_photo,
+  savePhoto,
+} from "./resources/Photo_checkout/photo_controller";
 import {
   uploadPhotoFootfall,
   view_photo_footfall,
@@ -208,7 +213,8 @@ app.use("/api/email", adminModel, protect, EmailRouter);
 app.use("/api/cart", userModel,vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.get("/category",userModel,vendingprotect,viewCategories);
-app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"),uploadPhoto);
+app.post("/api/facedetector",fileUpload(),uploadPhoto);
+app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"), savePhoto);
 app.get("/api/getphoto", userModel, protect, view_photo);
 
 app.post(
@@ -236,7 +242,7 @@ app.use("/api/tax_rates", userModel, protect, TaxRouter);
   // //   console.log("Recieved");
   // //   res.json("Success");
   // // });
-  app.use("/api/client", ClientRouter);
+  app.use("/api/checkout",userModel,vendingprotect, ClientRouter);
   
 export const start = async () => {
   try {
