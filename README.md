@@ -1,1 +1,0 @@
-"@tensorflow/tfjs": "^2.8.6"
