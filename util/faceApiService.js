@@ -36,8 +36,6 @@ async function main(file, filename) {
   try{
 
     console.log("FaceAPI single-process test");
-    console.log(nets);
-    console.log(modelPath);
     await tf.setBackend("tensorflow");
     tf.enableProdMode();
     await tf.ENV.set("DEBUG", false);

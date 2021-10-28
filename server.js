@@ -75,7 +75,7 @@ import {
   getProductById,
   getproducy_by_category,
 } from "./resources/Ecommerce/Ecommerce_controller";
-import { firebaseAuthProtect } from "./util/firebase";
+
 import { view as viewCategories } from "./resources/Category/Category_controller";
 import {
   add_news,
