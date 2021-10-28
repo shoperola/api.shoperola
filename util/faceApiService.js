@@ -8,6 +8,7 @@ import canvas from "canvas";
 import pkg from "@vladmandic/face-api";
 const { env, detectAllFaces, tf, nets, SsdMobilenetv1Options } = pkg;
 const __dirname=path.resolve();
+
 const modelPathRoot = "./util/model";
 const modelPath = path.join(__dirname, modelPathRoot);
 
