@@ -1,14 +1,11 @@
 import {Photo} from "./photo_model";
-import faceApiService from "../../util/faceApiService";
 const uploadPhoto=async(req,res,next)=>{
        try {
-        //  if (!req.user) {
-        //    return res.status(400).json({ message: "User Not Found" });
-        //  }
+         if (!req.user) {
+           return res.status(400).json({ message: "User Not Found" });
+         }
         const id=req.body.id;
-        const { file } = req.files;
-        console.log(file);
-         const result = await faceApiService.detect(file.data, file.name);
+         const result = req.body.result;
          console.log(result);
          let expObject = result[0].expressions;
          let emotion;
@@ -24,7 +21,7 @@ const uploadPhoto=async(req,res,next)=>{
            emotion:emotion,
          };
          const upload_logo = await Photo.findByIdAndUpdate(id,createLogo,{new:true});
-         console.log(upload_logo);
+        //  console.log(upload_logo);
          res.status(201).json({ success: "ok", data: upload_logo });
        } catch (e) {
          res.status(400).json({status:"something wrong",error:e});

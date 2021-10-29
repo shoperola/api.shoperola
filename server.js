@@ -213,7 +213,7 @@ app.use("/api/email", adminModel, protect, EmailRouter);
 app.use("/api/cart", userModel,vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.get("/category",userModel,vendingprotect,viewCategories);
-app.post("/api/facedetector",fileUpload(),uploadPhoto);
+app.post("/api/facedetector", userModel, protect, uploadPhoto);
 app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"), savePhoto);
 app.get("/api/getphoto", userModel, protect, view_photo);
 
