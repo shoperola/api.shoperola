@@ -7,32 +7,7 @@ import {
   cartCheckoutSession,
   // paymentintend
 } from "../../util/stripe";
-import {
-  show_order,
-  order_by_id,
-  update_address,
-} from "../paymentLog/order_controller";
-import {
-  createClient,
-  getClient,
-  resumeplay,
-  continueplaying,
-  resume_watching,
-} from "./client.controllers";
-import {
-  getSubscription,
-  getSubscriptionById,
-} from "../subscription/subscription.controllers";
-import { view_list, view_listbyid } from "../Studio/studio_contoller";
-import {
-  //search_movies,
-  videosViewsIncrement,
-} from "../lesson/lesson.controllers";
-import {
-  tvShowsViewsIncrement,
-  search_tvshow,
-} from "../tvshows/tvshow_controller";
-
+import {view_order } from "../paymentLog/order_controller";
 const router = Router();
 // router.get("/view_order/:id",order_by_id);
 // router.get("/view_orders", show_order);
@@ -57,4 +32,5 @@ router
   .route("/stripe/check-cart-checkout-session")
   .post(checkCartSessionStatusOnSuccess);
 
+router.route("/check_order_completed").get(view_order);
 export default router;
