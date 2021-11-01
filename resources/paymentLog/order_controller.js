@@ -88,7 +88,7 @@ const view_order = async (req, res) => {
     console.log("Most sold " + most_sold_products);
     console.log("Least sold " + least_sold_products);
 
-    res.json({
+    res.status(200).json({
       status: "OK",
       total_orders: total_orders,
       total_sales: total_sales,
@@ -98,7 +98,7 @@ const view_order = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.send(err.message);
+    res.status(400).send(err.message);
   }
 };
 const view_order_byid = async (req, res) => {

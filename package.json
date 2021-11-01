@@ -11,7 +11,7 @@
     "deploy": "npm run format && git push && git push heroku master",
     "start:pm2": "pm2 start index.js --node-args=\"--es-module-specifier-resolution=node\"",
     "pc": "git add . && git commit -am 'heroku' && git push heroku master",
-    "heroku_pull": "git add . && git commit -am 'heroku' && git pull heroku master"
+    "push": "git push heroku master"
   },
   "keywords": [],
   "author": "",
