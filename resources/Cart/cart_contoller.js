@@ -294,10 +294,29 @@ const get_product_by_price = async (req, res) => {
   }
 };
 
+const cartEmpty= async(req,res)=>{
+  try{
+     if (!req.user) {
+       return res.status(400).json({ message: "User Not Found" });
+     }
+    const cart = await Cart.findByIdAndUpdate(
+      req.user.cartID,
+      { $set: { products: [], cart_total_price: 0 } },
+      { new: true }
+    );
+    console.log(cart);
+      res.status(200).json({status:"OK",cart:cart})
+  }catch(e){
+console.log(e);
+res.status(400).json({ message: "something went wrong" ,error:e});
+  }
+}
+
 export {
   update_cart,
   view_cart,
   remove_product,
   update_quantity,
   get_product_by_price,
+  cartEmpty
 };

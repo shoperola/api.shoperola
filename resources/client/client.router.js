@@ -8,6 +8,7 @@ import {
   // paymentintend
 } from "../../util/stripe";
 import {view_order } from "../paymentLog/order_controller";
+import {cartEmpty} from "../Cart/cart_contoller"
 const router = Router();
 // router.get("/view_order/:id",order_by_id);
 // router.get("/view_orders", show_order);
@@ -33,4 +34,5 @@ router
   .post(checkCartSessionStatusOnSuccess);
 
 router.route("/check_order_completed").get(view_order);
+router.route("/cart_session_expired").put(cartEmpty);
 export default router;
