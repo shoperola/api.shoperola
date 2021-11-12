@@ -3,49 +3,39 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const TransactionSchema = new Schema(
   {
-    processed_by: {
-      type: String,
-      enum: ["stripe", "paypal"],
-      required: true,
-    },
-    confirmationID: {
+    amount: {
       type: String,
       required: true,
     },
-    ip: {
+    checksum: {
       type: String,
       required: true,
     },
-    client: {
-      type: SchemaTypes.ObjectId,
-      ref: "clients",
+    errorCode: {
+      type: String
     },
-    user: {
+    userID: {
       type: SchemaTypes.ObjectId,
       ref: "users",
     },
-    amount: {
-      type: Number,
-      required: true,
+    errorMessage: {
+      type: String
     },
-    currency: {
+    merchantTxnId: {
       type: String,
       required: true,
     },
-    paymentType: {
+    txnId: {
       type: String,
-      required: true,
-      enum: ["monthly", "yearly"],
+      required: true
     },
     status: {
       type: String,
       required: true,
-      enum: ["SUCCESS", "FAILED"],
+      enum: ["SUCCESS", "FAILED","INITIATED"],
     },
   },
   { timestamps: true }
 );
-
-TransactionSchema.index({ userID: 1, clientID: 1 });
 
 export const Transaction = model("transactions", TransactionSchema);

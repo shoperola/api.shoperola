@@ -133,5 +133,38 @@ const getTransactionById = async (req, res) => {
     res.status(500).json({ message: "Error getting transaction" });
   }
 };
+const transaction_status_create=async(req,res,next)=>{
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const createObject={...req.body,userID:req.user._id};
+    const transaction= await Transaction.create(createObject);
+    res.status(201).json({ status: "OK", data: transaction });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error getting transaction" });
+  }
+}
 
-export { sessionCompleteEventListener, getTransactions, getTransactionById };
+const transaction_status_view = async (req, res, next) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const _id=req.body;
+    const transaction = await Transaction.findById(_id);
+    res.status(200).json({ status: "OK", data: transaction });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error getting transaction" });
+  }
+};
+
+export {
+  sessionCompleteEventListener,
+  getTransactions,
+  getTransactionById,
+  transaction_status_create,
+  transaction_status_view
+};

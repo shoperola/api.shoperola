@@ -202,7 +202,7 @@ app.get("/view_news", view_news);
 // //app.get("/search_movie/:username/:name", getUserById, search_movies);
 // app.get("/search_tvshow/:username/:name", getUserById, search_tvshow);
 // app.use("/api/request", clientModel, protect, RequestRouter);
-app.use("/api/transaction", TransactionRouter);
+app.use("/api/transaction",userModel,vendingprotect, TransactionRouter);
 // app.use("/api/tvshow", userModel, protect, TvshowRouter);
 // app.use("/api/studio", userModel, protect, StudioRouter);
 // app.use("/api/lesson", userModel, protect, LessonRouter);
