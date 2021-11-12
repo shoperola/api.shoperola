@@ -140,7 +140,18 @@ const transaction_status_create=async(req,res,next)=>{
   try {
     const createObject={...req.body,userID:req.user._id};
     const transaction= await Transaction.create(createObject);
-    res.status(201).json({ status: "OK", data: transaction });
+
+    const order=await Orders.create({userID:req.user._id,is_completed:false,is_abandoned:false});
+    if(transaction.status == 'SUCCESS'){
+    order.is_completed = true;
+    order.is_abandoned= false;
+    await order.save();
+    }else if(transaction.status=='FAILED' || transaction.status=='INITIATED'){
+      order.is_completed = false;
+      order.is_abandoned = true;
+      await order.save();
+    }
+    res.status(201).json({ status: "OK", transaction_status: transaction,order_status:order });
   } catch (e) {
     console.log(e.message);
     res.status(500).json({ message: "Error getting transaction" });
