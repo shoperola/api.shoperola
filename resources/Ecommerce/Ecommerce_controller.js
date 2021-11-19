@@ -53,15 +53,15 @@ const addProduct = async (req, res) => {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-    // const {image,image1,image2,image3,image4,image5} = req.files;
+    const {image,image1,image2,image3,image4,image5} = req.files;
     const name = await Tax.find({tax_name: 'ZERO_TAX'});
     const updateObject ={ ...req.body,userID: req.user._id };
-    // image ? (updateObject.image = image[0].location) : null;
-    // image1 ? (updateObject.image1 = image1[0].location) : null;
-    // image2 ? (updateObject.image2 = image2[0].location) : null;
-    // image3 ? (updateObject.image3 = image3[0].location) : null;
-    // image4 ? (updateObject.image4 = image4[0].location) : null;
-    // image5 ? (updateObject.image5 = image5[0].location) : null;
+    image ? (updateObject.image = image[0].location) : null;
+    image1 ? (updateObject.image1 = image1[0].location) : null;
+    image2 ? (updateObject.image2 = image2[0].location) : null;
+    image3 ? (updateObject.image3 = image3[0].location) : null;
+    image4 ? (updateObject.image4 = image4[0].location) : null;
+    image5 ? (updateObject.image5 = image5[0].location) : null;
   
     const product = await Ecommerce.create(updateObject);
     if(!product.sample_free){
@@ -99,12 +99,12 @@ const updateProduct = async (req, res) => {
     //  const {image,image1,image2,image3,image4,image5} = req.files;
      const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
-      // image ? (updateObject.image = image[0].location) : null;
-      // image1 ? (updateObject.image1 = image1[0].location) : null; 
-      // image2 ? (updateObject.image2 = image2[0].location) : null;
-      // image3 ? (updateObject.image3 = image3[0].location) : null;
-      // image4 ? (updateObject.image4 = image4[0].location) : null;
-      // image5 ? (updateObject.image5 = image5[0].location) : null;
+      image ? (updateObject.image = image[0].location) : null;
+      image1 ? (updateObject.image1 = image1[0].location) : null; 
+      image2 ? (updateObject.image2 = image2[0].location) : null;
+      image3 ? (updateObject.image3 = image3[0].location) : null;
+      image4 ? (updateObject.image4 = image4[0].location) : null;
+      image5 ? (updateObject.image5 = image5[0].location) : null;
     const product = await Ecommerce.findByIdAndUpdate(id, updateObject, {
       new: true});
       const view = await product.populate("tax",async(err,res)=>{
