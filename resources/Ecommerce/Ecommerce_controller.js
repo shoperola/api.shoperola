@@ -96,7 +96,7 @@ const updateProduct = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "id is required" });
     }
-    //  const {image,image1,image2,image3,image4,image5} = req.files;
+     const {image,image1,image2,image3,image4,image5} = req.files;
      const name = await Tax.find({tax_name: 'ZERO_TAX'});
       const updateObject ={ ...req.body};
       image ? (updateObject.image = image[0].location) : null;
