@@ -14,7 +14,7 @@ const s3 = new AWS.S3({
 export const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "storage.tellytell.com",
+    bucket: "spaces.tellytell.com",
     acl: "public-read",
     key: function (request, file, cb) {
       const filenameArray = file.originalname.split(".");
