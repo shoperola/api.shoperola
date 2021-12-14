@@ -171,11 +171,25 @@ const transaction_status_view = async (req, res, next) => {
     res.status(500).json({ message: "Error getting transaction" });
   }
 };
+const transaction_status_views = async (req, res, next) => {
+  if (!req.user) {
+    return res.status(400).json({ message: "User Not Found" });
+  }
+  try {
+    const transaction = await Transaction.find();
+    res.status(200).json({ status: "OK", data: transaction });
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).json({ message: "Error getting transaction" });
+  }
+};
+
 
 export {
   sessionCompleteEventListener,
   getTransactions,
   getTransactionById,
   transaction_status_create,
-  transaction_status_view
+  transaction_status_view,
+  transaction_status_views
 };
