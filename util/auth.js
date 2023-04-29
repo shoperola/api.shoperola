@@ -1,10 +1,15 @@
 import { Payment } from "../resources/payments/payments.model";
 import { newToken, verifyToken } from "./jwt";
-import {User} from "../resources/user/user.model";
-import {Logo} from "../resources/ConfigLogo/logo_model";
-import {Cart} from "../resources/Cart/cart_model";
+import { User } from "../resources/user/user.model";
+import { Logo } from "../resources/ConfigLogo/logo_model";
+import { Cart } from "../resources/Cart/cart_model";
 import AWS from "aws-sdk";
 import { SECRETS } from "./config";
+import generator from 'generate-password';
+import bcrypt from "bcrypt";
+import { sendMail } from "./mail";
+
+
 
 AWS.config.update({ region: SECRETS.region });
 
@@ -30,12 +35,12 @@ const signup = async (req, res) => {
     }
     const token = newToken(user);
     const cart = await Cart.create({});
-    cart.userID=user._id;
+    cart.userID = user._id;
     await cart.save();
-    user.cartID=cart._id;
+    user.cartID = cart._id;
     await user.save();
-//  email ////////////////////////////////////////////
-const send_email = req.body.email;
+    //  email ////////////////////////////////////////////
+    const send_email = req.body.email;
     const params = {
       Source: "hello@shoperola.com",
       Template: "vm_welcome",
@@ -43,12 +48,12 @@ const send_email = req.body.email;
       Destination: {
         ToAddresses: [send_email],
       },
-       TemplateData: `{ "first-name": "${req.body.firstName}","last-name": "${req.body.lastName}"}`
+      TemplateData: `{ "first-name": "${req.body.firstName}","last-name": "${req.body.lastName}"}`
     };
     ses.sendTemplatedEmail(params, (err, data) => {
-      if (err){
-        console.log(err, err.stack);  
-      } 
+      if (err) {
+        console.log(err, err.stack);
+      }
       else console.log(data); // successful response
     });
     /////////////////////////////////////////
@@ -58,9 +63,8 @@ const send_email = req.body.email;
     console.log();
     if (e.toString().includes("E11000 duplicate key error collection")) {
       return res.status(400).send({
-        status: `${
-          collectionName === "users" ? "User" : "Client"
-        } Already Exists`,
+        status: `${collectionName === "users" ? "User" : "Client"
+          } Already Exists`,
       });
     }
     return res.status(400).send({ status: "Error Communicating with server" });
@@ -69,7 +73,6 @@ const send_email = req.body.email;
 
 const signin = async (req, res) => {
   const Model = req.model;
-
   if (!req.body.email || !req.body.password)
     return res.status(400).send({ message: "Email and password required" });
   const user = await Model.findOne({ email: req.body.email }).exec();
@@ -78,7 +81,9 @@ const signin = async (req, res) => {
   }
 
   try {
+
     const match = await user.checkPassword(req.body.password);
+
     if (!match) {
       return res.status(401).send({ message: "Invalid Credentials" });
     }
@@ -89,6 +94,44 @@ const signin = async (req, res) => {
     return res.status(401).send({ message: "Not Authorized" });
   }
 };
+
+
+const forgotPassword = async (req, res) => {
+  const Model = req.model;
+  if (!req.body.forgot)
+    return res.status(400).send({ message: "Email is required" });
+  const user = await Model.findOne({ email: req.body.forgot }).exec();
+
+  if (!user) {
+    return res.status(400).send({ message: "Invalid Email" });
+  }
+
+  const password = generator.generate({
+    length: 5,
+    numbers: true,
+  });
+
+  try {
+    // const match = user.changePassoword(password);
+    user.password = password;
+    await user.save();
+    const { firstName, lastName, email } = user;
+
+    const sendOrNot = sendMail(firstName + lastName, email, password);
+
+    if (sendOrNot) {
+      return res.status(201).send({ status: "ok", success: true });
+    } else {
+      return res.status(400).send({ message: "Not Send Mail" });
+    }
+
+  } catch (e) {
+    console.log(e);
+    return res.status(401).send({ message: "Not Authorized" });
+  }
+};
+
+
 
 const protect = async (req, res, next) => {
   const Model = req.model;
@@ -116,22 +159,22 @@ const protect = async (req, res, next) => {
   }
 };
 
-const vendingsignin= async (req, res) => {
+const vendingsignin = async (req, res) => {
   if (!req.body.email || !req.body.password)
     return res.status(400).send({ message: "Email and password required" });
-  const user=await User.findOne({ stored_email: req.body.email}).exec();
-  if(!user){
+  const user = await User.findOne({ stored_email: req.body.email }).exec();
+  if (!user) {
     return res.status(400).send({ message: "Invalid Email or Password" });
-  }try{
+  } try {
     console.log(user.stored_password + req.body.password);
-    if(user.stored_password===req.body.password){
+    if (user.stored_password === req.body.password) {
       const token = newToken(user);
-      const logoObject=await Logo.findOne({userID:user._id});
-      return res.status(201).send({ status: "ok", loginStatus:true,logo:logoObject.logo,token: token});
+      const logoObject = await Logo.findOne({ userID: user._id });
+      return res.status(201).send({ status: "ok", loginStatus: true, logo: logoObject.logo, token: token });
     }
     return res.status(401).send({ message: "Wrong Password" });
 
-  }catch (e) {
+  } catch (e) {
     console.log(e);
     return res.status(401).send({ message: "Not Authorized" });
   }
@@ -158,4 +201,5 @@ const vendingprotect = async (req, res, next) => {
   }
 };
 
-export { signup, signin, protect,vendingsignin,vendingprotect };
+export { signup, signin, protect, vendingsignin, vendingprotect, forgotPassword };
+//shoperolaadmin@gmail.com
