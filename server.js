@@ -8,7 +8,7 @@ import { upload } from "./util/s3-spaces";
 import fileUpload from "express-fileupload";
 
 // modules
-import { signup, signin, protect,vendingsignin,vendingprotect } from "./util/auth";
+import { signup, signin, protect, vendingsignin, vendingprotect, forgotPassword } from "./util/auth";
 import { User } from "./resources/user/user.model";
 import { Client } from "./resources/client/client.model";
 import { Admin } from "./resources/Admin website/admin-model";
@@ -89,13 +89,13 @@ import { zero_shipping_rate } from "./resources/shipping_method/shipping_control
 import { view_amount } from "./resources/paymentLog/payment_log_controller";
 import { public_shipments } from "./resources/shipping_method/shipping_controller";
 import EmailRouter from "./resources/Email templates/email_router";
-import {get_product_by_price} from "./resources/Cart/cart_contoller";
-import {getcoupons_client} from "./resources/Coupons/coupon_controller";
+import { get_product_by_price } from "./resources/Cart/cart_contoller";
+import { getcoupons_client } from "./resources/Coupons/coupon_controller";
 import VariantRouter from "./resources/variants/variant_router";
-import {getall_users} from "./resources/user/user.controllers";
-import {rackview} from "./resources/Racks/rack_controller";
+import { getall_users } from "./resources/user/user.controllers";
+import { rackview } from "./resources/Racks/rack_controller";
 import RackRouter from "./resources/Racks/rack_router";
-import {send_cart} from "./resources/Racks/rack_controller";
+import { send_cart } from "./resources/Racks/rack_controller";
 import {
   uploadPhoto,
   view_photo,
@@ -109,7 +109,7 @@ import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
 config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const userModel = (req, res, next) => {
   req.model = User;
@@ -134,9 +134,20 @@ app.get("/", (req, res) => {
 });
 app.post("/signup", userModel, signup);
 app.post("/signin", userModel, signin);
-app.post("/vmlogin",vendingsignin);
+app.post("/vmlogin", vendingsignin);
 app.post("/signup_admin", adminModel, signup);
 app.post("/signin_admin", adminModel, signin);
+
+
+
+// forgot admin password with exiting email
+app.post("/forgot_password_admin", adminModel, forgotPassword);
+
+
+// forgot user password with exiting email
+app.post("/forgot_password_user", userModel, forgotPassword);
+
+
 // app.post("/signupClient", clientModel, signup);
 // app.post("/signinClient", clientModel, signin);
 
@@ -146,7 +157,7 @@ app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
 app.use("/api/apps", userModel, protect, AppsRouter);
 app.use("/api/order", userModel, protect, OrderRouter);
-app.get("/api/contact",view_contact);
+app.get("/api/contact", view_contact);
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/rack", userModel, protect, RackRouter);
 app.use("/sendCart", userModel, vendingprotect, send_cart);
@@ -156,7 +167,7 @@ app.use("/sendCart", userModel, vendingprotect, send_cart);
 
 
 // app.use("/api/languages", LanguageRouter);
-app.get("/rackview",userModel,vendingprotect,rackview);
+app.get("/rackview", userModel, vendingprotect, rackview);
 // app.use("/contact",userModel,vendingprotect,ContactRouter);
 
 app.get("/admin_users", getall_users);
@@ -202,7 +213,7 @@ app.get("/view_news", view_news);
 // //app.get("/search_movie/:username/:name", getUserById, search_movies);
 // app.get("/search_tvshow/:username/:name", getUserById, search_tvshow);
 // app.use("/api/request", clientModel, protect, RequestRouter);
-app.use("/api/transaction",userModel,vendingprotect, TransactionRouter);
+app.use("/api/transaction", userModel, vendingprotect, TransactionRouter);
 // app.use("/api/tvshow", userModel, protect, TvshowRouter);
 // app.use("/api/studio", userModel, protect, StudioRouter);
 // app.use("/api/lesson", userModel, protect, LessonRouter);
@@ -210,11 +221,11 @@ app.use("/api/transaction",userModel,vendingprotect, TransactionRouter);
 
 app.use("/api/email", adminModel, protect, EmailRouter);
 // app.use("/api/categories", userModel, protect, CategoriesRouter);
-app.use("/api/cart", userModel,vendingprotect, CartRouter);
+app.use("/api/cart", userModel, vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
-app.get("/category",userModel,vendingprotect,viewCategories);
+app.get("/category", userModel, vendingprotect, viewCategories);
 app.post("/api/facedetector", userModel, protect, uploadPhoto);
-app.post("/api/savephoto",userModel,vendingprotect,upload.single("file"), savePhoto);
+app.post("/api/savephoto", userModel, vendingprotect, upload.single("file"), savePhoto);
 app.get("/api/getphoto", userModel, protect, view_photo);
 
 app.post(
@@ -229,7 +240,7 @@ app.get("/api/footfalls", userModel, protect, view_photo_footfall);
 // app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
 // // app.use("/api/tvwatchlist", firebaseAuthProtect,TvwatchlistRouter);
 app.use("/api/product", userModel, protect, ProductRouter);
-app.get("/products",userModel,vendingprotect,getProducts);
+app.get("/products", userModel, vendingprotect, getProducts);
 // app.get("/testing/:id", userModel, protect, view_amount);
 // app.use("/api/feature_product", userModel, protect, feautreRouter);
 app.use("/api/tax_rates", userModel, protect, TaxRouter);
@@ -239,11 +250,11 @@ app.use("/api/tax_rates", userModel, protect, TaxRouter);
 // //app.post("/cognito/generateTokens", generateTokensfromCode);
 // app.use("/api/address", firebaseAuthProtect, AddressRouter);
 // // app.post("/firebase/test/", firebaseAuthProtect, (req, res) => {
-  // //   console.log("Recieved");
-  // //   res.json("Success");
-  // // });
-  app.use("/api/checkout",userModel,vendingprotect, ClientRouter);
-  
+// //   console.log("Recieved");
+// //   res.json("Success");
+// // });
+app.use("/api/checkout", userModel, vendingprotect, ClientRouter);
+
 export const start = async () => {
   try {
     await connect();

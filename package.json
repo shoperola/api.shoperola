@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "amazon-cognito-identity-js": "^5.0.3",
     "aws-sdk": "^2.910.0",
     "axios": "^0.21.1",
@@ -28,6 +29,7 @@
     "express-list-routes": "^1.1.3",
     "express-session": "^1.17.2",
     "firebase-admin": "^9.10.0",
+    "generate-password": "^1.7.0",
     "jpeg-js": "^0.4.3",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.5",

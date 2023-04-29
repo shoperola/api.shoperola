@@ -39,11 +39,11 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
-    stored_email:{type: String,default: ""},
-    stored_password:{ type: String, default: ""},
-    dispensebag:{type:String,enum:["Yes","No"]},
-    dispensecharge:{type:String,enum:["Free","Paid"]},
-    dispensepaid:{type:Number,default:0},
+    stored_email: { type: String, default: "" },
+    stored_password: { type: String, default: "" },
+    dispensebag: { type: String, enum: ["Yes", "No"] },
+    dispensecharge: { type: String, enum: ["Free", "Paid"] },
+    dispensepaid: { type: Number, default: 0 },
     categories: [{ type: SchemaTypes.ObjectId, ref: "Category" }],
     settings: {
       country: {
@@ -55,7 +55,7 @@ const UserSchema = new Schema(
         default: "",
       },
     },
-    cartID:{type:SchemaTypes.ObjectId,ref:'carts'}
+    cartID: { type: SchemaTypes.ObjectId, ref: 'carts' }
   },
   { timestamps: true }
 );
@@ -86,6 +86,8 @@ UserSchema.pre("save", async function (next) {
   ) {
     return next();
   }
+
+
   this.username = await generateUniqueUserName(
     `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`,
     this.firstName,
@@ -93,8 +95,9 @@ UserSchema.pre("save", async function (next) {
   );
 
   try {
-    const hash = await bcrypt.hash(this.password, 8);
+    const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;
+
     next();
   } catch (err) {
     next(err);
@@ -113,16 +116,30 @@ UserSchema.pre(
 );
 
 UserSchema.methods.checkPassword = function (password) {
+  console.log(password);
+  console.log(this.password);
   const passwordHash = this.password;
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, passwordHash, (err, same) => {
       if (err) {
         return reject(err);
       }
-
       resolve(same);
     });
   });
 };
+
+// UserSchema.methods.changePassoword = async function (password) {
+//   try {
+//     console.log("hi");
+//     // const passwordHash = this.password;
+//     this.password = await bcrypt.hash(password, 8);
+//     this.save();
+//     return this;
+//   } catch (error) {
+//     return error
+//   }
+
+// };
 
 export const User = model("users", UserSchema);
