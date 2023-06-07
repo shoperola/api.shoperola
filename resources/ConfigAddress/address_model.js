@@ -3,34 +3,34 @@ const { Schema, SchemaTypes, model } = mongoose;
 
 const AdminAddressSchema = new Schema(
   {
-    company_name:{
-        type:String
+    company_name: {
+      type: String,
     },
-    AdminAddress:{
-        type:String
+    AdminAddress: {
+      type: String,
     },
-    city:{
-        type:String
+    city: {
+      type: String,
     },
     state: {
-        type:String
+      type: String,
     },
-    country:{
-        type:String
+    country: {
+      type: String,
     },
-    pincode:{
-        type:String
+    pincode: {
+      type: String,
     },
-    website:{
-        type:String
+    website: {
+      type: String,
     },
-    contact_number:{
-        type:String
+    contact_number: {
+      type: String,
     },
     email: {
-        type:String
+      type: String,
     },
-    userID: {type: SchemaTypes.ObjectId, ref: "users"}
+    userID: { type: SchemaTypes.ObjectId, ref: "users" },
   },
   { timestamps: true }
 );

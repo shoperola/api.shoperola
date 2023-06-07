@@ -35,6 +35,11 @@ const UserSchema = new Schema(
       type: String,
       default: "",
     },
+    contactNo: {
+      type: String,
+      default: "",
+      required: false,
+    },
     about: {
       type: String,
       default: "",
@@ -55,9 +60,9 @@ const UserSchema = new Schema(
         default: "",
       },
     },
-    cartID: { type: SchemaTypes.ObjectId, ref: 'carts' }
+    cartID: { type: SchemaTypes.ObjectId, ref: "carts" },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 export const generateUniqueUserName = async (
@@ -86,7 +91,6 @@ UserSchema.pre("save", async function (next) {
   ) {
     return next();
   }
-
 
   this.username = await generateUniqueUserName(
     `${this.firstName.toLowerCase()}.${this.lastName.toLowerCase()}`,

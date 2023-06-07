@@ -1,14 +1,21 @@
 // packages
 import express from "express";
 import morgan from "morgan";
-import { config } from "dotenv";
 import cors from "cors";
+import { config } from "dotenv";
 import expressListRoutes from "express-list-routes";
 import { upload } from "./util/s3-spaces";
 import fileUpload from "express-fileupload";
 
 // modules
-import { signup, signin, protect, vendingsignin, vendingprotect, forgotPassword } from "./util/auth";
+import {
+  signup,
+  signin,
+  protect,
+  vendingsignin,
+  vendingprotect,
+  forgotPassword,
+} from "./util/auth";
 import { User } from "./resources/user/user.model";
 import { Client } from "./resources/client/client.model";
 import { Admin } from "./resources/Admin website/admin-model";
@@ -24,6 +31,7 @@ import CategoryRouter from "./resources/Category/Category_routes";
 import TaxRouter from "./resources/tax_rates/tax_route";
 import StudioRouter from "./resources/Studio/studio_routes";
 import CartRouter from "./resources/Cart/cart_routes";
+import ProductRouterAdmin from "./resources/Product/product.router";
 import CategoriesRouter from "./resources/Content_category/Content_category_routes";
 import ProductRouter from "./resources/Ecommerce/ecommerce.router";
 import AdminRouter from "./resources/Admin website/Admin-router";
@@ -107,6 +115,12 @@ import {
 } from "./resources/Footfalls/footfalls_controller";
 import LogoRouter from "./resources/ConfigLogo/logo_router";
 import ContactRouter from "./resources/ContactRequest/contact_us_router";
+import FranchiseProductRouter from "./resources/FranchiseProduct/franchise.router";
+import VendingMachineRouter from "./resources/VendingMachine/vending.router";
+import AlertRouter from "./resources/AlertStock/alert.routes";
+
+import orderManageRouter from "./resources/Admin website/orderManagement/orderManagement.router";
+
 config();
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -127,26 +141,28 @@ const adminModel = (req, res, next) => {
 //const cognitoAuthMiddleware = await getVerifyMiddleware();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({ origin: true }));
+
 app.use(morgan("dev"));
+
 app.get("/", (req, res) => {
   res.json("Server is Running");
 });
+
+// admin order management route
+app.use("/api/manage", orderManageRouter);
+
 app.post("/signup", userModel, signup);
 app.post("/signin", userModel, signin);
 app.post("/vmlogin", vendingsignin);
 app.post("/signup_admin", adminModel, signup);
 app.post("/signin_admin", adminModel, signin);
 
-
-
 // forgot admin password with exiting email
 app.post("/forgot_password_admin", adminModel, forgotPassword);
 
-
 // forgot user password with exiting email
 app.post("/forgot_password_user", userModel, forgotPassword);
-
 
 // app.post("/signupClient", clientModel, signup);
 // app.post("/signinClient", clientModel, signin);
@@ -156,15 +172,15 @@ app.use("/api/logo", userModel, protect, LogoRouter);
 app.use("/api/user", userModel, protect, AddressUserRouter);
 app.use("/api/user", userModel, protect, SocialRouter);
 app.use("/api/apps", userModel, protect, AppsRouter);
+
 app.use("/api/order", userModel, protect, OrderRouter);
+
 app.get("/api/contact", view_contact);
 app.use("/api/user", userModel, protect, UserRouter);
 app.use("/api/rack", userModel, protect, RackRouter);
 app.use("/sendCart", userModel, vendingprotect, send_cart);
 
-
 // app.use("/view_product",);
-
 
 // app.use("/api/languages", LanguageRouter);
 app.get("/rackview", userModel, vendingprotect, rackview);
@@ -220,21 +236,23 @@ app.use("/api/transaction", userModel, vendingprotect, TransactionRouter);
 // app.post("/get_orders_overPrice", get_product_by_price);
 
 app.use("/api/email", adminModel, protect, EmailRouter);
+
 // app.use("/api/categories", userModel, protect, CategoriesRouter);
 app.use("/api/cart", userModel, vendingprotect, CartRouter);
 app.use("/api/category", userModel, protect, CategoryRouter);
 app.get("/category", userModel, vendingprotect, viewCategories);
 app.post("/api/facedetector", userModel, protect, uploadPhoto);
-app.post("/api/savephoto", userModel, vendingprotect, upload.single("file"), savePhoto);
+app.post(
+  "/api/savephoto",
+  userModel,
+  vendingprotect,
+  upload.single("file"),
+  savePhoto
+);
 app.get("/api/getphoto", userModel, protect, view_photo);
 
-app.post(
-  "/api/footfalls",
-  upload.single("file"),
-  uploadPhotoFootfall
-);
+app.post("/api/footfalls", upload.single("file"), uploadPhotoFootfall);
 app.get("/api/footfalls", userModel, protect, view_photo_footfall);
-
 
 // app.use("/api/coupons", userModel, protect, CouponRouter);
 // app.use("/api/watchlist", firebaseAuthProtect, WatchlistRouter);
@@ -254,6 +272,12 @@ app.use("/api/tax_rates", userModel, protect, TaxRouter);
 // //   res.json("Success");
 // // });
 app.use("/api/checkout", userModel, vendingprotect, ClientRouter);
+
+// product
+app.use("/api/prod", ProductRouterAdmin);
+app.use("/api/franchise", userModel, protect, FranchiseProductRouter);
+app.use("/api/vending", userModel, protect, VendingMachineRouter);
+app.use("/api/alert", AlertRouter);
 
 export const start = async () => {
   try {
