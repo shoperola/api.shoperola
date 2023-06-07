@@ -4,13 +4,301 @@ import { Address } from "../Address/address_model";
 import { Orders } from "../orders/order_model";
 import { Ecommerce } from "../Ecommerce/ecomerce_model";
 import { Cart } from "../Cart/cart_model";
+import { OrderBeforeConfirm } from "../orders/order_before_confirm.model";
+import Razorpay from "razorpay";
+import axios from "axios";
+import crypto from "crypto";
+import { generateID } from "../../util/generateID";
+
+// Razorpay setup
+// const instance = new Razorpay({
+//   key_id: process.env.RAZOR_PAY_KEY_ID,
+//   key_secret: process.env.RAZOR_PAY_KEY_SECRET,
+// });
+const config = {
+  key_id: "rzp_test_MgNn5wEsqPADa4",
+  key_secret: "2e0TiXHTcHs252qDrcXUHOaQ",
+};
+const instance = new Razorpay({
+  key_id: "rzp_test_MgNn5wEsqPADa4",
+  key_secret: "2e0TiXHTcHs252qDrcXUHOaQ",
+});
+
+// create orders
+const create_order = async (req, res) => {
+  try {
+    const { _id, title, description, price, qty, image } = req.body;
+    const userId = req.user._id;
+
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const findUserId = await OrderBeforeConfirm.find({ userID: userId });
+    if (findUserId.length > 0) {
+      const order_confirm_prod = await OrderBeforeConfirm.findOne(
+        { userID: userId },
+        { product: { $elemMatch: { productId: _id } } }
+      );
+
+      if (order_confirm_prod && order_confirm_prod.product.length) {
+        res.status(201).json({ message: "product already exist!" });
+      } else {
+        const pushProduct = await OrderBeforeConfirm.findOneAndUpdate(
+          {
+            userID: userId,
+          },
+          {
+            $push: {
+              product: {
+                productId: _id,
+                title: title,
+                description: description,
+                price: price,
+                qty: qty,
+                image: image,
+              },
+            },
+          }
+        );
+
+        await pushProduct.save();
+      }
+    } else {
+      const productObj = new OrderBeforeConfirm({
+        userID: userId,
+        product: [
+          {
+            productId: _id,
+            title: title,
+            description: description,
+            price: price,
+            qty: qty,
+            image: image,
+          },
+        ],
+      });
+
+      await productObj.save();
+
+      res.status(201).json({ message: "product added successfully!" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error });
+  }
+};
+
+// fetch order_confirm_product
+const fetchOrderConfirmProduct = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const findProduct = await OrderBeforeConfirm.findOne({ userID: userId });
+    res.status(200).json(findProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// remove product
+const removeProductOrderById = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { productId } = req.body;
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const findProduct = await OrderBeforeConfirm.updateOne(
+      { userID: userId },
+      { $pull: { product: { productId } } }
+    );
+
+    res.status(200).json(findProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// update product
+const updateProductOrderById = async (req, res) => {
+  try {
+    const { productId, qty } = req.body;
+    const userId = req.user._id;
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const findProduct = await OrderBeforeConfirm.findOne(
+      { userID: userId },
+      { product: { $elemMatch: { productId } } }
+    );
+
+    findProduct.product[0].qty += qty;
+
+    await findProduct.save();
+
+    res.status(200).json(findProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// -----------------Create Order Pay-----------------------
+const createOrderPayProduct = async (req, res) => {
+  try {
+    const { totalPrice, totalQty, data } = req.body;
+
+    // add GST
+    const calGST = (totalPrice * 5) / 100;
+    const GSTPrice = totalPrice + calGST;
+
+    // Create Order using  in numeric format
+    const order_id = generateID();
+
+    const userId = req.user._id;
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+
+    const product = data.map((prod) => {
+      const resp = {
+        productId: prod.productId,
+        title: prod.title,
+        description: prod.description,
+        price: prod.price,
+        qty: prod.qty,
+        image: prod.image,
+      };
+      return resp;
+    });
+
+    const instObj = new Orders({
+      userID: userId,
+      totalPrice: totalPrice,
+      totalQuantity: totalQty,
+      product: product,
+      GSTPrice: GSTPrice,
+      order_id: order_id,
+    });
+    const respData = await instObj.save();
+    if (respData) {
+      await OrderBeforeConfirm.updateOne(
+        { userID: userId },
+        { $set: { product: [] } }
+      );
+    }
+
+    res.status(201).json(respData);
+  } catch (err) {
+    console.log(err);
+    res.send(err.message);
+  }
+};
+
+// fetch order
+const fetchOrderPay = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const findProduct = await Orders.find({ userID: userId });
+    res.status(200).json(findProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// fetch order by ID
+const fetchOrderPayById = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { orderId } = req.params;
+    if (!req.user) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+    const findProduct = await Orders.findOne({ order_id: orderId });
+    res.status(200).json(findProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//====================Payment or Checkout============================
+
+const checkoutOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const orderProduct = await Orders.findOne({ order_id: orderId });
+
+    const { GSTPrice, totalPrice, _id } = orderProduct;
+
+    const options = {
+      amount: GSTPrice * 100,
+      currency: "INR",
+      receipt: `receipt${_id}`,
+      payment_capture: 0,
+    };
+    instance.orders.create(options, async function (err, order) {
+      if (err) {
+        // console.log(err);
+        return res.status(500).json({
+          message: "Something Went Wrong",
+        });
+      }
+      return res.status(200).json(order);
+    });
+  } catch (err) {
+    console.log("err", err);
+    return res.status(500).json({
+      message: "Something Went Wrong",
+    });
+  }
+};
+// payment create
+const paymentCreateOrder = async (req, res) => {
+  try {
+    const { response } = req.body;
+
+    const { orderId } = req.query;
+    const orderProduct = await Orders.findOne({ order_id: orderId });
+    const { GSTPrice, totalPrice } = orderProduct;
+
+    const url = `https://${config.key_id}:${config.key_secret}@api.razorpay.com/v1/payments/${req.params.paymentId}/capture`;
+    const { data: respOrder } = await axios.post(url, {
+      amount: GSTPrice * 100,
+      currency: "INR",
+    });
+
+    if (respOrder.status === "captured") {
+      orderProduct.status = "PAID";
+      orderProduct.razorpay_order_id = response.razorpay_order_id;
+      orderProduct.razorpay_payment_id = response.razorpay_payment_id;
+
+      await orderProduct.save();
+      res.send(respOrder);
+    } else {
+      return res.status(500).send({
+        message: "Payment Failed",
+      });
+    }
+  } catch (err) {
+    console.log("error", err);
+    return res.status(500).send({
+      message: "Something Went Wrong",
+    });
+  }
+};
+
+// old controller js
 
 const show_order = async (req, res) => {
   try {
     if (!req.user) {
       return res.status(400).json({ message: "User Not Found" });
     }
-
     const view_order = await Orders.find({ user: req.user._id })
       .populate("products")
       .populate("address");
@@ -51,10 +339,13 @@ const view_order = async (req, res) => {
 
     const view_order = await Orders.find({ user: req.user._id });
     const view_cart = await Cart.find({});
+
     console.log(view_order);
     const Productsview = await Ecommerce.find({});
     const Productsidarray = [];
+
     const prod = Productsview.map((x) => Productsidarray.push(x._id));
+
     console.log("Prod id " + Productsidarray);
     const total_orders = view_order.length;
     let total_sales = 0;
@@ -66,21 +357,39 @@ const view_order = async (req, res) => {
     const carts = view_cart.map((x) => {
       const mapids = x.products.map((some) => {
         const mapss = Productsidarray.map((pro) => {
-          const productsales=some.quantity;
+          const productsales = some.quantity;
           if (JSON.stringify(pro) === JSON.stringify(some.pid)) {
             if (
               !most_sold_products.some((od) => {
-                if (od.pro === pro && od.date === x.createdAt && od.total_sales===productsales) return true;
+                if (
+                  od.pro === pro &&
+                  od.date === x.createdAt &&
+                  od.total_sales === productsales
+                )
+                  return true;
               })
             )
-              most_sold_products.push({ pro: pro, date: x.createdAt ,total_sales:productsales});
+              most_sold_products.push({
+                pro: pro,
+                date: x.createdAt,
+                total_sales: productsales,
+              });
           } else if (JSON.stringify(pro) !== JSON.stringify(some.pid)) {
             if (
               !least_sold_products.some((od) => {
-                if (od.pro === pro && od.date === x.createdAt && od.total_sales ===0) return true;
+                if (
+                  od.pro === pro &&
+                  od.date === x.createdAt &&
+                  od.total_sales === 0
+                )
+                  return true;
               })
             )
-              least_sold_products.push({ pro: pro, date: x.createdAt ,total_sales:0});
+              least_sold_products.push({
+                pro: pro,
+                date: x.createdAt,
+                total_sales: 0,
+              });
           }
         });
       });
@@ -172,4 +481,13 @@ export {
   update_order,
   view_order,
   view_order_byid,
+  create_order,
+  fetchOrderConfirmProduct,
+  updateProductOrderById,
+  removeProductOrderById,
+  createOrderPayProduct,
+  fetchOrderPay,
+  fetchOrderPayById,
+  checkoutOrder,
+  paymentCreateOrder,
 };
